@@ -1,0 +1,11 @@
+[data-mantine-color-scheme='light'] {
+  --shadow-sm: 0 1px 2px rgb(17 19 29 / 5%);
+  --shadow-md: 0 3px 10px rgb(17 19 29 / 7%);
+  --shadow-lg: 0 6px 20px rgb(17 19 29 / 9%);
+}
+
+[data-mantine-color-scheme='dark'] {
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 10%);
+  --shadow-md: 0 3px 10px rgb(0 0 0 / 12%);
+  --shadow-lg: 0 6px 20px rgb(0 0 0 / 14%);
+}

@@ -1,0 +1,7 @@
+:root {
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+
+  --transition-fast: var(--duration-fast) ease;
+  --transition-normal: var(--duration-normal) ease;
+}
