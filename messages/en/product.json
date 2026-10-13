@@ -1,0 +1,82 @@
+{
+  "name": "Nodus",
+  "tagline": "Communication that stays organized.",
+  "description": "Workspaces, channels and real-time conversations in one focused place for your team.",
+  "category": "Communication for teams",
+  "concepts": {
+    "workspaces": "Workspaces",
+    "channels": "Channels",
+    "conversations": "Conversations"
+  },
+  "actions": {
+    "getStarted": "Get started",
+    "getStartedPreview": "Explore the product preview",
+    "previewAvailability": "Explore the preview. Workspace access is coming later.",
+    "newChannel": "New channel"
+  },
+  "preview": {
+    "eyebrow": "Inside Nodus",
+    "title": "A clear place for every conversation.",
+    "description": "Team overview, announcements and conversations in one workspace.",
+    "workspaceName": "Nodus team",
+    "channelDescription": "General team discussion",
+    "messages": {
+      "contract": "Updated the API contract. The channel endpoints are ready for review.",
+      "review": "Looks good to me. I’ll check the frontend integration.",
+      "nextStep": "Thanks. Let’s keep the implementation notes in #frontend."
+    },
+    "messagePlaceholder": "Message #general…",
+    "members": "{count, plural, one {# member} other {# members}}",
+    "today": "Today",
+    "people": {
+      "ihor": "Ihor",
+      "anna": "Anna",
+      "oleh": "Oleh"
+    }
+  },
+  "capabilities": {
+    "eyebrow": "What you can do",
+    "title": "Built around the conversation.",
+    "organization": {
+      "title": "Organize conversations",
+      "description": "Create workspaces and channels so every discussion has a clear place."
+    },
+    "realtime": {
+      "title": "Talk in real time",
+      "description": "Messages, presence and live updates keep everyone in sync.",
+      "media": {
+        "message": "The channel is ready for review.",
+        "reply": "I’ll take a look now.",
+        "typing": "Anna is typing…"
+      }
+    },
+    "visibility": {
+      "title": "Keep important information visible",
+      "description": "Scheduled announcements, notifications and search help important updates avoid getting buried.",
+      "media": {
+        "search": "Search this workspace",
+        "announcement": "Weekly team update",
+        "scheduled": "Scheduled · Monday, 09:00",
+        "pinned": "Pinned in announcements",
+        "message": "This week’s priorities, in one place."
+      }
+    }
+  },
+  "structure": {
+    "title": "One place for the whole conversation.",
+    "description": "A workspace keeps people, channels and conversations connected without turning communication into a pile of unrelated chats.",
+    "eyebrow": "A simple structure",
+    "workspace": "Workspace"
+  },
+  "invitation": {
+    "title": "Ready to start a workspace?",
+    "description": "Bring your conversations into one organized place."
+  },
+  "copyright": "© {year} Nodus",
+  "navigation": {
+    "overview": "Overview",
+    "conversations": "Conversations",
+    "announcements": "Announcements",
+    "search": "Search"
+  }
+}

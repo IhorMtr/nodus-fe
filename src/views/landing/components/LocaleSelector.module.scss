@@ -1,0 +1,73 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== TRIGGER ====================
+
+.trigger {
+  @include mixins.focus-ring;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height-sm);
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover,
+  &[data-expanded] {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+.fullLabel {
+  display: none;
+
+  @include mixins.up(breakpoints.$breakpoint-sm) {
+    display: inline;
+  }
+}
+
+.compactLabel {
+  @include mixins.up(breakpoints.$breakpoint-sm) {
+    display: none;
+  }
+}
+
+// ==================== MENU ====================
+
+.dropdown {
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: var(--color-surface-elevated);
+  box-shadow: none;
+}
+
+.menuItem {
+  @include mixins.focus-ring;
+
+  border-radius: var(--radius-xs);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+
+  &[data-checked] {
+    background: transparent;
+  }
+
+  &:hover,
+  &[data-hovered] {
+    background: var(--color-surface-hover);
+  }
+}
+
+.indicator {
+  color: var(--color-accent);
+}

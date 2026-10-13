@@ -1,0 +1,140 @@
+@use '@/shared/styles/controls';
+@use '@/shared/styles/field';
+@use '@/shared/styles/mixins';
+
+.root.root {
+  @include field.root;
+}
+
+.wrapper.wrapper {
+  @include field.wrapper;
+}
+
+.input.input {
+  @include field.input;
+}
+
+.section.section {
+  @include field.section;
+}
+
+.clearButton.clearButton {
+  @include mixins.focus-ring;
+
+  --input-bg: transparent;
+
+  width: calc(var(--control-height) - var(--space-3));
+  height: calc(var(--control-height) - var(--space-3));
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--input-section-color);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover:where(:not(:disabled)) {
+    --input-bg: var(--color-surface-hover);
+
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+
+  &:active:where(:not(:disabled)) {
+    --input-bg: var(--color-surface-active);
+
+    background: var(--color-surface-active);
+  }
+}
+
+.label.label {
+  @include field.label;
+}
+
+.description.description {
+  @include field.description;
+}
+
+.error.error {
+  @include field.error;
+}
+
+.required.required {
+  @include field.asterisk;
+}
+
+.dropdown.dropdown {
+  @include controls.sizes;
+
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  box-shadow: none;
+}
+
+.options.options {
+  @include controls.sizes;
+}
+
+.option.option {
+  min-height: calc(var(--control-height) - var(--space-2));
+  padding: var(--space-1) var(--control-padding);
+  border-radius: var(--radius-control);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--control-font-size);
+  line-height: var(--line-height-normal);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover:where(:not([data-combobox-selected], [data-combobox-disabled])) {
+    background: var(--color-surface-hover);
+  }
+
+  &:active:where(:not([data-combobox-selected], [data-combobox-disabled])) {
+    background: var(--color-surface-active);
+  }
+
+  &[data-combobox-active] {
+    background: var(--color-surface-active);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &[data-checked] > svg {
+    color: inherit;
+    opacity: 1;
+  }
+
+  &[data-combobox-selected] {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  &[data-combobox-disabled] {
+    background: transparent;
+    color: var(--color-text-disabled);
+    opacity: 1;
+  }
+}
+
+.empty.empty {
+  padding: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--control-font-size);
+}
+
+.groupLabel.groupLabel {
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+
+  &::after {
+    background: var(--color-divider);
+  }
+}

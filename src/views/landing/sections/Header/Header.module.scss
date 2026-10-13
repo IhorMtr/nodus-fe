@@ -1,0 +1,106 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== LAYOUT ====================
+
+.root {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'brand actions actions'
+    'locale locale appearance';
+  align-items: center;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'brand locale actions appearance';
+    gap: var(--space-6);
+    padding-block: var(--space-5);
+  }
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas: 'brand navigation locale actions appearance';
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+  }
+}
+
+.brand {
+  @include mixins.focus-ring;
+
+  grid-area: brand;
+  justify-self: start;
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+// ==================== NAVIGATION ====================
+
+.navigation {
+  grid-area: navigation;
+  display: none;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+
+  a {
+    @include mixins.focus-ring;
+
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height-sm);
+    border-radius: var(--radius-control);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    text-underline-offset: var(--space-1);
+
+    &:hover {
+      color: var(--color-text-primary);
+      text-decoration: underline;
+    }
+  }
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    display: flex;
+  }
+}
+
+// ==================== LOCALE AND APPEARANCE ====================
+
+.locale {
+  grid-area: locale;
+  justify-self: start;
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    justify-self: end;
+  }
+}
+
+.appearance {
+  grid-area: appearance;
+  justify-self: end;
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    padding-left: var(--space-4);
+    border-left: 1px solid var(--color-divider);
+  }
+}
+
+// ==================== AUTH ACTIONS ====================
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: var(--space-1);
+
+  @include mixins.up(breakpoints.$breakpoint-sm) {
+    gap: var(--space-2);
+  }
+}

@@ -1,0 +1,142 @@
+@use '@/shared/styles/controls';
+
+@mixin root {
+  @include controls.sizes;
+
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: top;
+  font-family: var(--font-family-sans);
+  line-height: var(--line-height-normal);
+
+  &[data-full-width] {
+    display: block;
+    width: 100%;
+  }
+}
+
+@mixin wrapper {
+  --input-height-sm: var(--control-height-sm);
+  --input-height-md: var(--control-height-md);
+  --input-height-lg: var(--control-height-lg);
+  --input-padding: var(--control-padding);
+  --input-radius: var(--radius-control);
+  --input-placeholder-color: var(--color-text-muted);
+  --input-section-color: var(--color-text-secondary);
+
+  &[data-multiline] {
+    --input-padding-y-sm: var(--space-2);
+    --input-padding-y-md: var(--space-2);
+    --input-padding-y-lg: var(--space-2);
+  }
+
+  &[data-error] {
+    --input-placeholder-color: var(--color-text-muted);
+    --input-section-color: var(--color-danger-text);
+  }
+
+  &[data-disabled],
+  &:has(input:disabled, textarea:disabled) {
+    --input-section-color: var(--color-text-disabled);
+  }
+}
+
+@mixin input {
+  height: var(--control-height);
+  min-height: var(--control-height);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--control-font-size);
+  line-height: var(--line-height-normal);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    outline-color var(--transition-fast);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+    opacity: 1;
+  }
+
+  &:hover:where(:not(:disabled, [data-disabled], [data-error])) {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+  }
+
+  &[data-error] {
+    border-color: var(--color-danger-border);
+    background: var(--color-danger-subtle);
+  }
+
+  &:focus,
+  &:focus-within {
+    border-color: var(--color-text-muted);
+    box-shadow: 0 0 0 3px var(--color-primary-subtle);
+  }
+
+  &:focus-visible,
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &[data-disabled],
+  &:has(input:disabled) {
+    border-color: var(--color-divider);
+    background: var(--color-surface);
+    color: var(--color-text-disabled);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1;
+
+    &::placeholder {
+      color: var(--color-text-disabled);
+    }
+  }
+}
+
+@mixin section {
+  color: var(--input-section-color);
+
+  svg {
+    display: block;
+    width: var(--control-icon-size);
+    height: var(--control-icon-size);
+    flex-shrink: 0;
+  }
+}
+
+@mixin label {
+  margin-bottom: var(--space-1);
+  color: var(--color-text-primary);
+  font-size: var(--control-font-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+@mixin description {
+  margin-bottom: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+@mixin error {
+  margin-top: var(--space-1);
+  padding-inline-start: var(--space-2);
+  border-inline-start: 2px solid var(--color-danger-border);
+  color: var(--color-danger-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+@mixin asterisk {
+  color: var(--color-danger-text);
+}

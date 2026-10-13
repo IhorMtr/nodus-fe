@@ -1,0 +1,64 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5) var(--space-8);
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--color-divider);
+  font-size: var(--font-size-sm);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    padding-block: var(--space-10);
+  }
+
+  a {
+    @include mixins.focus-ring;
+
+    border-radius: var(--radius-control);
+    text-decoration: none;
+    text-underline-offset: var(--space-1);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.brand {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+}
+
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+  color: var(--color-text-secondary);
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height-sm);
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+}
+
+.copyright {
+  width: 100%;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    width: auto;
+    margin-left: auto;
+  }
+}

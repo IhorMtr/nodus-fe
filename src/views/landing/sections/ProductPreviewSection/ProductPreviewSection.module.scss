@@ -1,0 +1,461 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== SECTION ====================
+
+.root {
+  padding-block: var(--space-16);
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    padding-block: var(--space-12);
+  }
+}
+
+.introduction {
+  max-width: 660px;
+  margin-bottom: var(--space-8);
+
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(var(--font-size-2xl), 3vw, 34px);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.025em;
+  }
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-accent);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.description {
+  max-width: 590px;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+}
+
+// ==================== APPLICATION SHELL ====================
+
+.mediaFrame {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: var(--color-surface);
+}
+
+.interface {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+
+  svg {
+    flex-shrink: 0;
+    stroke-width: 1.6;
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    font-size: var(--font-size-xs);
+  }
+}
+
+.applicationBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-height: 58px;
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-elevated);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    gap: var(--space-3);
+    min-height: 50px;
+    padding-inline: var(--space-3);
+  }
+}
+
+.brand {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    font-size: var(--font-size-sm);
+  }
+}
+
+.workspaceSelector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding-left: var(--space-6);
+  border-left: 1px solid var(--color-divider);
+  color: var(--color-text-secondary);
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    gap: var(--space-1);
+    padding-left: var(--space-3);
+  }
+}
+
+.applicationSearch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  color: var(--color-text-muted);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    span {
+      display: none;
+    }
+  }
+}
+
+.applicationAvatar,
+.userAvatar,
+.messageAvatar {
+  display: grid;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+}
+
+.applicationAvatar {
+  width: 28px;
+  height: 28px;
+}
+
+.workspaceBody {
+  display: grid;
+  grid-template-columns: clamp(104px, 23%, 232px) minmax(0, 1fr);
+  min-height: 520px;
+}
+
+// ==================== WORKSPACE HUB ====================
+
+.workspaceSidebar {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-3) 0;
+  border-right: 1px solid var(--color-border);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-4) var(--space-2) 0;
+  }
+}
+
+.workspaceNavigation,
+.channelList {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    min-height: 34px;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-xs);
+    color: var(--color-text-secondary);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    li {
+      gap: var(--space-1);
+      padding-inline: var(--space-1);
+      font-size: 11px;
+    }
+  }
+}
+
+.workspaceNavigation {
+  .activeNavigation {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    svg {
+      display: none;
+    }
+  }
+}
+
+.channelGroup {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-divider);
+}
+
+.groupHeading {
+  display: block;
+  margin-bottom: var(--space-2);
+  padding-inline: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.channelList {
+  svg {
+    color: var(--color-text-muted);
+  }
+
+  .activeChannel {
+    background: var(--color-surface-active);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+.newChannel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-inline: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    gap: var(--space-1);
+    padding-inline: var(--space-1);
+    font-size: 10px;
+  }
+}
+
+.userPanel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding: var(--space-4) var(--space-2);
+  border-top: 1px solid var(--color-divider);
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    .userAvatar {
+      display: none;
+    }
+    padding-inline: var(--space-1);
+  }
+}
+
+.userDetails {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+
+  strong {
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+.userStatus,
+.presenceSummary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
+
+.busyDot,
+.onlineDot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+}
+
+.busyDot {
+  background: var(--color-presence-busy);
+}
+.onlineDot {
+  background: var(--color-presence-online);
+}
+
+// ==================== CONVERSATION ====================
+
+.conversation {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  background: var(--color-background);
+}
+
+.channelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-3);
+  }
+}
+
+.channelTitle {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+
+  strong {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  > span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+}
+
+.members {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.messageArea {
+  padding: var(--space-5) var(--space-6) var(--space-6);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-4) var(--space-3);
+  }
+}
+
+.dateLabel {
+  display: block;
+  margin-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
+
+.messages {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    .messageAvatar {
+      display: none;
+    }
+  }
+}
+
+.messageContent {
+  flex: 1;
+  min-width: 0;
+
+  p {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    overflow-wrap: anywhere;
+  }
+}
+
+.messageMeta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+
+  strong {
+    font-weight: var(--font-weight-semibold);
+  }
+  span {
+    color: var(--color-text-muted);
+    font-size: 10px;
+  }
+}
+
+// ==================== COMPOSER ====================
+
+.composerArea {
+  margin-top: auto;
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-divider);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-3);
+  }
+}
+
+.composer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 60px;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.sendMark {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-control);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.presenceSummary {
+  margin-top: var(--space-2);
+}

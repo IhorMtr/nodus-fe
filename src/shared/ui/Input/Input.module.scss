@@ -1,0 +1,80 @@
+@use '@/shared/styles/field';
+@use '@/shared/styles/mixins';
+
+.root.root {
+  @include field.root;
+}
+
+.wrapper.wrapper {
+  @include field.wrapper;
+}
+
+.input.input {
+  @include field.input;
+}
+
+.innerInput.innerInput {
+  font-family: var(--font-family-sans);
+  line-height: var(--line-height-normal);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:disabled::placeholder {
+    color: var(--color-text-disabled);
+  }
+}
+
+.section.section {
+  @include field.section;
+}
+
+.label.label {
+  @include field.label;
+}
+
+.description.description {
+  @include field.description;
+}
+
+.error.error {
+  @include field.error;
+}
+
+.required.required {
+  @include field.asterisk;
+}
+
+.visibilityToggle.visibilityToggle {
+  @include mixins.focus-ring;
+
+  width: calc(var(--control-height) - var(--space-2));
+  height: calc(var(--control-height) - var(--space-2));
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--input-section-color);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover:where(:not(:disabled)) {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+
+  &:active:where(:not(:disabled)) {
+    background: var(--color-surface-active);
+  }
+
+  &:disabled {
+    background: transparent;
+    color: var(--color-text-disabled);
+    opacity: 1;
+    cursor: not-allowed;
+  }
+}

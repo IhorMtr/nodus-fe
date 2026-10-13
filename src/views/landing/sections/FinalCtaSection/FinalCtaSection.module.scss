@@ -1,0 +1,29 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-block: var(--space-12);
+  border-top: 1px solid var(--color-divider);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    padding-block: var(--space-16);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-secondary);
+  }
+}

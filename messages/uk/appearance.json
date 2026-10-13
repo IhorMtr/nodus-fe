@@ -1,0 +1,6 @@
+{
+  "actions": {
+    "switchToLight": "Увімкнути світлу тему",
+    "switchToDark": "Увімкнути темну тему"
+  }
+}

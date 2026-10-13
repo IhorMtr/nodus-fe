@@ -1,0 +1,93 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.section {
+  padding-block: var(--space-16);
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    padding-block: 88px;
+  }
+}
+
+.heading {
+  max-width: 640px;
+  margin-bottom: var(--space-10);
+
+  h2 {
+    margin: var(--space-3) 0 0;
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.025em;
+  }
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.showcases {
+  border-top: 1px solid var(--color-divider);
+}
+
+.showcase {
+  display: grid;
+  align-items: center;
+  gap: var(--space-8);
+  padding-block: var(--space-12);
+
+  & + & {
+    border-top: 1px solid var(--color-divider);
+  }
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-12);
+    padding-block: var(--space-16);
+
+    &:nth-child(even) {
+      .copy {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      > figure {
+        grid-column: 1;
+        grid-row: 1;
+      }
+    }
+  }
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    gap: var(--space-16);
+  }
+}
+
+.copy {
+  min-width: 0;
+  max-width: 400px;
+
+  h3 {
+    margin: var(--space-5) 0 var(--space-4);
+    font-size: clamp(24px, 2.5vw, 30px);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-relaxed);
+  }
+}
+
+.number {
+  color: var(--color-accent-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,147 @@
+@use '@/shared/styles/controls';
+
+.root.root {
+  @include controls.sizes;
+
+  --switch-height-sm: var(--icon-size-sm);
+  --switch-height-md: var(--icon-size-md);
+  --switch-height-lg: var(--icon-size-lg);
+  --switch-width-sm: calc(var(--icon-size-sm) * 2 - var(--space-1));
+  --switch-width-md: calc(var(--icon-size-md) * 2 - var(--space-1));
+  --switch-width-lg: calc(var(--icon-size-lg) * 2 - var(--space-1));
+  --switch-thumb-size-sm: calc(var(--icon-size-sm) - 6px);
+  --switch-thumb-size-md: calc(var(--icon-size-md) - 6px);
+  --switch-thumb-size-lg: calc(var(--icon-size-lg) - 6px);
+  --switch-track-label-padding-sm: calc(var(--space-1) / 2);
+  --switch-track-label-padding-md: calc(var(--space-1) / 2);
+  --switch-track-label-padding-lg: calc(var(--space-1) / 2);
+  --switch-radius: var(--radius-full);
+
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+}
+
+.body.body {
+  min-height: var(--control-height);
+  align-items: center;
+  cursor: pointer;
+}
+
+.track.track {
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-active);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+
+  &[data-error] {
+    border-color: var(--color-danger-border);
+  }
+}
+
+.thumb.thumb {
+  border-radius: var(--radius-full);
+  background: var(--color-text-secondary);
+  transition:
+    inset-inline-start var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.input.input {
+  &:focus-visible + .track {
+    border-color: var(--color-focus);
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  &:checked + .track {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+
+    .thumb {
+      background: var(--color-on-primary);
+    }
+  }
+
+  &:not(:disabled) + .track[data-error],
+  &[aria-invalid='true']:not(:disabled) + .track {
+    border-color: var(--color-danger-border);
+  }
+
+  &:disabled + .track {
+    border-color: var(--color-divider);
+    background: var(--color-surface-active);
+    cursor: not-allowed;
+
+    .thumb {
+      background: var(--color-text-disabled);
+    }
+  }
+}
+
+.body:hover .input:not(:disabled) + .track {
+  border-color: var(--color-text-muted);
+  background: var(--color-surface-hover);
+}
+
+.body:hover .input:checked:not(:disabled) + .track {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+}
+
+.body:hover .input:not(:disabled) + .track[data-error],
+.body:hover .input[aria-invalid='true']:not(:disabled) + .track {
+  border-color: var(--color-danger-text);
+}
+
+.input.input:focus-visible:not(:disabled) + .track {
+  border-color: var(--color-focus);
+}
+
+.labelWrapper.labelWrapper {
+  font-size: var(--control-font-size);
+  line-height: var(--line-height-normal);
+  cursor: pointer;
+
+  &[data-disabled] {
+    cursor: not-allowed;
+  }
+}
+
+.label.label,
+.description.description,
+.error.error {
+  padding-inline-start: var(--control-gap);
+  padding-inline-end: 0;
+}
+
+.label.label {
+  color: var(--color-text-primary);
+
+  &[data-disabled] {
+    color: var(--color-text-disabled);
+  }
+}
+
+.description.description,
+.error.error {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.description.description {
+  color: var(--color-text-secondary);
+}
+
+.error.error {
+  color: var(--color-danger-text);
+  font-weight: var(--font-weight-medium);
+}
+
+fieldset:disabled .label.label {
+  color: var(--color-text-disabled);
+}

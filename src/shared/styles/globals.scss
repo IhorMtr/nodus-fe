@@ -19,6 +19,10 @@ body {
   min-height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   min-height: 100vh;
   min-height: 100dvh;
@@ -71,6 +75,10 @@ a {
 // ==================== REDUCED MOTION ====================
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   :root {
     --duration-fast: 0.01ms;
     --duration-normal: 0.01ms;

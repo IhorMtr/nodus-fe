@@ -1,0 +1,32 @@
+@use '@/shared/styles/field';
+
+.root.root {
+  @include field.root;
+}
+
+.wrapper.wrapper {
+  @include field.wrapper;
+}
+
+.input.input {
+  @include field.input;
+
+  height: auto;
+  padding-block: var(--space-2);
+}
+
+.label.label {
+  @include field.label;
+}
+
+.description.description {
+  @include field.description;
+}
+
+.error.error {
+  @include field.error;
+}
+
+.required.required {
+  @include field.asterisk;
+}

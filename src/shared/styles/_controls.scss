@@ -1,0 +1,23 @@
+@mixin sizes {
+  --control-height: var(--control-height-md);
+  --control-icon-size: var(--icon-size-md);
+  --control-font-size: var(--font-size-md);
+  --control-padding: var(--space-3);
+  --control-gap: var(--space-2);
+
+  &[data-size='sm'] {
+    --control-height: var(--control-height-sm);
+    --control-icon-size: var(--icon-size-sm);
+    --control-font-size: var(--font-size-sm);
+    --control-padding: var(--space-2);
+    --control-gap: var(--space-1);
+  }
+
+  &[data-size='lg'] {
+    --control-height: var(--control-height-lg);
+    --control-icon-size: var(--icon-size-lg);
+    --control-font-size: var(--font-size-lg);
+    --control-padding: var(--space-4);
+    --control-gap: var(--space-2);
+  }
+}

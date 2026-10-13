@@ -1,0 +1,9 @@
+{
+  "app": {
+    "description": "Nodus brings workspaces, channels and real-time conversations together in one focused place for your team."
+  },
+  "actions": {
+    "togglePasswordVisibility": "Show or hide password",
+    "clearSelection": "Clear selection"
+  }
+}
