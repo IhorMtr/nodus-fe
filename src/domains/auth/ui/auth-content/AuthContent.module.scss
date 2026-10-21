@@ -1,0 +1,44 @@
+@use '@/shared/styles/mixins' as mixins;
+
+.introduction {
+  margin-bottom: var(--space-8);
+
+  h1 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(var(--font-size-2xl), 2.5vw, var(--font-size-3xl));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.025em;
+    overflow-wrap: anywhere;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+}
+
+.alternative {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1) var(--space-2);
+  margin: var(--space-6) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+
+  a {
+    @include mixins.focus-ring;
+
+    border-radius: var(--radius-xs);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    text-underline-offset: 3px;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+}

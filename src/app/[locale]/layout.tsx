@@ -1,19 +1,12 @@
-import 'modern-normalize/modern-normalize.css';
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import '@/shared/styles/globals.scss';
-
-import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
-import { appFont } from '@/shared/config/font';
 import { routing } from '@/shared/i18n/routing';
 
-import { AppProviders } from '../_providers/AppProviders';
+import { DocumentLocale } from './_providers/DocumentLocale';
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -58,15 +51,9 @@ export default async function LocaleLayout({
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale} {...mantineHtmlProps} className={appFont.variable}>
-      <head>
-        <ColorSchemeScript defaultColorScheme="auto" />
-      </head>
-      <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <AppProviders>{children}</AppProviders>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <DocumentLocale locale={locale} />
+      {children}
+    </NextIntlClientProvider>
   );
 }

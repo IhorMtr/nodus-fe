@@ -1,0 +1,25 @@
+@mixin form-styles {
+  .form {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .error {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border-inline-start: 2px solid var(--color-danger-border);
+    border-radius: var(--radius-control);
+    background: var(--color-danger-subtle);
+    color: var(--color-danger-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .submit {
+    margin-top: var(--space-2);
+  }
+}

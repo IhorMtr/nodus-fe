@@ -1,6 +1,15 @@
 {
   "actions": {
     "signIn": "Sign in",
-    "signInPreview": "Sign in is not available yet. Explore the product preview."
+    "signInPreview": "Sign in is not available yet. Explore the product preview.",
+    "signUp": "Sign up",
+    "createAccount": "Create account"
+  },
+  "fields": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password"
   }
 }

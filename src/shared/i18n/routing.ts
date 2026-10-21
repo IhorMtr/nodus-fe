@@ -7,5 +7,9 @@ export const routing = defineRouting({
   localeDetection: false,
   pathnames: {
     '/': '/',
+    '/auth/login': '/auth/login',
+    '/auth/register': '/auth/register',
+    '/app': '/app',
+    '/workspaces': '/workspaces',
   },
 });

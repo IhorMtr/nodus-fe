@@ -1,0 +1,99 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.root {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.formPanel,
+.previewPanel {
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+.formPanel {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  background: var(--color-background);
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    padding: var(--space-8);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    padding-inline: var(--space-5);
+  }
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-4);
+}
+
+.brand {
+  @include mixins.focus-ring;
+
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.backLink {
+  @include mixins.focus-ring;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height-sm);
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  text-underline-offset: var(--space-1);
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: var(--color-text-primary);
+    text-decoration: underline;
+  }
+}
+
+.formArea {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--space-12);
+}
+
+.formContent {
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
+}
+
+.previewPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  background: var(--color-surface);
+
+  @include mixins.up(breakpoints.$breakpoint-xl) {
+    padding: var(--space-12);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-lg) {
+    display: none;
+  }
+}

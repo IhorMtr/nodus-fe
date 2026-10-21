@@ -1,0 +1,3 @@
+@use '../auth-form/form-mixins' as form;
+
+@include form.form-styles;
