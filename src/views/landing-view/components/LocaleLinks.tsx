@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 
-import { Link, usePathname } from '@/shared/i18n/navigation';
+import { Link } from '@/shared/i18n/navigation';
 import { routing } from '@/shared/i18n/routing';
 
 import styles from './LocaleLinks.module.scss';
@@ -12,7 +12,6 @@ const localeNames = { uk: 'ukrainian', en: 'english' } as const;
 
 export function LocaleLinks() {
   const locale = useLocale();
-  const pathname = usePathname();
   const language = useTranslations('language');
 
   return (
@@ -21,7 +20,7 @@ export function LocaleLinks() {
         <Link
           key={availableLocale}
           className={styles.option}
-          href={pathname}
+          href="/"
           locale={availableLocale}
           lang={availableLocale}
           hrefLang={availableLocale}

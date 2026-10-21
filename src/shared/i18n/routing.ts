@@ -11,5 +11,9 @@ export const routing = defineRouting({
     '/auth/register': '/auth/register',
     '/app': '/app',
     '/workspaces': '/workspaces',
+    '/workspaces/new': '/workspaces/new',
+    '/workspaces/[workspaceId]': '/workspaces/[workspaceId]',
+    '/workspaces/[workspaceId]/channels/[channelId]':
+      '/workspaces/[workspaceId]/channels/[channelId]',
   },
 });

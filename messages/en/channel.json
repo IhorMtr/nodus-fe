@@ -1,0 +1,15 @@
+{
+  "messagesPending": "Messages will be available here in a future update.",
+  "states": {
+    "loading": "Loading channel",
+    "empty": "No channels yet",
+    "emptyDescription": "This workspace has no available channels. Try again after a channel has been added.",
+    "unavailable": "Channel unavailable",
+    "unavailableDescription": "This channel no longer exists or is not available in this workspace.",
+    "loadError": "Unable to open this channel",
+    "loadErrorDescription": "Check your connection and try again. The channel could not be loaded."
+  },
+  "actions": {
+    "openWorkspace": "Open an available channel"
+  }
+}

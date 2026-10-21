@@ -1,0 +1,39 @@
+{
+  "creation": {
+    "title": "Create a workspace",
+    "description": "Give your team a place to bring conversations together.",
+    "submit": "Create workspace"
+  },
+  "fields": {
+    "name": "Workspace name",
+    "namePlaceholder": "Your team or project"
+  },
+  "validation": {
+    "nameRequired": "Enter a workspace name.",
+    "nameTooLong": "Workspace name must be at most 100 characters."
+  },
+  "errors": {
+    "validationFailed": "Check the form and try again.",
+    "invalidName": "Check the workspace name and try again.",
+    "networkError": "Unable to connect. Check your connection and try again.",
+    "requestFailed": "Unable to create the workspace. Please try again.",
+    "accessDenied": "You don't have permission to perform this action.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "sessionChanged": "Your session changed. Please try again."
+  },
+  "states": {
+    "loading": "Loading workspace",
+    "currentUserFailed": "Unable to load your account. Please try again.",
+    "loadError": "Unable to open your workspace",
+    "loadErrorDescription": "Check your connection and try again. Your workspaces could not be loaded.",
+    "unavailable": "Workspace unavailable",
+    "unavailableDescription": "This workspace no longer exists or you no longer have access to it.",
+    "accessDenied": "You don't have access to this workspace.",
+    "invalidLink": "This workspace or channel link is invalid. Open an available workspace to continue.",
+    "managementPending": "Workspace management will be available in a future update."
+  },
+  "actions": {
+    "retry": "Try again",
+    "openAvailable": "Open an available workspace"
+  }
+}

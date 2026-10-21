@@ -1,0 +1,1 @@
+export { NewWorkspaceView } from './NewWorkspaceView';

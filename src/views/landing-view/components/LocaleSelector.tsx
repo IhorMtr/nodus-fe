@@ -4,7 +4,7 @@ import { Menu } from '@mantine/core';
 import { Check, ChevronDown, Languages } from 'lucide-react';
 import { hasLocale, useLocale, useTranslations } from 'next-intl';
 
-import { usePathname, useRouter } from '@/shared/i18n/navigation';
+import { useRouter } from '@/shared/i18n/navigation';
 import { routing } from '@/shared/i18n/routing';
 
 import styles from './LocaleSelector.module.scss';
@@ -18,7 +18,6 @@ const localeCodes = { uk: 'UA', en: 'EN' } as const;
 
 export function LocaleSelector() {
   const locale = useLocale();
-  const pathname = usePathname();
   const router = useRouter();
   const language = useTranslations('language');
 
@@ -27,7 +26,7 @@ export function LocaleSelector() {
   function changeLocale(value: string) {
     if (!hasLocale(routing.locales, value) || value === locale) return;
 
-    router.replace(pathname, { locale: value, scroll: false });
+    router.replace('/', { locale: value, scroll: false });
   }
 
   // ==================== MENU ====================
