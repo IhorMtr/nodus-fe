@@ -1,0 +1,126 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.header {
+  display: flex;
+  height: 64px;
+  min-height: 64px;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-surface-elevated);
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    height: 56px;
+    min-height: 56px;
+    gap: var(--space-2);
+    padding-inline: var(--space-3);
+  }
+}
+
+.identity,
+.actions {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+
+.identity {
+  flex: 1;
+  gap: var(--space-5);
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    gap: var(--space-2);
+  }
+}
+
+.actions {
+  flex-shrink: 0;
+  gap: var(--space-1);
+}
+
+.mobileMenu {
+  display: none;
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    display: flex;
+  }
+}
+
+.brand {
+  flex-shrink: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+  text-decoration: none;
+
+  @include mixins.focus-ring;
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    display: none;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  flex-shrink: 0;
+  background: var(--color-divider);
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    display: none;
+  }
+}
+
+.switcher {
+  display: flex;
+  min-width: 0;
+  max-width: 320px;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+
+  @include mixins.focus-ring;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    max-width: 100%;
+    padding-inline: var(--space-2);
+  }
+}
+
+.dropdown {
+  border-color: var(--color-border);
+  background: var(--color-surface-elevated);
+}
+
+.workspaceItem {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

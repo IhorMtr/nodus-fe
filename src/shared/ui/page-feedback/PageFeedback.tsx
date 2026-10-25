@@ -10,6 +10,7 @@ type PageFeedbackProps = {
   description?: string;
   actionLabel?: string;
   onAction?: () => void;
+  contained?: boolean;
 };
 
 export function PageFeedback({
@@ -17,9 +18,10 @@ export function PageFeedback({
   description,
   actionLabel,
   onAction,
+  contained = false,
 }: PageFeedbackProps) {
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} ${contained ? styles.contained : ''}`}>
       <div className={styles.content}>
         <h1>{title}</h1>
         {description && <p role="status">{description}</p>}
@@ -33,9 +35,15 @@ export function PageFeedback({
   );
 }
 
-export function PageSpinner({ label }: { label: string }) {
+export function PageSpinner({
+  label,
+  contained = false,
+}: {
+  label: string;
+  contained?: boolean;
+}) {
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} ${contained ? styles.contained : ''}`}>
       <Spinner label={label} />
     </main>
   );

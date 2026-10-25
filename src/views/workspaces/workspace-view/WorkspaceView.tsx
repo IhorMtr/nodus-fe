@@ -12,11 +12,13 @@ export function WorkspaceView({ workspaceId }: { workspaceId: string }) {
   const auth = useTranslations('auth.messages');
   const state = useWorkspaceView(workspaceId);
 
-  if (state.isFetching) return <PageSpinner label={t('states.loading')} />;
+  if (state.isFetching)
+    return <PageSpinner contained label={t('states.loading')} />;
 
   if (state.isUnavailable || state.isInvalidLink || state.status === 403) {
     return (
       <PageFeedback
+        contained
         title={t('states.unavailable')}
         description={
           state.isInvalidLink
@@ -34,6 +36,7 @@ export function WorkspaceView({ workspaceId }: { workspaceId: string }) {
   if (state.error) {
     return (
       <PageFeedback
+        contained
         title={t('states.loadError')}
         description={
           state.status === 401
@@ -49,6 +52,7 @@ export function WorkspaceView({ workspaceId }: { workspaceId: string }) {
   if (state.isEmpty) {
     return (
       <PageFeedback
+        contained
         title={channel('states.empty')}
         description={channel('states.emptyDescription')}
         actionLabel={t('actions.retry')}
@@ -57,5 +61,5 @@ export function WorkspaceView({ workspaceId }: { workspaceId: string }) {
     );
   }
 
-  return <PageSpinner label={t('states.loading')} />;
+  return <PageSpinner contained label={t('states.loading')} />;
 }

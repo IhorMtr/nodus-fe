@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Hash } from 'lucide-react';
 
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
@@ -19,7 +20,8 @@ export function ChannelView({
   const auth = useTranslations('auth.messages');
   const state = useChannelView(workspaceId, channelId);
 
-  if (state.isFetching) return <PageSpinner label={t('states.loading')} />;
+  if (state.isFetching)
+    return <PageSpinner contained label={t('states.loading')} />;
 
   if (
     state.isWorkspaceUnavailable ||
@@ -28,6 +30,7 @@ export function ChannelView({
   ) {
     return (
       <PageFeedback
+        contained
         title={workspace('states.unavailable')}
         description={
           state.isInvalidLink
@@ -45,6 +48,7 @@ export function ChannelView({
   if (state.isUnavailable) {
     return (
       <PageFeedback
+        contained
         title={t('states.unavailable')}
         description={t('states.unavailableDescription')}
         actionLabel={t('actions.openWorkspace')}
@@ -56,6 +60,7 @@ export function ChannelView({
   if (state.error) {
     return (
       <PageFeedback
+        contained
         title={t('states.loadError')}
         description={
           state.status === 401
@@ -68,14 +73,20 @@ export function ChannelView({
     );
   }
 
-  if (!state.channel) return <PageSpinner label={t('states.loading')} />;
+  if (!state.channel)
+    return <PageSpinner contained label={t('states.loading')} />;
 
   return (
     <main className={styles.page}>
-      <section className={styles.channel} aria-labelledby="channel-title">
-        <h1 id="channel-title"># {state.channel.name}</h1>
+      <header className={styles.header}>
+        <Hash size={18} aria-hidden="true" />
+        <h1 id="channel-title" title={state.channel.name}>
+          {state.channel.name}
+        </h1>
+      </header>
+      <div className={styles.empty}>
         <p>{t('messagesPending')}</p>
-      </section>
+      </div>
     </main>
   );
 }

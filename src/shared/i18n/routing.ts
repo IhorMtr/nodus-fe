@@ -13,6 +13,12 @@ export const routing = defineRouting({
     '/workspaces': '/workspaces',
     '/workspaces/new': '/workspaces/new',
     '/workspaces/[workspaceId]': '/workspaces/[workspaceId]',
+    '/workspaces/[workspaceId]/overview': '/workspaces/[workspaceId]/overview',
+    '/workspaces/[workspaceId]/conversations':
+      '/workspaces/[workspaceId]/conversations',
+    '/workspaces/[workspaceId]/announcements':
+      '/workspaces/[workspaceId]/announcements',
+    '/workspaces/[workspaceId]/search': '/workspaces/[workspaceId]/search',
     '/workspaces/[workspaceId]/channels/[channelId]':
       '/workspaces/[workspaceId]/channels/[channelId]',
   },

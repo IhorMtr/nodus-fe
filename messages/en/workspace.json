@@ -1,4 +1,22 @@
 {
+  "navigation": {
+    "sidebar": "Workspace navigation",
+    "openSidebar": "Open workspace navigation",
+    "workspaces": "Workspaces",
+    "create": "Create workspace",
+    "overview": "Overview",
+    "conversations": "Conversations",
+    "announcements": "Announcements",
+    "search": "Search",
+    "channels": "Channels",
+    "notificationsPending": "Notifications are coming soon"
+  },
+  "sections": {
+    "overviewPending": "Your workspace overview will appear here soon.",
+    "conversationsPending": "Conversations will be available here soon.",
+    "announcementsPending": "Announcements will be available here soon.",
+    "searchPending": "Workspace search will be available here soon."
+  },
   "creation": {
     "title": "Create a workspace",
     "description": "Give your team a place to bring conversations together.",
