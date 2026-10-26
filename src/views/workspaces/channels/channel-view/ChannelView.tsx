@@ -5,6 +5,7 @@ import { Hash } from 'lucide-react';
 
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
+import { ChannelConversation } from './ChannelConversation';
 import { useChannelView } from './hooks/use-channel-view';
 import styles from './ChannelView.module.scss';
 
@@ -84,9 +85,11 @@ export function ChannelView({
           {state.channel.name}
         </h1>
       </header>
-      <div className={styles.empty}>
-        <p>{t('messagesPending')}</p>
-      </div>
+      <ChannelConversation
+        key={state.channel.id}
+        workspaceId={workspaceId}
+        channelId={state.channel.id}
+      />
     </main>
   );
 }

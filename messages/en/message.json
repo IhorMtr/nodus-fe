@@ -1,0 +1,48 @@
+{
+  "list": {
+    "label": "Messages"
+  },
+  "composer": {
+    "label": "Message",
+    "placeholder": "Write a message…"
+  },
+  "actions": {
+    "send": "Send message",
+    "more": "Message actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "retry": "Try again"
+  },
+  "meta": {
+    "edited": "(edited)"
+  },
+  "deletion": {
+    "title": "Delete this message?",
+    "description": "The message will be permanently deleted for everyone in this channel. This cannot be undone."
+  },
+  "states": {
+    "loading": "Loading messages",
+    "loadingOlder": "Loading earlier messages",
+    "empty": "No messages yet",
+    "emptyDescription": "Start the conversation by sending the first message.",
+    "loadError": "Unable to load messages",
+    "loadErrorDescription": "Check your connection and try again.",
+    "olderLoadError": "Unable to load earlier messages"
+  },
+  "validation": {
+    "contentRequired": "Enter a message.",
+    "contentTooLong": "Message must be at most 4000 characters."
+  },
+  "errors": {
+    "validationFailed": "Check the message and try again.",
+    "networkError": "Unable to connect. Check your connection and try again.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "sessionChanged": "Your session changed. Please try again.",
+    "accessDenied": "You don't have permission to do this.",
+    "notFound": "This channel is no longer available.",
+    "messageNotFound": "This message no longer exists.",
+    "requestFailed": "Something went wrong. Please try again."
+  }
+}

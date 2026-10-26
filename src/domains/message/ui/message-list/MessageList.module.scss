@@ -1,0 +1,100 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.viewport {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.scroller {
+  min-height: 0;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // Scroll position is compensated manually when history is prepended.
+  overflow-anchor: none;
+  overscroll-behavior: contain;
+  padding-block: var(--space-6);
+  // Faint tonal light on the reading zone, fading into the composer surface.
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 30% 0%,
+      var(--color-surface) 0%,
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-background) 0%,
+      var(--color-surface) 100%
+    );
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: -2px;
+  }
+}
+
+.inner {
+  width: 100%;
+  // Left-anchored column, aligned with the channel header and composer.
+  max-width: 960px;
+  margin-inline: 0;
+  padding-inline: var(--space-8);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding-inline: var(--space-4);
+  }
+}
+
+.list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-10) 0;
+  color: var(--color-text-muted);
+  text-align: left;
+
+  strong {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+  }
+
+  p {
+    max-width: 360px;
+    margin: 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+}
+
+.status {
+  position: absolute;
+  z-index: var(--z-sticky);
+  top: var(--space-3);
+  left: 50%;
+  display: flex;
+  max-width: calc(100% - var(--space-8));
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  transform: translateX(-50%);
+}

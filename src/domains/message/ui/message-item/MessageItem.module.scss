@@ -1,0 +1,93 @@
+.item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: var(--space-3);
+  margin-inline: calc(-1 * var(--space-3));
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+
+  &:hover,
+  &:focus-within,
+  &[data-editing] {
+    background: var(--color-surface-hover);
+  }
+}
+
+.avatar {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.body {
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  min-height: 24px;
+  align-items: baseline;
+  gap: var(--space-2);
+  // Keeps long names clear of the action button.
+  padding-right: var(--space-8);
+}
+
+.author {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time,
+.edited {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.content {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.actions {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+
+  .item:hover &,
+  .item:focus-within &,
+  &:has([aria-expanded='true']) {
+    opacity: 1;
+  }
+
+  // Touch devices have no hover, so the action stays reachable.
+  @media (hover: none) {
+    opacity: 1;
+  }
+}
+
+.dropdown {
+  border-color: var(--color-border);
+  background: var(--color-surface-elevated);
+}

@@ -1,5 +1,4 @@
 {
-  "messagesPending": "Messages will be available here in a future update.",
   "states": {
     "loading": "Loading channel",
     "empty": "No channels yet",

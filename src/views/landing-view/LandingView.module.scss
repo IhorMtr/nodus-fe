@@ -1,8 +1,12 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
 @use '@/shared/styles/mixins' as mixins;
 
 .root {
+  // Full-width section backdrops extend past the container.
+  overflow-x: clip;
   min-height: 100dvh;
+  background: effects.glow(50%, 0%, 720px), var(--color-background);
 
   main:focus {
     outline: none;

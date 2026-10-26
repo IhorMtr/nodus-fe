@@ -1,7 +1,18 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
 @use '@/shared/styles/mixins' as mixins;
 
 .root {
+  @include effects.full-bleed-backdrop(
+    (
+      effects.glow(88%, 50%, 460px),
+      effects.ring(92%, 50%, 140px),
+      effects.ring(92%, 50%, 240px),
+      effects.ring(92%, 50%, 340px),
+      effects.ring(92%, 50%, 440px)
+    )
+  );
+
   display: grid;
   align-items: center;
   gap: var(--space-8);
@@ -16,6 +27,8 @@
 }
 
 .copy {
+  @include effects.rise-on-scroll;
+
   max-width: 46ch;
 
   h2 {
@@ -41,10 +54,16 @@
 }
 
 .hierarchy {
+  @include effects.rise-on-scroll;
+
   padding: var(--space-6);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-container);
-  background: var(--color-surface);
+  background: linear-gradient(
+    160deg,
+    var(--color-surface-elevated) 0%,
+    var(--color-surface) 100%
+  );
 
   @include mixins.up(breakpoints.$breakpoint-md) {
     padding: var(--space-8);

@@ -4,15 +4,15 @@ import type { ReactNode } from 'react';
 
 import { Link } from '@/shared/i18n/navigation';
 
-import { AuthPreview } from '../auth-preview';
-
 import styles from './AuthLayout.module.scss';
 
 type AuthLayoutProps = {
   children: ReactNode;
+  // Product visual shown beside the form on wide screens.
+  preview: ReactNode;
 };
 
-export function AuthLayout({ children }: AuthLayoutProps) {
+export function AuthLayout({ children, preview }: AuthLayoutProps) {
   const product = useTranslations('product');
   const auth = useTranslations('auth');
 
@@ -32,9 +32,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           <div className={styles.formContent}>{children}</div>
         </div>
       </div>
-      <aside className={styles.previewPanel}>
-        <AuthPreview />
-      </aside>
+      <aside className={styles.previewPanel}>{preview}</aside>
     </main>
   );
 }

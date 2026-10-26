@@ -26,6 +26,7 @@ export default getRequestConfig(
       auth,
       workspace,
       channel,
+      message,
     ] = await Promise.all([
       import(`../../../messages/${locale}/common.json`),
       import(`../../../messages/${locale}/user.json`),
@@ -37,6 +38,7 @@ export default getRequestConfig(
       import(`../../../messages/${locale}/auth.json`),
       import(`../../../messages/${locale}/workspace.json`),
       import(`../../../messages/${locale}/channel.json`),
+      import(`../../../messages/${locale}/message.json`),
     ]);
 
     return {
@@ -52,6 +54,7 @@ export default getRequestConfig(
         auth: auth.default,
         workspace: workspace.default,
         channel: channel.default,
+        message: message.default,
       },
     };
   }

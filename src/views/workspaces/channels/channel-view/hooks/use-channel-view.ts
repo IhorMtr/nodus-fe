@@ -15,23 +15,32 @@ export function useChannelView(workspaceId: string, channelId: string) {
   const channel = useChannelQuery(workspaceId, channelId, {
     enabled: user.isSuccess && user.isFetchedAfterMount && !user.isFetching,
   });
-  const error = user.error ?? channel.error;
-  const status = isAxiosError(error) ? error.response?.status : undefined;
+  const rawError = user.error ?? channel.error;
+  const rawStatus = isAxiosError(rawError)
+    ? rawError.response?.status
+    : undefined;
   const response = isAxiosError<ApiErrorResponse>(channel.error)
     ? channel.error.response
     : undefined;
-  const isFetching = user.isFetching || channel.isFetching;
+  // Once the channel has loaded, a failed background refetch (for example a
+  // network blip on window focus) must not replace the open conversation.
+  // Only responses that mean access was lost are treated as terminal.
+  const isTerminalError =
+    rawStatus !== undefined && [400, 401, 403, 404].includes(rawStatus);
   const isReady =
-    user.isSuccess &&
+    user.data !== undefined &&
     user.isFetchedAfterMount &&
-    channel.isSuccess &&
+    channel.data !== undefined &&
     channel.isFetchedAfterMount &&
-    !isFetching;
+    (!rawError || !isTerminalError);
+  const error = isReady ? undefined : rawError;
+  const status = isReady ? undefined : rawStatus;
+  const isFetching = !isReady && (user.isFetching || channel.isFetching);
   const isUnavailable = !user.isError && response?.status === 404;
   const isInvalidLink = !user.isError && response?.status === 400;
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || !user.data || !channel.data) return;
 
     // The scoped endpoint verifies membership and the channel's workspace.
     // An explicitly opened URL always wins over any saved channel choice.

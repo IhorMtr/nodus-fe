@@ -1,0 +1,108 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== LAYOUT ====================
+
+.root {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  overflow: hidden;
+  background:
+    effects.glow(50%, 45%, 520px), effects.ring(50%, 45%, 220px),
+    effects.ring(50%, 45%, 340px), effects.ring(50%, 45%, 460px),
+    effects.ring(50%, 45%, 580px), effects.lines(115deg, 120px),
+    linear-gradient(
+      180deg,
+      var(--color-surface-elevated) 0%,
+      var(--color-background) 60%
+    );
+}
+
+.header {
+  padding: var(--space-6);
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    padding: var(--space-8);
+  }
+}
+
+.brand {
+  @include mixins.focus-ring;
+
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+// ==================== CONTENT ====================
+
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-6) var(--space-16);
+  text-align: center;
+
+  > * {
+    @include effects.rise;
+  }
+
+  > :nth-child(2) {
+    animation-delay: 80ms;
+  }
+
+  > :nth-child(3) {
+    animation-delay: 160ms;
+  }
+
+  > :nth-child(4) {
+    animation-delay: 240ms;
+  }
+
+  h1 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-3xl));
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.03em;
+  }
+}
+
+// Neutral tonal fade instead of a flat or colored numeral.
+.code {
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(
+    180deg,
+    var(--color-text-primary) 0%,
+    var(--color-border) 100%
+  );
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(6rem, 18vw, 11rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.06em;
+  line-height: 1;
+  -webkit-background-clip: text;
+}
+
+.description {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}

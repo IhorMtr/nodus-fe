@@ -1,0 +1,48 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.composer {
+  display: flex;
+  min-height: 80px; // Matches the sidebar profile bar so the dividers line up.
+  flex-shrink: 0;
+  align-items: center;
+  padding: var(--space-3) var(--space-8);
+  border-top: 1px solid var(--color-divider);
+  background: linear-gradient(
+    180deg,
+    var(--color-surface) 0%,
+    var(--color-surface-hover) 100%
+  );
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding-inline: var(--space-4);
+  }
+}
+
+.inner {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+
+  > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  // Roomier field than the default control, since it is the main input here.
+  textarea {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+  }
+}
+
+.error {
+  margin: var(--space-2) 0 0;
+  color: var(--color-danger-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}

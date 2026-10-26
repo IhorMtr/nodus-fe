@@ -1,7 +1,12 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
 @use '@/shared/styles/mixins' as mixins;
 
 .section {
+  @include effects.full-bleed-backdrop(
+    (effects.glow(12%, 50%, 420px), effects.lines(115deg, 120px))
+  );
+
   padding-block: var(--space-16);
 
   @include mixins.up(breakpoints.$breakpoint-lg) {
@@ -34,6 +39,8 @@
 }
 
 .showcase {
+  @include effects.rise-on-scroll;
+
   display: grid;
   align-items: center;
   gap: var(--space-8);

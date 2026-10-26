@@ -1,7 +1,13 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
 @use '@/shared/styles/mixins' as mixins;
 
 .root {
+  @include effects.full-bleed-backdrop(
+    (effects.glow(50%, 100%, 560px), effects.lines(65deg, 100px))
+  );
+  @include effects.rise-on-scroll;
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;

@@ -3,6 +3,7 @@ import type auth from '../../../messages/uk/auth.json';
 import type channel from '../../../messages/uk/channel.json';
 import type common from '../../../messages/uk/common.json';
 import type language from '../../../messages/uk/language.json';
+import type message from '../../../messages/uk/message.json';
 import type navigation from '../../../messages/uk/navigation.json';
 import type product from '../../../messages/uk/product.json';
 import type presence from '../../../messages/uk/presence.json';
@@ -20,6 +21,7 @@ declare module 'next-intl' {
       channel: typeof channel;
       common: typeof common;
       language: typeof language;
+      message: typeof message;
       user: typeof user;
       product: typeof product;
       navigation: typeof navigation;
