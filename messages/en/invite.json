@@ -1,0 +1,69 @@
+{
+  "members": {
+    "title": "Members",
+    "description": "People in {workspace}",
+    "listTitle": "Workspace members",
+    "loading": "Loading members",
+    "empty": "No members to show."
+  },
+  "management": {
+    "title": "Invitations",
+    "description": "Invite someone to join this workspace.",
+    "loading": "Loading invitations",
+    "empty": "No invitations have been created yet.",
+    "expires": "Expires {date}",
+    "shareTitle": "Share invitation",
+    "onceOnly": "Copy this link now. It cannot be retrieved after you close this window.",
+    "linkLabel": "Invitation link",
+    "copied": "Link copied.",
+    "failed": "Copy failed. Select and copy the link above."
+  },
+  "roles": {
+    "Owner": "Owner",
+    "Admin": "Admin",
+    "Member": "Member"
+  },
+  "status": {
+    "active": "Active",
+    "used": "Used",
+    "revoked": "Revoked",
+    "expired": "Expired"
+  },
+  "page": {
+    "title": "Join a workspace",
+    "eyebrow": "You've been invited",
+    "loading": "Checking invitation",
+    "missing": "This invitation link is incomplete.",
+    "expires": "Invitation expires {date}",
+    "checkingSession": "Checking your session",
+    "sessionUnavailable": "Your session could not be checked. Try again to continue.",
+    "signInPrompt": "Sign in or create an account to accept this invitation."
+  },
+  "actions": {
+    "create": "Create invitation",
+    "revoke": "Revoke",
+    "copy": "Copy link",
+    "retry": "Try again",
+    "refresh": "Refresh",
+    "home": "Go home",
+    "leave": "Leave invitation",
+    "accept": "Join workspace",
+    "login": "Sign in",
+    "register": "Create account",
+    "openWorkspace": "Open workspace"
+  },
+  "errors": {
+    "InviteNotFound": "This invitation was not found.",
+    "InviteExpired": "This invitation has expired.",
+    "InviteRevoked": "This invitation was revoked.",
+    "InviteAlreadyUsed": "This invitation has already been used.",
+    "AlreadyWorkspaceMember": "You already belong to this workspace.",
+    "InsufficientWorkspaceRole": "Only workspace owners and admins can manage invitations.",
+    "WorkspaceNotFound": "This workspace is unavailable.",
+    "ValidationFailed": "The invitation information is invalid.",
+    "Unauthorized": "Sign in to continue.",
+    "AccessTokenExpired": "Your session has expired. Sign in again.",
+    "networkError": "Unable to connect. Check your connection and try again.",
+    "requestFailed": "Something went wrong. Please try again."
+  }
+}

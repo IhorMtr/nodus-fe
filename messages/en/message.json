@@ -29,7 +29,8 @@
     "emptyDescription": "Start the conversation by sending the first message.",
     "loadError": "Unable to load messages",
     "loadErrorDescription": "Check your connection and try again.",
-    "olderLoadError": "Unable to load earlier messages"
+    "olderLoadError": "Unable to load earlier messages",
+    "realtimeUnavailable": "Live updates are unavailable. Messages can still be loaded and sent."
   },
   "validation": {
     "contentRequired": "Enter a message.",

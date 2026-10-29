@@ -52,6 +52,11 @@ export function ChannelConversation({
 
   return (
     <div className={styles.conversation}>
+      {history.joinError && (
+        <p role="status" title={history.joinError}>
+          {t('states.realtimeUnavailable')}
+        </p>
+      )}
       <MessageList
         messages={history.messages}
         currentUserId={history.currentUserId}

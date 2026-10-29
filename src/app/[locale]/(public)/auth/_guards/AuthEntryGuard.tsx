@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 
 import { authLifecycle, useAuthSession } from '@/domains/auth/model/session';
 import { SessionFeedback } from '@/domains/auth/ui/session-feedback';
+import { inviteStorage } from '@/domains/invite/model/invitations';
 import { useRouter } from '@/shared/i18n/navigation';
 
 function reportInitializationError(error: unknown) {
@@ -25,7 +26,9 @@ export function AuthEntryGuard({ children }: { children: ReactNode }) {
       .initialize()
       .catch(reportInitializationError)
       .finally(() => {
-        if (mounted) setInitialized(true);
+        if (mounted) {
+          setInitialized(true);
+        }
       });
 
     return () => {
@@ -36,7 +39,9 @@ export function AuthEntryGuard({ children }: { children: ReactNode }) {
   // ==================== AUTHENTICATION ENTRY ====================
 
   useEffect(() => {
-    if (status === 'authenticated') router.replace('/app');
+    if (status === 'authenticated') {
+      router.replace(inviteStorage.get() ? '/invites' : '/app');
+    }
   }, [status, router]);
 
   if (!initialized || status === 'initializing' || status === 'authenticated') {

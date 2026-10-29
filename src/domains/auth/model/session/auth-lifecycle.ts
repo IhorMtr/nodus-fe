@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios';
 
 import { configureHttpAuthentication } from '@/shared/api/http-authentication';
 import { httpClient } from '@/shared/api/http-client';
+import { logRealtime } from '@/shared/realtime/realtime-debug';
 
 import { authApi } from '../../api/auth-api';
 import { AuthError } from '../errors';
@@ -39,10 +40,13 @@ function isInvalidSession(error: AuthError): boolean {
 // ==================== COOKIE OPERATIONS ====================
 
 function enqueue(operation: () => Promise<void>): Promise<void> {
-  if (typeof window === 'undefined')
+  if (typeof window === 'undefined') {
     return Promise.reject(new AuthError('InternalError'));
+  }
+
   const result = cookieOperation.then(operation);
   cookieOperation = result.catch(() => {});
+
   return result;
 }
 
@@ -53,18 +57,25 @@ export const authLifecycle = {
     if (typeof window === 'undefined') {
       return Promise.reject(new AuthError('InternalError'));
     }
+
     if (authenticationPending) {
       return Promise.reject(new AuthError('SessionChanged'));
     }
+
     authenticationPending = true;
     const version = authSession.beginTransition();
+
     return enqueue(async () => {
-      if (version !== authSession.getVersion())
+      if (version !== authSession.getVersion()) {
         throw new AuthError('SessionChanged');
+      }
+
       try {
         const tokens = await request();
-        if (!authSession.setAccessToken(tokens, version))
+
+        if (!authSession.setAccessToken(tokens, version)) {
           throw new AuthError('SessionChanged');
+        }
       } finally {
         authSession.finishInitialization(version);
       }
@@ -79,27 +90,41 @@ export const authLifecycle = {
     if (typeof window === 'undefined') {
       return Promise.reject(new AuthError('InternalError'));
     }
-    if (refreshFlight) return refreshFlight;
+
+    if (refreshFlight) {
+      return refreshFlight;
+    }
+
     const version = authSession.getVersion();
     const operation = enqueue(async () => {
-      if (version !== authSession.getVersion()) return;
+      if (version !== authSession.getVersion()) {
+        return;
+      }
+
       try {
         const tokens = await authApi.refresh();
         authSession.setAccessToken(tokens, version);
+        logRealtime('[AUTH] ACCESS TOKEN REFRESH COMPLETED', {
+          sessionVersion: version,
+        });
       } catch (error) {
         const authError = AuthError.from(error);
+
         if (
           version === authSession.getVersion() &&
           isInvalidSession(authError)
         ) {
           authSession.clear();
         }
+
         throw authError;
       }
     });
+
     refreshFlight = operation.finally(() => {
       refreshFlight = null;
     });
+
     return refreshFlight;
   },
 
@@ -112,12 +137,18 @@ export const authLifecycle = {
     ) {
       return Promise.resolve();
     }
+
     if (retry && authSession.getSnapshot().status === 'unavailable') {
       initialization = null;
     }
-    if (initialization) return initialization;
+
+    if (initialization) {
+      return initialization;
+    }
+
     const version = authSession.getVersion();
     authSession.startInitialization();
+
     initialization = authApi
       .hasRefreshCookie()
       .then(hasRefreshCookie => {
@@ -126,8 +157,10 @@ export const authLifecycle = {
           version !== authSession.getVersion() ||
           authSession.getSnapshot().status === 'authenticated' ||
           !hasRefreshCookie
-        )
+        ) {
           return;
+        }
+
         return authLifecycle.refresh();
       })
       .then(
@@ -135,9 +168,13 @@ export const authLifecycle = {
         error => {
           authSession.finishInitialization(version, true);
           const authError = AuthError.from(error);
-          if (!isInvalidSession(authError)) throw authError;
+
+          if (!isInvalidSession(authError)) {
+            throw authError;
+          }
         }
       );
+
     return initialization;
   },
 
@@ -146,6 +183,7 @@ export const authLifecycle = {
   logout(): Promise<void> {
     authSession.clear();
     initialization = Promise.resolve();
+
     // Await older refresh responses before deleting their rotated cookie.
     return enqueue(() => authApi.logout());
   },
@@ -163,8 +201,9 @@ configureHttpAuthentication({
       !isAxiosError<AuthErrorResponse>(error) ||
       error.response?.status !== 401 ||
       error.response.data?.messageType !== 'AccessTokenExpired'
-    )
+    ) {
       return null;
+    }
 
     const requestUrl = httpClient.getUri(error.config);
     if (
@@ -174,9 +213,12 @@ configureHttpAuthentication({
     }
 
     const currentToken = authSession.getAccessToken();
-    if (currentToken && currentToken !== usedToken) return currentToken;
+    if (currentToken && currentToken !== usedToken) {
+      return currentToken;
+    }
 
     await authLifecycle.refresh();
+
     return version === authSession.getVersion()
       ? authSession.getAccessToken()
       : null;

@@ -22,6 +22,7 @@ export function useChannelView(workspaceId: string, channelId: string) {
   const response = isAxiosError<ApiErrorResponse>(channel.error)
     ? channel.error.response
     : undefined;
+
   // Once the channel has loaded, a failed background refetch (for example a
   // network blip on window focus) must not replace the open conversation.
   // Only responses that mean access was lost are treated as terminal.
@@ -40,7 +41,9 @@ export function useChannelView(workspaceId: string, channelId: string) {
   const isInvalidLink = !user.isError && response?.status === 400;
 
   useEffect(() => {
-    if (!isReady || !user.data || !channel.data) return;
+    if (!isReady || !user.data || !channel.data) {
+      return;
+    }
 
     // The scoped endpoint verifies membership and the channel's workspace.
     // An explicitly opened URL always wins over any saved channel choice.
@@ -62,8 +65,11 @@ export function useChannelView(workspaceId: string, channelId: string) {
     isWorkspaceUnavailable:
       isUnavailable && response?.data?.messageType === 'WorkspaceNotFound',
     retry: () => {
-      if (user.isError) void user.refetch();
-      else void channel.refetch();
+      if (user.isError) {
+        void user.refetch();
+      } else {
+        void channel.refetch();
+      }
     },
     openApp: () => router.replace('/app'),
     openWorkspace: () =>

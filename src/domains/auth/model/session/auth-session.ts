@@ -36,26 +36,37 @@ export const authSession = {
   },
 
   beginTransition(): number {
-    if (typeof window === 'undefined') return 0;
+    if (typeof window === 'undefined') {
+      return 0;
+    }
+
     browserStorage.remove(LEGACY_REFRESH_TOKEN_KEY);
     ++version;
-    publish(snapshot.status);
+    access = null;
+    publish('initializing');
+
     return version;
   },
 
   setAccessToken(tokens: AuthAccessToken, expectedVersion = version): boolean {
-    if (typeof window === 'undefined' || expectedVersion !== version)
+    if (typeof window === 'undefined' || expectedVersion !== version) {
       return false;
+    }
+
     access = {
       accessToken: tokens.accessToken,
       expiresAt: tokens.expiresAt,
     };
     publish('authenticated');
+
     return true;
   },
 
   clear(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     ++version;
     access = null;
     browserStorage.remove(LEGACY_REFRESH_TOKEN_KEY);
@@ -63,13 +74,19 @@ export const authSession = {
   },
 
   startInitialization(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     browserStorage.remove(LEGACY_REFRESH_TOKEN_KEY);
     publish('initializing');
   },
 
   finishInitialization(expectedVersion: number, unavailable = false): void {
-    if (typeof window === 'undefined' || expectedVersion !== version) return;
+    if (typeof window === 'undefined' || expectedVersion !== version) {
+      return;
+    }
+
     publish(
       access ? 'authenticated' : unavailable ? 'unavailable' : 'anonymous'
     );
@@ -84,8 +101,12 @@ export const authSession = {
   },
 
   subscribe(listener: () => void) {
-    if (typeof window === 'undefined') return () => {};
+    if (typeof window === 'undefined') {
+      return () => {};
+    }
+
     listeners.add(listener);
+
     return () => {
       listeners.delete(listener);
     };

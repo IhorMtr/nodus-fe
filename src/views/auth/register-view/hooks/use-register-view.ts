@@ -12,6 +12,7 @@ import {
 } from '@/domains/auth/model/register';
 import { getAuthErrorFeedback } from '@/domains/auth/model/errors';
 import type { RegisterFormProps } from '@/domains/auth/ui/register-form';
+import { inviteStorage } from '@/domains/invite/model/invitations';
 import { useRouter } from '@/shared/i18n/navigation';
 
 export function useRegisterView(): RegisterFormProps {
@@ -45,7 +46,10 @@ export function useRegisterView(): RegisterFormProps {
 
   const onSubmit: RegisterFormProps['onSubmit'] = async event => {
     event.preventDefault();
-    if (submissionLock.current) return;
+    if (submissionLock.current) {
+      return;
+    }
+
     submissionLock.current = true;
 
     try {
@@ -54,7 +58,7 @@ export function useRegisterView(): RegisterFormProps {
 
         try {
           await mutation.mutateAsync(values);
-          router.replace('/app');
+          router.replace(inviteStorage.get() ? '/invites' : '/app');
         } catch (error) {
           const feedback = getAuthErrorFeedback(error, messages);
           const fields = [
@@ -66,7 +70,9 @@ export function useRegisterView(): RegisterFormProps {
           ] as const;
           for (const field of fields) {
             const message = feedback.fieldErrors[field];
-            if (message) setError(field, { type: 'server', message });
+            if (message) {
+              setError(field, { type: 'server', message });
+            }
           }
           setError('root.server', { message: feedback.formError });
         } finally {

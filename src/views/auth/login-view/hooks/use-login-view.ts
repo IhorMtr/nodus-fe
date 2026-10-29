@@ -12,6 +12,7 @@ import {
 } from '@/domains/auth/model/login';
 import { getAuthErrorFeedback } from '@/domains/auth/model/errors';
 import type { LoginFormProps } from '@/domains/auth/ui/login-form';
+import { inviteStorage } from '@/domains/invite/model/invitations';
 import { useRouter } from '@/shared/i18n/navigation';
 
 export function useLoginView(): LoginFormProps {
@@ -39,7 +40,10 @@ export function useLoginView(): LoginFormProps {
 
   const onSubmit: LoginFormProps['onSubmit'] = async event => {
     event.preventDefault();
-    if (submissionLock.current) return;
+    if (submissionLock.current) {
+      return;
+    }
+
     submissionLock.current = true;
 
     try {
@@ -48,12 +52,14 @@ export function useLoginView(): LoginFormProps {
 
         try {
           await mutation.mutateAsync(values);
-          router.replace('/app');
+          router.replace(inviteStorage.get() ? '/invites' : '/app');
         } catch (error) {
           const feedback = getAuthErrorFeedback(error, messages);
           for (const field of ['email', 'password'] as const) {
             const message = feedback.fieldErrors[field];
-            if (message) setError(field, { type: 'server', message });
+            if (message) {
+              setError(field, { type: 'server', message });
+            }
           }
           setError('root.server', { message: feedback.formError });
         } finally {

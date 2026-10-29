@@ -17,6 +17,7 @@ export function useMessageActions(workspaceId: string, channelId: string) {
   const create = useCreateMessageMutation();
   const update = useUpdateMessageMutation();
   const remove = useDeleteMessageMutation();
+
   const [lastSentId, setLastSentId] = useState<string>();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Message | null>(null);
@@ -28,11 +29,13 @@ export function useMessageActions(workspaceId: string, channelId: string) {
 
   const send = async (content: string) => {
     create.reset();
+
     const message = await create.mutateAsync({
       workspaceId,
       channelId,
       content,
     });
+
     setLastSentId(message.id);
   };
 
@@ -49,13 +52,17 @@ export function useMessageActions(workspaceId: string, channelId: string) {
   };
 
   const saveEdit = async (content: string) => {
-    if (!editingId) return;
+    if (!editingId) {
+      return;
+    }
+
     await update.mutateAsync({
       workspaceId,
       channelId,
       messageId: editingId,
       content,
     });
+
     setEditingId(null);
   };
 
@@ -67,11 +74,15 @@ export function useMessageActions(workspaceId: string, channelId: string) {
   };
 
   const closeDelete = () => {
-    if (!remove.isPending) setDeleteTarget(null);
+    if (!remove.isPending) {
+      setDeleteTarget(null);
+    }
   };
 
   const confirmDelete = async () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget) {
+      return;
+    }
 
     try {
       await remove.mutateAsync({
@@ -79,10 +90,13 @@ export function useMessageActions(workspaceId: string, channelId: string) {
         channelId,
         messageId: deleteTarget.id,
       });
+
       setDeleteTarget(null);
     } catch (error) {
       // The message is already gone, so there is nothing left to confirm.
-      if (isMessageNotFound(error)) setDeleteTarget(null);
+      if (isMessageNotFound(error)) {
+        setDeleteTarget(null);
+      }
     }
   };
 

@@ -9,6 +9,7 @@ export const routing = defineRouting({
     '/': '/',
     '/auth/login': '/auth/login',
     '/auth/register': '/auth/register',
+    '/invites': '/invites',
     '/app': '/app',
     '/workspaces': '/workspaces',
     '/workspaces/new': '/workspaces/new',
@@ -19,6 +20,7 @@ export const routing = defineRouting({
     '/workspaces/[workspaceId]/announcements':
       '/workspaces/[workspaceId]/announcements',
     '/workspaces/[workspaceId]/search': '/workspaces/[workspaceId]/search',
+    '/workspaces/[workspaceId]/members': '/workspaces/[workspaceId]/members',
     '/workspaces/[workspaceId]/channels/[channelId]':
       '/workspaces/[workspaceId]/channels/[channelId]',
   },

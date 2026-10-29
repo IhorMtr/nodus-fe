@@ -22,7 +22,10 @@ export function flattenMessageHistory(data: MessageHistoryData): Message[] {
 
   for (let index = data.pages.length - 1; index >= 0; index--) {
     for (const message of data.pages[index].items) {
-      if (seen.has(message.id)) continue;
+      if (seen.has(message.id)) {
+        continue;
+      }
+
       seen.add(message.id);
       messages.push(message);
     }
@@ -73,20 +76,28 @@ export function addMessage(
     const exists = data.pages.some(page =>
       page.items.some(item => item.id === message.id)
     );
+
     if (exists) {
       return mapPages(data, items =>
-        items.map(item => (item.id === message.id ? message : item))
+        items.map(item =>
+          item.id === message.id && item.updatedAt <= message.updatedAt
+            ? message
+            : item
+        )
       );
     }
 
     const [newest, ...older] = data.pages;
-    if (!newest) return data;
+    if (!newest) {
+      return data;
+    }
 
     const items = [...newest.items];
     let position = items.length;
     while (position > 0 && compareMessages(items[position - 1], message) > 0) {
       position--;
     }
+
     items.splice(position, 0, message);
 
     return { ...data, pages: [{ ...newest, items }, ...older] };
@@ -101,7 +112,11 @@ export function replaceMessage(
 ) {
   updateHistory(queryClient, workspaceId, channelId, data =>
     mapPages(data, items =>
-      items.map(item => (item.id === message.id ? message : item))
+      items.map(item =>
+        item.id === message.id && item.updatedAt <= message.updatedAt
+          ? message
+          : item
+      )
     )
   );
 }

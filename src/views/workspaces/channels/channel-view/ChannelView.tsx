@@ -21,8 +21,9 @@ export function ChannelView({
   const auth = useTranslations('auth.messages');
   const state = useChannelView(workspaceId, channelId);
 
-  if (state.isFetching)
+  if (state.isFetching) {
     return <PageSpinner contained label={t('states.loading')} />;
+  }
 
   if (
     state.isWorkspaceUnavailable ||
@@ -74,8 +75,9 @@ export function ChannelView({
     );
   }
 
-  if (!state.channel)
+  if (!state.channel) {
     return <PageSpinner contained label={t('states.loading')} />;
+  }
 
   return (
     <main className={styles.page}>
@@ -86,7 +88,7 @@ export function ChannelView({
         </h1>
       </header>
       <ChannelConversation
-        key={state.channel.id}
+        key={`${workspaceId}:${state.channel.id}`}
         workspaceId={workspaceId}
         channelId={state.channel.id}
       />

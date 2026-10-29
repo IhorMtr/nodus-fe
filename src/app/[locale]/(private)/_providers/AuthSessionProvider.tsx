@@ -6,6 +6,9 @@ import { authLifecycle, useAuthSession } from '@/domains/auth/model/session';
 import { SessionFeedback } from '@/domains/auth/ui/session-feedback';
 import { useRouter } from '@/shared/i18n/navigation';
 
+import { SocketProvider } from './SocketProvider';
+import { WorkspaceAccessListener } from './WorkspaceAccessListener';
+
 function reportInitializationError(error: unknown) {
   console.error('Failed to restore authentication session', error);
 }
@@ -24,7 +27,9 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
       .initialize()
       .catch(reportInitializationError)
       .finally(() => {
-        if (mounted) setInitialized(true);
+        if (mounted) {
+          setInitialized(true);
+        }
       });
 
     return () => {
@@ -57,5 +62,9 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  return status === 'authenticated' ? children : null;
+  return status === 'authenticated' ? (
+    <SocketProvider>
+      <WorkspaceAccessListener>{children}</WorkspaceAccessListener>
+    </SocketProvider>
+  ) : null;
 }

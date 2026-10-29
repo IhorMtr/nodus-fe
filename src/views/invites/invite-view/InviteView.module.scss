@@ -1,0 +1,115 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+.page {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: var(--space-6);
+  background: var(--color-background);
+}
+
+.card {
+  display: grid;
+  width: min(100%, 480px);
+  gap: var(--space-4);
+  padding: var(--space-10);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: linear-gradient(
+    155deg,
+    var(--color-surface-elevated),
+    var(--color-surface)
+  );
+
+  h1,
+  p {
+    margin: 0;
+  }
+
+  h1 {
+    font-size: var(--font-size-2xl);
+    letter-spacing: -0.03em;
+  }
+
+  > a {
+    color: var(--color-text-primary);
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    padding: var(--space-6);
+  }
+}
+
+.icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+}
+
+.eyebrow {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.workspace {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+.expiry,
+.actions p {
+  color: var(--color-text-secondary);
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.primaryLink,
+.secondaryLink {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  text-decoration: none;
+
+  @include mixins.focus-ring;
+}
+
+.primaryLink {
+  background: var(--color-text-primary);
+  color: var(--color-surface);
+}
+
+.secondaryLink {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.decline {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+
+  @include mixins.focus-ring;
+}
+
+.error {
+  color: var(--color-danger-text);
+}

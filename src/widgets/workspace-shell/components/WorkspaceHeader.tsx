@@ -8,6 +8,7 @@ import {
   Menu as MenuIcon,
   Plus,
   Search,
+  Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -80,6 +81,17 @@ export function WorkspaceHeader({
                 {workspace.name}
               </Menu.Item>
             ))}
+            <Menu.Divider />
+            <Menu.Item
+              component={Link}
+              href={{
+                pathname: '/workspaces/[workspaceId]/members',
+                params: { workspaceId },
+              }}
+              leftSection={<Users size={16} />}
+            >
+              {t('navigation.members')}
+            </Menu.Item>
             <Menu.Divider />
             <Menu.Item
               component={Link}
