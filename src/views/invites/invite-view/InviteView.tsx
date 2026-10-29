@@ -203,12 +203,12 @@ export function InviteView() {
           <>
             {!cannotRetryAcceptance && (
               <Button
+                rightIcon={<ArrowRight size={16} />}
                 onClick={() => void acceptInvite()}
                 loading={accept.isPending}
                 disabled={accept.isPending}
               >
-                {t('actions.accept')}{' '}
-                <ArrowRight size={16} aria-hidden="true" />
+                {t('actions.accept')}
               </Button>
             )}
             {acceptErrorKey && (

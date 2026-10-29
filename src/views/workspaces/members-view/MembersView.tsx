@@ -121,10 +121,11 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
             <Button
               variant="secondary"
               size="sm"
+              leftIcon={<RefreshCw size={15} />}
               onClick={() => void members.refetch()}
               disabled={members.isFetching}
             >
-              <RefreshCw size={15} aria-hidden="true" /> {t('actions.refresh')}
+              {t('actions.refresh')}
             </Button>
           </div>
         </div>
@@ -155,11 +156,12 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
               <p>{t('management.description')}</p>
             </div>
             <Button
+              leftIcon={<Plus size={16} />}
               onClick={() => void createInvite()}
               loading={create.isPending}
               disabled={create.isPending}
             >
-              <Plus size={16} aria-hidden="true" /> {t('actions.create')}
+              {t('actions.create')}
             </Button>
           </div>
           {create.isError && (
@@ -235,8 +237,11 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
             onFocus={event => event.currentTarget.select()}
             aria-label={t('management.linkLabel')}
           />
-          <Button onClick={() => void copyInvite()}>
-            <Copy size={16} aria-hidden="true" /> {t('actions.copy')}
+          <Button
+            leftIcon={<Copy size={16} />}
+            onClick={() => void copyInvite()}
+          >
+            {t('actions.copy')}
           </Button>
           {copyState && <p role="status">{t(`management.${copyState}`)}</p>}
         </div>
