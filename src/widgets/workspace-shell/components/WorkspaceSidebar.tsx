@@ -7,6 +7,7 @@ import {
   Megaphone,
   MessagesSquare,
   Search,
+  Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
@@ -24,6 +25,7 @@ const sections = [
   { route: 'conversations', icon: MessagesSquare },
   { route: 'announcements', icon: Megaphone },
   { route: 'search', icon: Search },
+  { route: 'members', icon: Users },
 ] as const;
 
 export function WorkspaceSidebar({
