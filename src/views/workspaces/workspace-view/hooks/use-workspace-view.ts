@@ -53,6 +53,13 @@ export function useWorkspaceView(workspaceId: string) {
     const channel =
       channels.data.find(item => item.id === savedId) ?? channels.data[0];
     workspaceNavigation.setLastWorkspaceId(user.data.id, workspaceId);
+    if (savedId && savedId !== channel?.id) {
+      workspaceNavigation.clearLastChannelId(
+        user.data.id,
+        workspaceId,
+        savedId
+      );
+    }
 
     if (channel) {
       router.replace({

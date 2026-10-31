@@ -65,4 +65,13 @@ export const workspaceNavigation = {
       channelId
     );
   },
+  clearLastChannelId(
+    userId: string,
+    workspaceId: string,
+    channelId: string
+  ): void {
+    if (this.getLastChannelId(userId, workspaceId) === channelId) {
+      remove(`nodus:user:${userId}:workspace:${workspaceId}:last-channel`);
+    }
+  },
 };

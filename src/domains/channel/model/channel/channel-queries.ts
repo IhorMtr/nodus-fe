@@ -6,7 +6,7 @@ import { retryQuery } from '@/shared/query/retry-query';
 
 import { channelApi } from '../../api/channel-api';
 
-const channelQueryKeys = {
+export const channelQueryKeys = {
   list: (workspaceId: string) => ['channels', workspaceId, 'list'] as const,
   detail: (workspaceId: string, channelId: string) =>
     ['channels', workspaceId, 'detail', channelId] as const,

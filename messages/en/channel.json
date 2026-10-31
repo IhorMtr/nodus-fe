@@ -9,6 +9,34 @@
     "loadErrorDescription": "Check your connection and try again. The channel could not be loaded."
   },
   "actions": {
-    "openWorkspace": "Open an available channel"
+    "openWorkspace": "Open an available channel",
+    "create": "Create channel",
+    "rename": "Rename",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "more": "Actions for {name}"
+  },
+  "management": {
+    "createTitle": "Create channel",
+    "renameTitle": "Rename channel",
+    "deleteTitle": "Delete channel?",
+    "deleteDescription": "The channel “{name}” and all its messages will be permanently deleted. This cannot be undone.",
+    "name": "Channel name",
+    "namePlaceholder": "Enter a channel name"
+  },
+  "validation": {
+    "nameRequired": "Enter a channel name.",
+    "nameTooLong": "Channel name must be at most 80 characters."
+  },
+  "errors": {
+    "duplicateName": "A channel with this name already exists in this workspace.",
+    "validationFailed": "Check the channel name and try again.",
+    "accessDenied": "You don't have permission to manage channels.",
+    "notFound": "This channel is no longer available.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "sessionChanged": "Your session changed. Please try again.",
+    "networkError": "Unable to connect. Check your connection and try again.",
+    "requestFailed": "Unable to save the channel. Please try again."
   }
 }
