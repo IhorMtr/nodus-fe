@@ -1,19 +1,12 @@
 'use client';
 
-import {
-  Menu,
-  useComputedColorScheme,
-  useMantineColorScheme,
-} from '@mantine/core';
-import { useMounted } from '@mantine/hooks';
+import { Menu } from '@mantine/core';
 import { Check, ChevronUp, LogOut, Moon, Sun } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
-import { authLifecycle } from '@/domains/auth/model/session';
 import type { User } from '@/domains/user/model/current-user';
-import { useRouter } from '@/shared/i18n/navigation';
 
+import { useUserProfile } from './use-user-profile';
 import styles from './UserProfile.module.scss';
 
 export function UserProfile({
@@ -32,66 +25,19 @@ export function UserProfile({
   const t = useTranslations('user');
   const appearance = useTranslations('appearance');
   const language = useTranslations('language');
-  const locale = useLocale();
-  const router = useRouter();
-  const { setColorScheme } = useMantineColorScheme();
-  const mounted = useMounted();
-  const colorScheme = useComputedColorScheme('light', {
-    getInitialValueInEffect: true,
-  });
-  const isDark = mounted && colorScheme === 'dark';
-  const [loggingOut, setLoggingOut] = useState(false);
+  const {
+    locale,
+    isDark,
+    loggingOut,
+    toggleColorScheme,
+    switchLocale,
+    logout,
+  } = useUserProfile(workspaceId, pathname, channelId, onNavigate);
   const name = `${user.firstName} ${user.lastName}`.trim();
   const initials =
     `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
 
-  function switchLocale(nextLocale: 'uk' | 'en') {
-    if (nextLocale === locale) return;
-    onNavigate?.();
-    const section = pathname.match(
-      /\/(overview|conversations|announcements|search)$/
-    )?.[1];
-
-    if (channelId) {
-      router.replace(
-        {
-          pathname: '/workspaces/[workspaceId]/channels/[channelId]',
-          params: { workspaceId, channelId },
-        },
-        { locale: nextLocale, scroll: false }
-      );
-    } else if (
-      section === 'overview' ||
-      section === 'conversations' ||
-      section === 'announcements' ||
-      section === 'search'
-    ) {
-      router.replace(
-        {
-          pathname: `/workspaces/[workspaceId]/${section}`,
-          params: { workspaceId },
-        },
-        { locale: nextLocale, scroll: false }
-      );
-    } else {
-      router.replace(
-        { pathname: '/workspaces/[workspaceId]', params: { workspaceId } },
-        { locale: nextLocale, scroll: false }
-      );
-    }
-  }
-
-  async function logout() {
-    setLoggingOut(true);
-    try {
-      await authLifecycle.logout();
-    } catch {
-      // The local session is cleared even if upstream revocation fails.
-    } finally {
-      router.replace('/auth/login');
-    }
-  }
-
+  // ==================== RENDER ====================
   return (
     <div className={styles.profile}>
       <Menu position="top-start" width={250} shadow="sm" withinPortal>
@@ -122,9 +68,7 @@ export function UserProfile({
           <Menu.Label>{name}</Menu.Label>
           <Menu.Item
             leftSection={isDark ? <Sun size={16} /> : <Moon size={16} />}
-            onClick={() =>
-              setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')
-            }
+            onClick={toggleColorScheme}
           >
             {appearance(
               isDark ? 'actions.switchToLight' : 'actions.switchToDark'

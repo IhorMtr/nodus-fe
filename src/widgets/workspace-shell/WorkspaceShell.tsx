@@ -21,6 +21,8 @@ export function WorkspaceShell({
   workspaceId: string;
   children: ReactNode;
 }) {
+  // ==================== CONTEXT AND QUERIES ====================
+
   const t = useTranslations('workspace');
   const auth = useTranslations('auth.messages');
   const router = useRouter();
@@ -29,8 +31,13 @@ export function WorkspaceShell({
   const workspace = useWorkspaceQuery(workspaceId, {
     enabled: user.isSuccess,
   });
+
+  // ==================== DERIVED FEEDBACK ====================
+
   const error = user.error ?? workspace.error;
   const status = isAxiosError(error) ? error.response?.status : undefined;
+
+  // ==================== ERROR STATE ====================
 
   if (error && !user.isFetching && !workspace.isFetching) {
     const unavailable = status === 400 || status === 403 || status === 404;
@@ -52,31 +59,49 @@ export function WorkspaceShell({
           unavailable ? t('actions.openAvailable') : t('actions.retry')
         }
         onAction={() => {
-          if (unavailable) router.replace('/app');
-          else if (user.isError) void user.refetch();
-          else void workspace.refetch();
+          if (unavailable) {
+            router.replace('/app');
+          } else if (user.isError) {
+            void user.refetch();
+          } else {
+            void workspace.refetch();
+          }
         }}
       />
     );
   }
 
+  // ==================== LOADING STATE ====================
+
   if (!user.data || !workspace.data) {
     return <PageSpinner label={t('states.loading')} />;
   }
 
+  // ==================== RENDER ====================
+
   return (
     <div className={styles.shell}>
+      {/* ==================== WORKSPACE HEADER ==================== */}
+
       <WorkspaceHeader
         workspaceId={workspaceId}
         workspaceName={workspace.data.name}
         onOpenSidebar={() => setDrawerOpened(true)}
       />
       <div className={styles.body}>
+        {/* ==================== DESKTOP SIDEBAR ==================== */}
+
         <div className={styles.desktopSidebar}>
           <WorkspaceSidebar workspaceId={workspaceId} user={user.data} />
         </div>
-        <div className={styles.content}>{children}</div>
+
+        {/* ==================== MAIN CONTENT ==================== */}
+
+        <main className={styles.content}>{children}</main>
       </div>
+
+      {/* ==================== MOBILE SIDEBAR ==================== */}
+
       <Drawer
         opened={drawerOpened}
         onClose={() => setDrawerOpened(false)}

@@ -26,6 +26,8 @@ export function ChannelConversation({
   const history = useChannelMessages(workspaceId, channelId);
   const actions = useMessageActions(workspaceId, channelId);
 
+  // ==================== LOADING AND ERROR STATES ====================
+
   if (history.isLoading && !history.loadError) {
     return (
       <div className={styles.state}>
@@ -50,6 +52,8 @@ export function ChannelConversation({
     );
   }
 
+  // ==================== CONVERSATION ====================
+
   return (
     <div className={styles.conversation}>
       {history.joinError && (
@@ -59,8 +63,8 @@ export function ChannelConversation({
       )}
       <MessageList
         messages={history.messages}
-        currentUserId={history.currentUserId}
-        canModerate={history.canModerate}
+        canEdit={history.canEdit}
+        canDelete={history.canDelete}
         hasOlder={history.hasOlder}
         isLoadingOlder={history.isLoadingOlder}
         hasOlderError={history.hasOlderError}

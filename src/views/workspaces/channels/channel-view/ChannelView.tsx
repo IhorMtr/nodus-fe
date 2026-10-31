@@ -21,9 +21,13 @@ export function ChannelView({
   const auth = useTranslations('auth.messages');
   const state = useChannelView(workspaceId, channelId);
 
+  // ==================== LOADING STATE ====================
+
   if (state.isFetching) {
     return <PageSpinner contained label={t('states.loading')} />;
   }
+
+  // ==================== ACCESS FEEDBACK ====================
 
   if (
     state.isWorkspaceUnavailable ||
@@ -59,6 +63,8 @@ export function ChannelView({
     );
   }
 
+  // ==================== REQUEST ERROR ====================
+
   if (state.error) {
     return (
       <PageFeedback
@@ -75,12 +81,16 @@ export function ChannelView({
     );
   }
 
+  // ==================== CHANNEL DATA ====================
+
   if (!state.channel) {
     return <PageSpinner contained label={t('states.loading')} />;
   }
 
+  // ==================== CHANNEL CONTENT ====================
+
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <header className={styles.header}>
         <Hash size={18} aria-hidden="true" />
         <h1 id="channel-title" title={state.channel.name}>
@@ -92,6 +102,6 @@ export function ChannelView({
         workspaceId={workspaceId}
         channelId={state.channel.id}
       />
-    </main>
+    </div>
   );
 }

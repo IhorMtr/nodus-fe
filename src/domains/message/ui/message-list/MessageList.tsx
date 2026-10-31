@@ -8,10 +8,6 @@ import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
 
 import type { Message } from '../../model/message-history';
-import {
-  canDeleteMessage,
-  canEditMessage,
-} from '../../model/message-permissions';
 import { MessageItem } from '../message-item';
 
 import styles from './MessageList.module.scss';
@@ -21,8 +17,8 @@ import styles from './MessageList.module.scss';
 type MessageListProps = {
   // Chronological order: the oldest message first.
   messages: Message[];
-  currentUserId: string;
-  canModerate: boolean;
+  canEdit: (message: Message) => boolean;
+  canDelete: (message: Message) => boolean;
   hasOlder: boolean;
   isLoadingOlder: boolean;
   hasOlderError: boolean;
@@ -72,8 +68,8 @@ function captureScroll(
 
 export function MessageList({
   messages,
-  currentUserId,
-  canModerate,
+  canEdit,
+  canDelete,
   hasOlder,
   isLoadingOlder,
   hasOlderError,
@@ -205,12 +201,8 @@ export function MessageList({
                     <MessageItem
                       message={message}
                       formatTime={formatTime}
-                      canEdit={canEditMessage(message, currentUserId)}
-                      canDelete={canDeleteMessage(
-                        message,
-                        currentUserId,
-                        canModerate
-                      )}
+                      canEdit={canEdit(message)}
+                      canDelete={canDelete(message)}
                       isEditing={isEditing}
                       isSaving={isEditing && isSavingEdit}
                       editError={isEditing ? editError : undefined}

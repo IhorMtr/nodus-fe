@@ -4,6 +4,7 @@
     "openSidebar": "Open workspace navigation",
     "workspaces": "Workspaces",
     "members": "Members",
+    "settings": "Settings",
     "create": "Create workspace",
     "overview": "Overview",
     "conversations": "Conversations",
@@ -30,6 +31,34 @@
   "validation": {
     "nameRequired": "Enter a workspace name.",
     "nameTooLong": "Workspace name must be at most 100 characters."
+  },
+  "management": {
+    "settingsTitle": "Workspace settings",
+    "settingsDescription": "Manage the name and lifecycle of this workspace.",
+    "nameTitle": "Workspace name",
+    "nameDescription": "This name appears in the workspace switcher and navigation.",
+    "save": "Save changes",
+    "saved": "Workspace name saved.",
+    "cancel": "Cancel",
+    "deleteTitle": "Delete workspace",
+    "deleteDescription": "Permanently remove this workspace and its contents.",
+    "deleteAction": "Delete workspace",
+    "deleteWarning": "Deleting {name} is permanent and cannot be undone. Type its name to confirm.",
+    "confirmName": "Workspace name",
+    "memberActions": "Actions for {name}",
+    "changeRole": "Change role",
+    "changeRoleFor": "Choose a role for {name}.",
+    "roleLabel": "Role",
+    "removeMember": "Remove member",
+    "removeConfirmation": "Remove {name} from this workspace? They will lose access immediately.",
+    "errors": {
+      "validationFailed": "Check the information and try again.",
+      "networkError": "Unable to connect. Check your connection and try again.",
+      "requestFailed": "Something went wrong. Please try again.",
+      "sessionExpired": "Your session has expired. Please sign in again.",
+      "accessDenied": "You no longer have permission to perform this action.",
+      "notFound": "This workspace or member is no longer available. Refresh and try again."
+    }
   },
   "errors": {
     "validationFailed": "Check the form and try again.",

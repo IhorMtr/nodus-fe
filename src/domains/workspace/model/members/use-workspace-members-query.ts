@@ -8,7 +8,7 @@ import { workspaceMembersApi } from '../../api/workspace-members-api';
 
 export function useWorkspaceMembersQuery(workspaceId: string) {
   return useQuery({
-    queryKey: ['workspaces', 'members', workspaceId],
+    queryKey: workspaceMembersKey(workspaceId),
     queryFn: ({ signal }) => workspaceMembersApi.list(workspaceId, signal),
     enabled: Boolean(workspaceId),
     networkMode: 'always',
@@ -16,3 +16,6 @@ export function useWorkspaceMembersQuery(workspaceId: string) {
     retry: retryQuery,
   });
 }
+
+export const workspaceMembersKey = (workspaceId: string) =>
+  ['workspaces', 'members', workspaceId] as const;

@@ -20,8 +20,10 @@ export function SessionFeedback({
 }: SessionFeedbackProps) {
   const t = useTranslations('auth.session');
 
+  // ==================== FULL PAGE FEEDBACK ====================
+
   return (
-    <div
+    <main
       className={`${styles.fullscreen}${unavailable ? ` ${styles.unavailable}` : ''}`}
     >
       {unavailable ? (
@@ -39,6 +41,6 @@ export function SessionFeedback({
       ) : (
         <Spinner label={t('loading')} />
       )}
-    </div>
+    </main>
   );
 }

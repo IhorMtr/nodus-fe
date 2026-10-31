@@ -11,11 +11,11 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { useWorkspacesQuery } from '@/domains/workspace/model/workspace';
-import { Link, useRouter } from '@/shared/i18n/navigation';
+import { Link } from '@/shared/i18n/navigation';
 import { IconButton } from '@/shared/ui/icon-button';
 
 import styles from './WorkspaceHeader.module.scss';
+import { useWorkspaceHeader } from './use-workspace-header';
 
 export function WorkspaceHeader({
   workspaceId,
@@ -26,10 +26,14 @@ export function WorkspaceHeader({
   workspaceName: string;
   onOpenSidebar: () => void;
 }) {
+  // ==================== VIEW STATE ====================
+
   const t = useTranslations('workspace');
   const product = useTranslations('product');
-  const router = useRouter();
-  const workspaces = useWorkspacesQuery();
+  const { workspaces, openSearch, retryWorkspaces } =
+    useWorkspaceHeader(workspaceId);
+
+  // ==================== RENDER ====================
 
   return (
     <header className={styles.header}>
@@ -59,7 +63,7 @@ export function WorkspaceHeader({
               <Menu.Label>{t('states.loading')}</Menu.Label>
             )}
             {workspaces.isError && (
-              <Menu.Item onClick={() => void workspaces.refetch()}>
+              <Menu.Item onClick={retryWorkspaces}>
                 {t('states.loadError')} · {t('actions.retry')}
               </Menu.Item>
             )}
@@ -97,12 +101,7 @@ export function WorkspaceHeader({
             icon={<Search />}
             variant="ghost"
             aria-label={t('navigation.search')}
-            onClick={() =>
-              router.push({
-                pathname: '/workspaces/[workspaceId]/search',
-                params: { workspaceId },
-              })
-            }
+            onClick={openSearch}
           />
         </Tooltip>
         <Tooltip label={t('navigation.notificationsPending')}>

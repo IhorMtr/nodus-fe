@@ -12,8 +12,10 @@ export function WorkspaceSection({
 }) {
   const t = useTranslations('workspace');
 
+  // ==================== SECTION CONTENT ====================
+
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <header className={styles.header}>
         <span aria-hidden="true">{icon}</span>
         <h1>{t(`navigation.${section}`)}</h1>
@@ -21,6 +23,6 @@ export function WorkspaceSection({
       <div className={styles.empty}>
         <p>{t(`sections.${section}Pending`)}</p>
       </div>
-    </main>
+    </div>
   );
 }

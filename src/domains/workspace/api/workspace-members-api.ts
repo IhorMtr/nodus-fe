@@ -13,4 +13,21 @@ export const workspaceMembersApi = {
     >(`/workspaces/${encodeURIComponent(workspaceId)}/members`, { signal });
     return data.data;
   },
+
+  async changeRole(
+    workspaceId: string,
+    userId: string,
+    role: 'Admin' | 'Member'
+  ): Promise<void> {
+    await httpClient.patch(
+      `/workspaces/${encodeURIComponent(workspaceId)}/members/${encodeURIComponent(userId)}/role`,
+      { role }
+    );
+  },
+
+  async remove(workspaceId: string, userId: string): Promise<void> {
+    await httpClient.delete(
+      `/workspaces/${encodeURIComponent(workspaceId)}/members/${encodeURIComponent(userId)}`
+    );
+  },
 };

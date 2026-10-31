@@ -20,8 +20,16 @@ export function PageFeedback({
   onAction,
   contained = false,
 }: PageFeedbackProps) {
+  // ==================== LANDMARK OWNERSHIP ====================
+
+  const Container = contained ? 'div' : 'main';
+
+  // ==================== RENDER ====================
+
   return (
-    <main className={`${styles.page} ${contained ? styles.contained : ''}`}>
+    <Container
+      className={`${styles.page} ${contained ? styles.contained : ''}`}
+    >
       <div className={styles.content}>
         <h1>{title}</h1>
         {description && <p role="status">{description}</p>}
@@ -31,7 +39,7 @@ export function PageFeedback({
           </Button>
         )}
       </div>
-    </main>
+    </Container>
   );
 }
 
@@ -42,9 +50,17 @@ export function PageSpinner({
   label: string;
   contained?: boolean;
 }) {
+  // ==================== LANDMARK OWNERSHIP ====================
+
+  const Container = contained ? 'div' : 'main';
+
+  // ==================== RENDER ====================
+
   return (
-    <main className={`${styles.page} ${contained ? styles.contained : ''}`}>
+    <Container
+      className={`${styles.page} ${contained ? styles.contained : ''}`}
+    >
       <Spinner label={label} />
-    </main>
+    </Container>
   );
 }

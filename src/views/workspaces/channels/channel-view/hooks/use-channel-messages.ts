@@ -9,7 +9,12 @@ import { getMessageErrorKey } from '@/domains/message/model/message-errors';
 import {
   applyMessageRealtimeEvent,
   useMessagesInfiniteQuery,
+  type Message,
 } from '@/domains/message/model/message-history';
+import {
+  canDeleteMessage,
+  canEditMessage,
+} from '@/domains/message/model/message-permissions';
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
 
@@ -99,13 +104,21 @@ export function useChannelMessages(workspaceId: string, channelId: string) {
     }
   };
 
+  // ==================== MESSAGE PERMISSIONS ====================
+
+  const canEdit = (message: Message) =>
+    Boolean(user.data && canEditMessage(message, user.data.id));
+  const canDelete = (message: Message) =>
+    Boolean(user.data && canDeleteMessage(message, user.data.id, canModerate));
+
   // ==================== PUBLIC API ====================
 
   return {
     messages: history.data ?? [],
     joinError: realtime.joinError,
     currentUserId: user.data?.id,
-    canModerate,
+    canEdit,
+    canDelete,
     isLoading: history.isPending || !user.data,
     loadError:
       history.isError && !hasHistory

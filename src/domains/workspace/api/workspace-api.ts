@@ -28,4 +28,16 @@ export const workspaceApi = {
     );
     return data.data;
   },
+
+  async rename(workspaceId: string, name: string): Promise<Workspace> {
+    const { data } = await httpClient.patch<ApiSuccessResponse<Workspace>>(
+      `/workspaces/${encodeURIComponent(workspaceId)}`,
+      { name }
+    );
+    return data.data;
+  },
+
+  async remove(workspaceId: string): Promise<void> {
+    await httpClient.delete(`/workspaces/${encodeURIComponent(workspaceId)}`);
+  },
 };

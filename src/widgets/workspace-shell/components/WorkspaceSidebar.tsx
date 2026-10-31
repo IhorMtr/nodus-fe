@@ -1,9 +1,6 @@
 'use client';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Menu, Modal } from '@mantine/core';
-import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import {
   Hash,
   LayoutDashboard,
@@ -15,32 +12,21 @@ import {
   Plus,
   Pencil,
   Trash2,
+  Settings,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
-import { useMemo, useState, type FormEvent } from 'react';
-import { useForm } from 'react-hook-form';
 
-import {
-  channelNameSchema,
-  getChannelErrorKey,
-  useChannelsQuery,
-  useCreateChannelMutation,
-  useDeleteChannelMutation,
-  useRenameChannelMutation,
-  type Channel,
-} from '@/domains/channel/model/channel';
-import { messageHistoryKey } from '@/domains/message/model/message-history';
 import type { User } from '@/domains/user/model/current-user';
-import { workspaceNavigation } from '@/domains/workspace/model/navigation';
-import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
-import { Link, usePathname, useRouter } from '@/shared/i18n/navigation';
+import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { UserProfile } from './UserProfile';
+import { useWorkspaceSidebar } from './use-workspace-sidebar';
 import styles from './WorkspaceSidebar.module.scss';
+
+// ==================== NAVIGATION SECTIONS ====================
 
 const sections = [
   { route: 'overview', icon: LayoutDashboard },
@@ -48,6 +34,7 @@ const sections = [
   { route: 'announcements', icon: Megaphone },
   { route: 'search', icon: Search },
   { route: 'members', icon: Users },
+  { route: 'settings', icon: Settings },
 ] as const;
 
 export function WorkspaceSidebar({
@@ -59,150 +46,42 @@ export function WorkspaceSidebar({
   user: User;
   onNavigate?: () => void;
 }) {
+  // ==================== VIEW STATE ====================
+
   const t = useTranslations('workspace');
   const channel = useTranslations('channel');
-  const validation = useTranslations('channel.validation');
-  const pathname = usePathname();
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const { channelId } = useParams<{ channelId?: string }>();
-  const channels = useChannelsQuery(workspaceId);
-  const workspace = useWorkspaceQuery(workspaceId);
-  const canManage =
-    workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
-  const createChannel = useCreateChannelMutation(workspaceId);
-  const renameChannel = useRenameChannelMutation(workspaceId);
-  const deleteChannel = useDeleteChannelMutation(workspaceId);
-  const [editor, setEditor] = useState<'create' | 'rename' | null>(null);
-  const [selected, setSelected] = useState<Channel | null>(null);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const schema = useMemo(() => channelNameSchema(validation), [validation]);
   const {
+    pathname,
+    channelId,
+    channels,
+    canManage,
+    createChannel,
+    renameChannel,
+    deleteChannel,
+    editor,
+    selected,
+    deleteError,
     register,
-    handleSubmit,
-    reset,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm<{ name: string }>({
-    resolver: yupResolver(schema),
-    defaultValues: { name: '' },
-  });
-  const status = isAxiosError(channels.error)
-    ? channels.error.response?.status
-    : undefined;
+    errors,
+    status,
+    openEditor,
+    closeEditor,
+    submitEditor,
+    confirmDelete,
+    requestDelete,
+    closeDelete,
+  } = useWorkspaceSidebar(workspaceId, user, onNavigate);
 
-  // ==================== HANDLERS ====================
-
-  function openEditor(mode: 'create' | 'rename', item: Channel | null = null) {
-    setSelected(item);
-    reset({ name: item?.name ?? '' });
-    clearErrors();
-    setEditor(mode);
-  }
-
-  function closeEditor() {
-    if (createChannel.isPending || renameChannel.isPending) {
-      return;
-    }
-    setEditor(null);
-    setSelected(null);
-  }
-
-  async function saveChannel({ name }: { name: string }) {
-    if (!canManage || createChannel.isPending || renameChannel.isPending) {
-      return;
-    }
-
-    const trimmedName = name.trim();
-    const duplicate = channels.data?.some(
-      item =>
-        item.name.trim().toLowerCase() === trimmedName.toLowerCase() &&
-        item.id !== selected?.id
-    );
-    if (duplicate) {
-      setError('name', { message: channel('errors.duplicateName') });
-      return;
-    }
-
-    try {
-      if (editor === 'create') {
-        const created = await createChannel.mutateAsync(trimmedName);
-        workspaceNavigation.setLastChannelId(user.id, workspaceId, created.id);
-        setEditor(null);
-        onNavigate?.();
-        router.push({
-          pathname: '/workspaces/[workspaceId]/channels/[channelId]',
-          params: { workspaceId, channelId: created.id },
-        });
-      } else if (editor === 'rename' && selected) {
-        await renameChannel.mutateAsync({
-          channelId: selected.id,
-          name: trimmedName,
-        });
-        setEditor(null);
-        setSelected(null);
-      }
-    } catch (error) {
-      const key = getChannelErrorKey(error);
-      setError(
-        key === 'duplicateName' || key === 'validationFailed'
-          ? 'name'
-          : 'root.server',
-        {
-          message: channel(`errors.${key}`),
-        }
-      );
-    }
-  }
-
-  function submitEditor(event: FormEvent<HTMLFormElement>) {
-    void handleSubmit(saveChannel)(event);
-  }
-
-  async function confirmDelete() {
-    if (!canManage || !selected || deleteChannel.isPending) {
-      return;
-    }
-
-    try {
-      const deletedId = selected.id;
-      await deleteChannel.mutateAsync(deletedId);
-      await queryClient.cancelQueries({
-        queryKey: messageHistoryKey(workspaceId, deletedId),
-      });
-      queryClient.removeQueries({
-        queryKey: messageHistoryKey(workspaceId, deletedId),
-      });
-      workspaceNavigation.clearLastChannelId(user.id, workspaceId, deletedId);
-      const next = channels.data?.find(item => item.id !== deletedId);
-      setSelected(null);
-      setDeleteError(null);
-
-      if (channelId === deletedId) {
-        onNavigate?.();
-        router.replace(
-          next
-            ? {
-                pathname: '/workspaces/[workspaceId]/channels/[channelId]',
-                params: { workspaceId, channelId: next.id },
-              }
-            : {
-                pathname: '/workspaces/[workspaceId]',
-                params: { workspaceId },
-              }
-        );
-      }
-    } catch (error) {
-      setDeleteError(channel(`errors.${getChannelErrorKey(error)}`));
-    }
-  }
-
+  // ==================== RENDER ====================
   return (
     <aside className={styles.sidebar} aria-label={t('navigation.sidebar')}>
       <nav className={styles.scrollArea} aria-label={t('navigation.sidebar')}>
         <ul className={styles.primaryNav}>
           {sections.map(({ route, icon: Icon }) => {
+            if (route === 'settings' && !canManage) {
+              return null;
+            }
+
             const active = pathname.endsWith(`/${route}`);
             return (
               <li key={route}>
@@ -298,10 +177,7 @@ export function WorkspaceSidebar({
                         <Menu.Item
                           leftSection={<Trash2 size={15} />}
                           color="red"
-                          onClick={() => {
-                            setSelected(item);
-                            setDeleteError(null);
-                          }}
+                          onClick={() => requestDelete(item)}
                         >
                           {channel('actions.delete')}
                         </Menu.Item>
@@ -374,11 +250,7 @@ export function WorkspaceSidebar({
           </Modal>
           <Modal
             opened={selected !== null && editor === null}
-            onClose={() => {
-              if (!deleteChannel.isPending) {
-                setSelected(null);
-              }
-            }}
+            onClose={closeDelete}
             title={channel('management.deleteTitle')}
             centered
             size="sm"
@@ -398,7 +270,7 @@ export function WorkspaceSidebar({
             <div className={styles.modalActions}>
               <Button
                 variant="secondary"
-                onClick={() => setSelected(null)}
+                onClick={closeDelete}
                 disabled={deleteChannel.isPending}
               >
                 {channel('actions.cancel')}

@@ -1,137 +1,35 @@
 'use client';
 
 import { ArrowRight, Users } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
-import { authLifecycle, useAuthSession } from '@/domains/auth/model/session';
-import {
-  getInviteErrorKey,
-  inviteStorage,
-  useAcceptInviteMutation,
-  useResolveInviteMutation,
-} from '@/domains/invite/model/invitations';
-import { useCurrentUserQuery } from '@/domains/user/model/current-user';
-import { workspaceNavigation } from '@/domains/workspace/model/navigation';
-import { workspaceQueryKeys } from '@/domains/workspace/model/workspace';
-import { Link, useRouter } from '@/shared/i18n/navigation';
+import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
 
 import styles from './InviteView.module.scss';
-
-const finalErrors = new Set([
-  'InviteNotFound',
-  'InviteExpired',
-  'InviteRevoked',
-  'InviteAlreadyUsed',
-  'AlreadyWorkspaceMember',
-]);
+import { useInviteView } from './hooks/use-invite-view';
 
 export function InviteView() {
+  // ==================== VIEW STATE ====================
+
   const t = useTranslations('invite');
-  const locale = useLocale();
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const { status } = useAuthSession();
-  const [token, setToken] = useState<string | null>(null);
-  const [ready, setReady] = useState(false);
-  const resolved = useResolveInviteMutation();
-  const accept = useAcceptInviteMutation();
-  const user = useCurrentUserQuery({ enabled: status === 'authenticated' });
-  const resolveInvite = resolved.mutate;
-  const acceptErrorKey = accept.isError
-    ? getInviteErrorKey(accept.error)
-    : null;
-  const cannotRetryAcceptance =
-    acceptErrorKey !== null && finalErrors.has(acceptErrorKey);
-
-  // ==================== INVITE AND SESSION RESTORATION ====================
-
-  useEffect(() => {
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const incomingToken = fragment.get('token');
-
-    if (incomingToken) {
-      inviteStorage.set(incomingToken);
-      window.history.replaceState(
-        null,
-        '',
-        window.location.pathname + window.location.search
-      );
-    }
-
-    const pendingToken = incomingToken ?? inviteStorage.get();
-    queueMicrotask(() => {
-      setToken(pendingToken);
-      setReady(true);
-    });
-
-    void authLifecycle.initialize().catch(() => {
-      // Session status provides recovery feedback; invite resolution remains public.
-    });
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      resolveInvite(token);
-    }
-  }, [token, resolveInvite]);
-
-  useEffect(() => {
-    if (
-      resolved.isError &&
-      finalErrors.has(getInviteErrorKey(resolved.error))
-    ) {
-      inviteStorage.clear();
-    }
-  }, [resolved.isError, resolved.error]);
-
-  // ==================== HANDLERS ====================
-
-  const acceptInvite = async () => {
-    if (!token) {
-      return;
-    }
-
-    try {
-      const membership = await accept.mutateAsync(token);
-      inviteStorage.clear();
-
-      if (user.data) {
-        workspaceNavigation.setLastWorkspaceId(
-          user.data.id,
-          membership.workspaceId
-        );
-      }
-
-      void queryClient.invalidateQueries({
-        queryKey: workspaceQueryKeys.list,
-      });
-
-      router.replace({
-        pathname: '/workspaces/[workspaceId]',
-        params: { workspaceId: membership.workspaceId },
-      });
-    } catch (error) {
-      if (finalErrors.has(getInviteErrorKey(error))) {
-        inviteStorage.clear();
-      }
-    }
-  };
-
-  const decline = () => {
-    inviteStorage.clear();
-    router.replace(status === 'authenticated' ? '/app' : '/');
-  };
-
-  const formatDate = (value: string) =>
-    new Intl.DateTimeFormat(locale, {
-      dateStyle: 'long',
-      timeStyle: 'short',
-    }).format(new Date(value));
-
+  const {
+    status,
+    token,
+    ready,
+    resolved,
+    accept,
+    acceptErrorKey,
+    cannotRetryAcceptance,
+    resolveErrorKey,
+    canRetryResolve,
+    acceptInvite,
+    decline,
+    retryResolve,
+    retrySession,
+    formatDate,
+  } = useInviteView();
   // ==================== FEEDBACK ====================
 
   if (!ready || (token && resolved.isPending)) {
@@ -157,14 +55,13 @@ export function InviteView() {
   }
 
   if (resolved.isError) {
-    const errorKey = getInviteErrorKey(resolved.error);
     return (
       <main className={styles.page}>
         <div className={styles.card} role="alert">
           <h1>{t('page.title')}</h1>
-          <p>{t(`errors.${errorKey}`)}</p>
-          {(errorKey === 'networkError' || errorKey === 'requestFailed') && (
-            <Button variant="secondary" onClick={() => resolved.mutate(token)}>
+          <p>{t(`errors.${resolveErrorKey ?? 'requestFailed'}`)}</p>
+          {canRetryResolve && (
+            <Button variant="secondary" onClick={retryResolve}>
               {t('actions.retry')}
             </Button>
           )}
@@ -232,12 +129,7 @@ export function InviteView() {
         ) : status === 'unavailable' ? (
           <div className={styles.actions}>
             <p>{t('page.sessionUnavailable')}</p>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                void authLifecycle.initialize({ retry: true }).catch(() => {})
-              }
-            >
+            <Button variant="secondary" onClick={retrySession}>
               {t('actions.retry')}
             </Button>
           </div>
