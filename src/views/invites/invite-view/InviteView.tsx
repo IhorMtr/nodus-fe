@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import styles from './InviteView.module.scss';
@@ -109,9 +110,9 @@ export function InviteView() {
               </Button>
             )}
             {acceptErrorKey && (
-              <p className={styles.error} role="alert">
+              <InlineStatus tone="danger" role="alert">
                 {t(`errors.${acceptErrorKey}`)}
-              </p>
+              </InlineStatus>
             )}
             {acceptErrorKey === 'AlreadyWorkspaceMember' && (
               <Link

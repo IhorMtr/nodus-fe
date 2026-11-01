@@ -13,17 +13,24 @@ interface AnnouncementCardProps {
   onOpen: () => void;
 }
 
-// ==================== RENDER ====================
+// ==================== COMPONENT ====================
 
 export function AnnouncementCard({
   announcement,
   authorName,
   onOpen,
 }: AnnouncementCardProps) {
+  // ==================== CONTEXT ====================
+
   const t = useTranslations('announcement');
   const locale = useLocale();
+
+  // ==================== DERIVED STATE ====================
+
   const scheduled = !announcement.publishedAt;
   const date = announcement.publishedAt ?? announcement.publishAt;
+
+  // ==================== RENDER ====================
 
   return (
     <article className={styles.card}>

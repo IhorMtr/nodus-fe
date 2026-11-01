@@ -24,7 +24,7 @@
 .input.input {
   @include mixins.focus-ring;
 
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-xs);
   background: var(--color-surface-elevated);
   cursor: pointer;
@@ -55,10 +55,6 @@
     &:hover:not(:disabled) {
       border-color: var(--color-danger-text);
     }
-  }
-
-  &:focus-visible:not(:disabled) {
-    border-color: var(--color-focus);
   }
 
   &:disabled {

@@ -10,8 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: `/${routing.defaultLocale}`,
     scope: '/',
     display: 'standalone',
-    background_color: '#111111',
-    theme_color: '#111111',
+    background_color: '#111317',
+    theme_color: '#111317',
     icons: [
       {
         src: '/icons/android-chrome-192x192.png',

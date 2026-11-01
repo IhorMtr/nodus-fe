@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useRef, type FormEvent, type KeyboardEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Textarea } from '@/shared/ui/textarea';
 
 import {
@@ -103,9 +104,14 @@ export function MessageComposer({
           />
         </div>
         {message && (
-          <p className={styles.error} role="alert">
+          <InlineStatus
+            tone="danger"
+            variant="plain"
+            role="alert"
+            className={styles.error}
+          >
             {message}
-          </p>
+          </InlineStatus>
         )}
       </div>
     </form>

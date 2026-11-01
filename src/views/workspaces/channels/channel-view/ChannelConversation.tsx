@@ -1,11 +1,13 @@
 'use client';
 
+import { WifiOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { DeleteMessageModal } from '@/domains/message/ui/delete-message-modal';
 import { MessageComposer } from '@/domains/message/ui/message-composer';
 import { MessageList } from '@/domains/message/ui/message-list';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { useChannelMessages } from './hooks/use-channel-messages';
@@ -71,11 +73,23 @@ export function ChannelConversation({
 
   return (
     <div className={styles.conversation}>
+      {/* ==================== REALTIME STATUS ==================== */}
+
       {history.joinError && (
-        <p role="status" title={history.joinError}>
-          {t('states.realtimeUnavailable')}
-        </p>
+        <div className={styles.realtime}>
+          <InlineStatus
+            tone="warning"
+            icon={<WifiOff />}
+            role="status"
+            title={history.joinError}
+          >
+            {t('states.realtimeUnavailable')}
+          </InlineStatus>
+        </div>
       )}
+
+      {/* ==================== MESSAGES ==================== */}
+
       <MessageList
         messages={history.messages}
         canEdit={history.canEdit}
@@ -96,6 +110,9 @@ export function ChannelConversation({
         onDelete={actions.deletion.onRequest}
         onBottomChange={readState.onBottomChange}
       />
+
+      {/* ==================== COMPOSER AND DIALOGS ==================== */}
+
       <MessageComposer
         onSubmit={actions.composer.onSubmit}
         isSubmitting={actions.composer.isSubmitting}

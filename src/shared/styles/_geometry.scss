@@ -1,4 +1,6 @@
 :root {
+  // ==================== SPACING ====================
+
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -10,6 +12,8 @@
   --space-12: 48px;
   --space-16: 64px;
 
+  // ==================== RADII ====================
+
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -19,15 +23,29 @@
   --radius-control: var(--radius-sm);
   --radius-container: var(--radius-md);
 
-  --control-height-sm: 32px;
-  --control-height-md: 40px;
-  --control-height-lg: 48px;
+  // ==================== CONTROLS ====================
+
+  --control-height-sm: 30px;
+  --control-height-md: 36px;
+  --control-height-lg: 44px;
 
   --icon-size-sm: 16px;
-  --icon-size-md: 20px;
-  --icon-size-lg: 24px;
+  --icon-size-md: 18px;
+  --icon-size-lg: 20px;
+
+  // ==================== FOCUS ====================
+
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  // ==================== PAGE LAYOUT ====================
 
   --page-padding-sm: 16px;
   --page-padding-md: 24px;
   --page-padding-lg: 32px;
+
+  // Readable widths for workspace pages: forms and settings stay narrow,
+  // lists of people or posts get a little more room.
+  --content-width-narrow: 680px;
+  --content-width: 840px;
 }

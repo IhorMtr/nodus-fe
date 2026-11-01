@@ -29,11 +29,11 @@
   height: 18px;
   padding: 0 4px;
   place-items: center;
-  border: 2px solid var(--color-surface-elevated);
+  border: 2px solid var(--color-chrome);
   border-radius: var(--radius-full);
   background: var(--color-primary);
   color: var(--color-on-primary);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-semibold);
   line-height: 1;
   pointer-events: none;

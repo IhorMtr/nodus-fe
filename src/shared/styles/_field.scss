@@ -1,4 +1,5 @@
 @use '@/shared/styles/controls';
+@use '@/shared/styles/mixins';
 
 @mixin root {
   @include controls.sizes;
@@ -47,7 +48,7 @@
   min-height: var(--control-height);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-control);
-  background: var(--color-surface-elevated);
+  background: var(--color-field);
   color: var(--color-text-primary);
   font-family: var(--font-family-sans);
   font-size: var(--control-font-size);
@@ -55,35 +56,42 @@
   transition:
     border-color var(--transition-fast),
     background-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    outline-color var(--transition-fast);
+    box-shadow var(--transition-fast);
 
   &::placeholder {
     color: var(--color-text-muted);
     opacity: 1;
   }
 
-  &:hover:where(:not(:disabled, [data-disabled], [data-error])) {
+  // ---------- Hover ----------
+
+  &:hover:where(:not(:disabled, [data-disabled], [data-error], :focus)) {
     border-color: var(--color-border-strong);
-    background: var(--color-surface-hover);
   }
+
+  // ---------- Error ----------
 
   &[data-error] {
     border-color: var(--color-danger-border);
-    background: var(--color-danger-subtle);
   }
 
+  // ---------- Focus ----------
+
+  // One indicator for mouse and keyboard focus alike: typing into a field is
+  // the same interaction either way, so there is no separate outline.
   &:focus,
+  &:focus-visible,
   &:focus-within {
-    border-color: var(--color-text-muted);
-    box-shadow: 0 0 0 3px var(--color-primary-subtle);
+    @include mixins.field-focus;
   }
 
-  &:focus-visible,
-  &:has(input:focus-visible) {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+  &[data-error]:focus,
+  &[data-error]:focus-within {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px var(--color-danger-subtle);
   }
+
+  // ---------- Disabled ----------
 
   &:disabled,
   &[data-disabled],
@@ -113,9 +121,9 @@
 }
 
 @mixin label {
-  margin-bottom: var(--space-1);
+  margin-bottom: 6px;
   color: var(--color-text-primary);
-  font-size: var(--control-font-size);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-normal);
 }
@@ -129,8 +137,6 @@
 
 @mixin error {
   margin-top: var(--space-1);
-  padding-inline-start: var(--space-2);
-  border-inline-start: 2px solid var(--color-danger-border);
   color: var(--color-danger-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);

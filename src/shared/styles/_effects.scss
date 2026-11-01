@@ -1,10 +1,12 @@
-// Decorative backgrounds and entrance motion. Everything is neutral and
-// derived from the text color so it follows the light and dark themes.
+// Decorative backgrounds and entrance motion for public pages (landing, auth,
+// not found). Lines derive from the text color and the soft light from the
+// steel accent, so both follow the light and dark themes. The workspace itself
+// never uses these.
 
 // ==================== TOKENS ====================
 
-$line: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
-$glow: color-mix(in srgb, var(--color-text-primary) 6%, transparent);
+$line: color-mix(in srgb, var(--color-text-primary) 6%, transparent);
+$glow: color-mix(in srgb, var(--color-accent) 9%, transparent);
 
 // ==================== BACKGROUND LAYERS ====================
 

@@ -18,6 +18,7 @@ import { useTranslations } from 'next-intl';
 import type { User } from '@/domains/user/model/current-user';
 import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
@@ -249,9 +250,13 @@ export function WorkspaceSidebar({
                 required
               />
               {errors.root?.server?.message && (
-                <p className={styles.formError} role="alert">
+                <InlineStatus
+                  tone="danger"
+                  role="alert"
+                  className={styles.formError}
+                >
                   {errors.root.server.message}
-                </p>
+                </InlineStatus>
               )}
               <div className={styles.modalActions}>
                 <Button
@@ -287,9 +292,13 @@ export function WorkspaceSidebar({
               })}
             </p>
             {deleteError && (
-              <p className={styles.formError} role="alert">
+              <InlineStatus
+                tone="danger"
+                role="alert"
+                className={styles.formError}
+              >
                 {deleteError}
-              </p>
+              </InlineStatus>
             )}
             <div className={styles.modalActions}>
               <Button

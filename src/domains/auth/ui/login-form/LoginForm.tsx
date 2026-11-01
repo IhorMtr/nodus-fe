@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 
 import type { AuthFieldProps, AuthFormProps } from '../auth-form';
@@ -57,9 +58,9 @@ export function LoginForm({
         required
       />
       {formError && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" role="alert">
           {formError}
-        </p>
+        </InlineStatus>
       )}
       <Button
         className={styles.submit}

@@ -120,7 +120,7 @@ export function WorkspaceHeader({
               <ChevronDown size={16} aria-hidden="true" />
             </button>
           </Menu.Target>
-          <Menu.Dropdown className={styles.dropdown}>
+          <Menu.Dropdown>
             <Menu.Label>{t('navigation.workspaces')}</Menu.Label>
             {workspaces.isPending && (
               <Menu.Label>{t('states.loading')}</Menu.Label>

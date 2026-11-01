@@ -62,7 +62,7 @@ export function UserProfile({
 
   return (
     <div className={styles.profile}>
-      <Menu position="top-start" width={250} shadow="sm" withinPortal>
+      <Menu position="top-start" width={250} withinPortal>
         {/* ==================== PROFILE TRIGGER ==================== */}
 
         <Menu.Target>
@@ -86,7 +86,7 @@ export function UserProfile({
           </button>
         </Menu.Target>
 
-        <Menu.Dropdown className={styles.dropdown}>
+        <Menu.Dropdown>
           <Menu.Label>{name}</Menu.Label>
 
           {/* ==================== PRESENCE STATUS ==================== */}

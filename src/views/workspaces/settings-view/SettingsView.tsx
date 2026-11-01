@@ -1,11 +1,11 @@
 'use client';
 
 import { Modal } from '@mantine/core';
-import { Settings } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { getWorkspaceManagementErrorKey } from '@/domains/workspace/model/workspace';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
@@ -49,19 +49,28 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
 
   if (workspace.isError || user.isError) {
     return (
-      <div className={styles.state} role="alert">
-        <p>{t('states.loadErrorDescription')}</p>
-        <Button variant="secondary" onClick={retry}>
-          {t('actions.retry')}
-        </Button>
+      <div className={styles.state}>
+        <InlineStatus
+          tone="danger"
+          role="alert"
+          action={
+            <Button variant="ghost" size="sm" onClick={retry}>
+              {t('actions.retry')}
+            </Button>
+          }
+        >
+          {t('states.loadErrorDescription')}
+        </InlineStatus>
       </div>
     );
   }
 
   if (!canManage) {
     return (
-      <div className={styles.state} role="alert">
-        {t('states.accessDenied')}
+      <div className={styles.state}>
+        <InlineStatus tone="warning" role="alert">
+          {t('states.accessDenied')}
+        </InlineStatus>
       </div>
     );
   }
@@ -70,12 +79,11 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
 
   return (
     <div className={styles.page}>
+      {/* ==================== PAGE HEADER ==================== */}
+
       <header className={styles.intro}>
-        <Settings size={22} aria-hidden="true" />
-        <div>
-          <h1>{management('settingsTitle')}</h1>
-          <p>{management('settingsDescription')}</p>
-        </div>
+        <h1>{management('settingsTitle')}</h1>
+        <p>{management('settingsDescription')}</p>
       </header>
 
       {/* ==================== WORKSPACE NAME ==================== */}
@@ -84,9 +92,15 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
         className={styles.section}
         aria-labelledby="workspace-name-heading"
       >
-        <h2 id="workspace-name-heading">{management('nameTitle')}</h2>
-        <p>{management('nameDescription')}</p>
-        <form onSubmit={event => void saveName(event)} noValidate>
+        <div className={styles.sectionText}>
+          <h2 id="workspace-name-heading">{management('nameTitle')}</h2>
+          <p>{management('nameDescription')}</p>
+        </div>
+        <form
+          className={styles.form}
+          onSubmit={event => void saveName(event)}
+          noValidate
+        >
           <Input
             {...register('name')}
             label={t('fields.name')}
@@ -96,20 +110,22 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
             required
           />
           {rename.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert">
               {management(
                 `errors.${getWorkspaceManagementErrorKey(rename.error)}`
               )}
-            </p>
+            </InlineStatus>
           )}
-          {rename.isSuccess && (
-            <p className={styles.success} role="status">
-              {management('saved')}
-            </p>
-          )}
-          <Button type="submit" loading={rename.isPending}>
-            {management('save')}
-          </Button>
+          <div className={styles.formActions}>
+            <Button type="submit" loading={rename.isPending}>
+              {management('save')}
+            </Button>
+            {rename.isSuccess && (
+              <InlineStatus tone="success" variant="plain" role="status">
+                {management('saved')}
+              </InlineStatus>
+            )}
+          </div>
         </form>
       </section>
 
@@ -120,13 +136,19 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
           className={`${styles.section} ${styles.dangerSection}`}
           aria-labelledby="delete-workspace-heading"
         >
-          <h2 id="delete-workspace-heading">{management('deleteTitle')}</h2>
-          <p>{management('deleteDescription')}</p>
-          <Button variant="danger" onClick={openDelete}>
-            {management('deleteAction')}
-          </Button>
+          <div className={styles.sectionText}>
+            <h2 id="delete-workspace-heading">{management('deleteTitle')}</h2>
+            <p>{management('deleteDescription')}</p>
+          </div>
+          <div className={styles.dangerAction}>
+            <Button variant="danger" onClick={openDelete}>
+              {management('deleteAction')}
+            </Button>
+          </div>
         </section>
       )}
+
+      {/* ==================== DELETE CONFIRMATION ==================== */}
 
       <Modal
         opened={deleteOpened}
@@ -147,11 +169,11 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
             disabled={remove.isPending || redirecting}
           />
           {remove.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert">
               {management(
                 `errors.${getWorkspaceManagementErrorKey(remove.error)}`
               )}
-            </p>
+            </InlineStatus>
           )}
           <div className={styles.actions}>
             <Button

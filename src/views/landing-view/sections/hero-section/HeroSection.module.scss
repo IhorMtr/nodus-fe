@@ -11,25 +11,20 @@
   isolation: isolate;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-container);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
 
-  // Abstract rings and hairlines over a tonal gradient.
+  // Abstract rings and hairlines with one soft steel light in the corner,
+  // over the flat hero surface.
   &::before {
     content: '';
     position: absolute;
     z-index: -2;
     inset: 0;
     background:
-      effects.glow(85%, 10%, 460px), effects.ring(100%, 100%, 200px),
+      effects.glow(85%, 10%, 420px), effects.ring(100%, 100%, 200px),
       effects.ring(100%, 100%, 320px), effects.ring(100%, 100%, 440px),
-      effects.lines(115deg, 110px),
-      linear-gradient(
-        135deg,
-        var(--color-surface-elevated) 0%,
-        var(--color-surface) 55%,
-        var(--color-background) 100%
-      );
+      effects.lines(115deg, 110px);
     pointer-events: none;
   }
 }
@@ -108,7 +103,7 @@
     max-width: 14ch;
     margin: var(--space-4) 0 var(--space-5);
     font-size: clamp(2rem, 4vw, 3.25rem);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-semibold);
     line-height: 1.12;
     letter-spacing: -0.035em;
     text-wrap: balance;
@@ -131,6 +126,7 @@
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
   line-height: var(--line-height-relaxed);
 }
 

@@ -8,6 +8,7 @@ import { getAnnouncementErrorKey } from '@/domains/announcement/model/announceme
 import { AnnouncementCard } from '@/domains/announcement/ui/announcement-card';
 import { AnnouncementForm } from '@/domains/announcement/ui/announcement-form';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import styles from './AnnouncementsView.module.scss';
@@ -16,6 +17,8 @@ import { useAnnouncementsView } from './hooks/use-announcements-view';
 // ==================== PAGE VIEW ====================
 
 export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
+  // ==================== VIEW STATE ====================
+
   const t = useTranslations('announcement');
   const locale = useLocale();
   const state = useAnnouncementsView(workspaceId);
@@ -40,7 +43,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
       <div className={styles.state} role="alert">
         <h1>{t('heading')}</h1>
         <p>{t(`errors.${getAnnouncementErrorKey(error)}`)}</p>
-        <Button variant="secondary" onClick={state.retry}>
+        <Button variant="secondary" size="sm" onClick={state.retry}>
           {t('retry')}
         </Button>
       </div>
@@ -54,9 +57,6 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
       {/* ==================== PAGE INTRO ==================== */}
 
       <header className={styles.intro}>
-        <span className={styles.icon}>
-          <Megaphone size={22} aria-hidden="true" />
-        </span>
         <div className={styles.introText}>
           <h1>{t('heading')}</h1>
           <p>{t('description')}</p>
@@ -72,7 +72,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
 
       {state.items.length === 0 ? (
         <div className={styles.empty}>
-          <Megaphone size={26} aria-hidden="true" />
+          <Megaphone size={24} aria-hidden="true" />
           <h2>{t('emptyTitle')}</h2>
           <p>{t('emptyDescription')}</p>
         </div>
@@ -114,7 +114,10 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
         )}
         {selected && !state.detail.isError && (
           <article className={styles.detail}>
-            <span className={styles.status}>
+            <span
+              className={styles.status}
+              data-published={Boolean(selected.publishedAt) || undefined}
+            >
               {selected.publishedAt ? t('published') : t('scheduled')}
             </span>
             <h2>{selected.title}</h2>
@@ -138,9 +141,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
             </p>
             <p className={styles.content}>{selected.content}</p>
             {state.publish.isError && (
-              <p className={styles.error} role="alert">
+              <InlineStatus tone="danger" role="alert" className={styles.error}>
                 {t(`errors.${getAnnouncementErrorKey(state.publish.error)}`)}
-              </p>
+              </InlineStatus>
             )}
             {state.canManage && (
               <div className={styles.actions}>
@@ -222,9 +225,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
             })}
           </p>
           {state.remove.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert" className={styles.error}>
               {t(`errors.${getAnnouncementErrorKey(state.remove.error)}`)}
-            </p>
+            </InlineStatus>
           )}
           <div className={styles.actions}>
             <Button variant="secondary" onClick={state.closeDelete}>

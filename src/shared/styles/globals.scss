@@ -5,6 +5,7 @@
 @use 'transitions';
 @use 'shadows';
 @use 'z-index';
+@use 'mantine';
 
 // ==================== BASE ====================
 
@@ -33,6 +34,8 @@ body {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 // ==================== ELEMENT DEFAULTS ====================
@@ -66,6 +69,13 @@ video {
 
 a {
   color: inherit;
+}
+
+// Native focus is replaced by the shared ring wherever a component opts in;
+// anything that does not still gets a calm, palette-matched outline.
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
 }
 
 ::selection {

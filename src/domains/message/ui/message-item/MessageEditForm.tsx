@@ -12,6 +12,7 @@ import {
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Textarea } from '@/shared/ui/textarea';
 
 import {
@@ -115,9 +116,9 @@ export function MessageEditForm({
         error={Boolean(message)}
       />
       {message && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" variant="plain" role="alert">
           {message}
-        </p>
+        </InlineStatus>
       )}
       <div className={styles.actions}>
         <Button

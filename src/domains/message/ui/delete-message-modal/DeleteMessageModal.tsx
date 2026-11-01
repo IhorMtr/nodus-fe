@@ -4,6 +4,7 @@ import { Modal } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 
 import styles from './DeleteMessageModal.module.scss';
 
@@ -34,17 +35,12 @@ export function DeleteMessageModal({
       closeOnClickOutside={!isDeleting}
       closeOnEscape={!isDeleting}
       withCloseButton={!isDeleting}
-      classNames={{
-        content: styles.content,
-        header: styles.header,
-        title: styles.title,
-      }}
     >
       <p className={styles.description}>{t('deletion.description')}</p>
       {error && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" role="alert" className={styles.error}>
           {error}
-        </p>
+        </InlineStatus>
       )}
       <div className={styles.actions}>
         <Button variant="secondary" onClick={onClose} disabled={isDeleting}>

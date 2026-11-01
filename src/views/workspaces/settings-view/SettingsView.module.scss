@@ -1,74 +1,110 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-.page {
-  display: grid;
-  width: min(100%, 760px);
-  gap: var(--space-5);
-  margin-inline: auto;
-  padding: var(--space-8);
+// ==================== PAGE ====================
 
-  @include mixins.down(breakpoints.$breakpoint-xs) {
-    padding: var(--space-5);
+.page {
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-8) var(--space-12);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-6) var(--space-4) var(--space-10);
   }
 }
 
 .intro {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-3);
-
-  svg {
-    flex: none;
-    color: var(--color-text-secondary);
-  }
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
 
   h1 {
-    margin: 0 0 var(--space-1);
-    font-size: var(--font-size-2xl);
+    @include mixins.page-title;
   }
 
   p {
-    margin: 0;
+    margin: 6px 0 0;
     color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
   }
 }
 
+// ==================== SECTIONS ====================
+
+// Each setting is a row of one page: an explanation on the left and the
+// control on the right, separated by hairlines rather than boxes.
 .section {
-  padding: var(--space-6);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-container);
-  background: var(--color-surface);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: var(--space-4) var(--space-8);
+  padding-block: var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
 
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sectionText {
   h2 {
-    margin: 0 0 var(--space-2);
-    font-size: var(--font-size-lg);
+    @include mixins.section-title;
+
+    font-size: var(--font-size-base);
   }
 
   p {
-    margin: 0 0 var(--space-5);
+    max-width: 44ch;
+    margin: var(--space-1) 0 0;
     color: var(--color-text-secondary);
-  }
-
-  form {
-    display: grid;
-    gap: var(--space-4);
-    justify-items: start;
-  }
-
-  form > div {
-    width: 100%;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
   }
 }
 
+.form {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+// ==================== DANGER ZONE ====================
+
+// Only the heading and the outlined button carry the warning tone; the row
+// otherwise matches the rest of the page.
 .dangerSection {
-  margin-top: var(--space-8);
+  border-bottom: 0;
+
+  .sectionText h2 {
+    color: var(--color-danger-text);
+  }
 }
+
+.dangerAction {
+  display: flex;
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    justify-content: flex-end;
+  }
+}
+
+// ==================== DELETE DIALOG ====================
 
 .modalBody {
   display: grid;
   gap: var(--space-4);
+
+  > p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
 }
 
 .actions {
@@ -78,16 +114,10 @@
   gap: var(--space-2);
 }
 
-.error,
-.section .error {
-  color: var(--color-danger);
-}
-
-.success,
-.section .success {
-  color: var(--color-text-secondary);
-}
+// ==================== STATES ====================
 
 .state {
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
   padding: var(--space-8);
 }

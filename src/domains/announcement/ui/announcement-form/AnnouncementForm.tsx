@@ -6,6 +6,7 @@ import type { UseFormRegister, FieldErrors } from 'react-hook-form';
 
 import type { AnnouncementFormValues } from '../../model/announcements';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
 import styles from './AnnouncementForm.module.scss';
@@ -90,9 +91,9 @@ export function AnnouncementForm(props: AnnouncementFormProps) {
       {/* ==================== ACTIONS ==================== */}
 
       {props.error && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" role="alert">
           {props.error}
-        </p>
+        </InlineStatus>
       )}
       <div className={styles.actions}>
         <Button type="button" variant="secondary" onClick={props.onCancel}>

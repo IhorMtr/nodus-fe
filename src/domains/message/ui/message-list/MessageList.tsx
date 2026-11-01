@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import type { Message } from '../../model/message-history';
@@ -243,7 +244,9 @@ export function MessageList({
       )}
       {hasOlderError && (
         <div className={styles.status} role="alert">
-          <span>{t('states.olderLoadError')}</span>
+          <InlineStatus tone="danger" variant="plain">
+            {t('states.olderLoadError')}
+          </InlineStatus>
           <Button variant="secondary" size="sm" onClick={onLoadOlder}>
             {t('actions.retry')}
           </Button>

@@ -1,26 +1,24 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
+// ==================== PAGE ====================
+
 .page {
   display: grid;
   min-height: 100dvh;
   place-items: center;
   padding: var(--space-6);
-  background: var(--color-background);
+  background: var(--color-chrome);
 }
 
 .card {
   display: grid;
   width: min(100%, 480px);
   gap: var(--space-4);
-  padding: var(--space-10);
+  padding: var(--space-8);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-container);
-  background: linear-gradient(
-    155deg,
-    var(--color-surface-elevated),
-    var(--color-surface)
-  );
+  border-radius: var(--radius-lg);
+  background: var(--color-background);
 
   h1,
   p {
@@ -29,7 +27,9 @@
 
   h1 {
     font-size: var(--font-size-2xl);
-    letter-spacing: -0.03em;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
   }
 
   > a {
@@ -41,22 +41,20 @@
   }
 }
 
+// ==================== CONTENT ====================
+
 .icon {
   display: grid;
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   place-items: center;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-control);
-  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-selected);
+  color: var(--color-accent);
 }
 
 .eyebrow {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  @include mixins.eyebrow;
 }
 
 .workspace {
@@ -68,48 +66,72 @@
 .expiry,
 .actions p {
   color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
 }
+
+// ==================== ACTIONS ====================
 
 .actions {
   display: grid;
   gap: var(--space-3);
 }
 
+// Link buttons mirror the shared Button variants.
 .primaryLink,
 .secondaryLink {
+  @include mixins.focus-ring;
+
   display: flex;
-  min-height: 42px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
   padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--color-border);
+  border: 1px solid transparent;
   border-radius: var(--radius-control);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
-
-  @include mixins.focus-ring;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .primaryLink {
-  background: var(--color-text-primary);
-  color: var(--color-surface);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+
+  &:hover {
+    background: var(--color-primary-hover);
+  }
 }
 
 .secondaryLink {
-  background: var(--color-surface);
+  border-color: var(--color-border);
+  background: var(--color-surface-elevated);
   color: var(--color-text-primary);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+  }
 }
 
 .decline {
+  @include mixins.focus-ring;
+
   justify-self: start;
+  padding: 0;
   border: 0;
+  border-radius: var(--radius-xs);
   background: transparent;
   color: var(--color-text-muted);
   cursor: pointer;
+  font: inherit;
+  font-size: var(--font-size-sm);
   text-decoration: underline;
+  text-underline-offset: 3px;
 
-  @include mixins.focus-ring;
-}
-
-.error {
-  color: var(--color-danger-text);
+  &:hover {
+    color: var(--color-text-primary);
+  }
 }

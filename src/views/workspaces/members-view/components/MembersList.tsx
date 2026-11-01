@@ -36,25 +36,33 @@ export function MembersList({
   const t = useTranslations('invite');
   const management = useTranslations('workspace.management');
 
+  // ==================== HELPERS ====================
+
+  const initialsOf = (member: WorkspaceMember) =>
+    `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`.toUpperCase();
+
   // ==================== RENDER ====================
 
   return (
     <section className={styles.section} aria-labelledby="members-heading">
+      {/* ==================== SECTION HEADER ==================== */}
+
       <div className={styles.sectionHeader}>
-        <h2 id="members-heading">{t('members.listTitle')}</h2>
-        <div className={styles.headingActions}>
+        <div className={styles.sectionHeading}>
+          <h2 id="members-heading">{t('members.listTitle')}</h2>
           <span className={styles.count}>{members.length}</span>
-          <Button
-            variant="secondary"
-            size="sm"
-            leftIcon={<RefreshCw size={15} />}
-            onClick={onRefresh}
-            disabled={isFetching}
-          >
-            {t('actions.refresh')}
-          </Button>
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          leftIcon={<RefreshCw size={15} />}
+          onClick={onRefresh}
+          disabled={isFetching}
+        >
+          {t('actions.refresh')}
+        </Button>
       </div>
+
       {/* ==================== MEMBER ROWS ==================== */}
 
       {members.length === 0 ? (
@@ -63,20 +71,27 @@ export function MembersList({
         <ul className={`${styles.list} ${styles.memberList}`}>
           {members.map(member => (
             <li key={member.userId} className={styles.row}>
+              <span className={styles.avatar} aria-hidden="true">
+                {initialsOf(member)}
+              </span>
               <div className={styles.person}>
                 <strong>
                   {member.firstName} {member.lastName}
                 </strong>
                 <span>{member.email}</span>
               </div>
-              <div className={styles.memberActions}>
+              <div className={styles.memberMeta}>
                 <PresenceIndicator
                   status={member.status}
                   className={styles.presence}
                 />
-                <span className={styles.role}>{t(`roles.${member.role}`)}</span>
+                <span className={styles.role} data-role={member.role}>
+                  {t(`roles.${member.role}`)}
+                </span>
+              </div>
+              <div className={styles.rowActions}>
                 {(canChangeRole(member) || canRemove(member)) && (
-                  <Menu position="bottom-end" shadow="sm" withinPortal>
+                  <Menu position="bottom-end" withinPortal>
                     <Menu.Target>
                       <button
                         type="button"

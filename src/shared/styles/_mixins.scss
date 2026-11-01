@@ -1,3 +1,5 @@
+// ==================== BREAKPOINTS ====================
+
 @mixin up($breakpoint) {
   @media (min-width: $breakpoint) {
     @content;
@@ -11,9 +13,65 @@
   }
 }
 
-@mixin focus-ring {
+// ==================== FOCUS ====================
+
+// The one keyboard focus indicator for buttons, links and other compact
+// controls: a steel outline with a small gap, shown only for keyboard focus.
+@mixin focus-ring($offset: var(--focus-ring-offset)) {
   &:focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: $offset;
   }
+}
+
+// Text fields mark focus in place, with a tinted border and a soft halo,
+// instead of an outline floating around the field.
+@mixin field-focus {
+  border-color: var(--color-focus);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+// ==================== TYPOGRAPHY ====================
+
+// Page-level heading used by workspace pages (Members, Settings, ...).
+@mixin page-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+}
+
+// Heading of a group inside a page.
+@mixin section-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+// Small uppercase label above navigation groups and lists.
+@mixin eyebrow {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// ==================== ACCESSIBILITY ====================
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
 }

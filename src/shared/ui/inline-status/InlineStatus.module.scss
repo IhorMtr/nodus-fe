@@ -1,0 +1,79 @@
+// ==================== ROOT ====================
+
+.root {
+  --status-color: var(--color-info-text);
+  --status-surface: var(--color-info-subtle);
+  --status-border: var(--color-info-border);
+
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+
+  // ==================== TONES ====================
+
+  &[data-tone='success'] {
+    --status-color: var(--color-success-text);
+    --status-surface: var(--color-success-subtle);
+    --status-border: var(--color-success-border);
+  }
+
+  &[data-tone='warning'] {
+    --status-color: var(--color-warning-text);
+    --status-surface: var(--color-warning-subtle);
+    --status-border: var(--color-warning-border);
+  }
+
+  &[data-tone='danger'] {
+    --status-color: var(--color-danger-text);
+    --status-surface: var(--color-danger-subtle);
+    --status-border: var(--color-danger-border);
+  }
+
+  // ==================== VARIANTS ====================
+
+  &[data-variant='banner'] {
+    min-height: 36px;
+    padding: 6px var(--space-3);
+    border: 1px solid var(--status-border);
+    border-radius: var(--radius-control);
+    background: var(--status-surface);
+  }
+
+  // Plain statuses keep the tone in the text too, since there is no surface.
+  &[data-variant='plain'] {
+    color: var(--status-color);
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+// ==================== PARTS ====================
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  align-self: flex-start;
+  // Centers a 16px icon on the first line of text.
+  margin-top: calc((1lh - 16px) / 2);
+  color: var(--status-color);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.message {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  display: inline-flex;
+  flex: none;
+  margin-inline-start: var(--space-2);
+}

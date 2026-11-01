@@ -12,6 +12,7 @@
     "loading": "Loading invitations",
     "empty": "No invitations have been created yet.",
     "expires": "Expires {date}",
+    "created": "Created {date}",
     "shareTitle": "Share invitation",
     "onceOnly": "Copy this link now. It cannot be retrieved after you close this window.",
     "linkLabel": "Invitation link",
