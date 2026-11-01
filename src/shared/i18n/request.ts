@@ -28,6 +28,8 @@ export default getRequestConfig(
       channel,
       message,
       invite,
+      notification,
+      announcement,
     ] = await Promise.all([
       import(`../../../messages/${locale}/common.json`),
       import(`../../../messages/${locale}/user.json`),
@@ -41,6 +43,8 @@ export default getRequestConfig(
       import(`../../../messages/${locale}/channel.json`),
       import(`../../../messages/${locale}/message.json`),
       import(`../../../messages/${locale}/invite.json`),
+      import(`../../../messages/${locale}/notification.json`),
+      import(`../../../messages/${locale}/announcement.json`),
     ]);
 
     return {
@@ -58,6 +62,8 @@ export default getRequestConfig(
         channel: channel.default,
         message: message.default,
         invite: invite.default,
+        notification: notification.default,
+        announcement: announcement.default,
       },
     };
   }

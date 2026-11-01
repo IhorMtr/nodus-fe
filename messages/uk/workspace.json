@@ -11,7 +11,8 @@
     "announcements": "Оголошення",
     "search": "Пошук",
     "channels": "Канали",
-    "notificationsPending": "Сповіщення з’являться незабаром"
+    "notifications": "Сповіщення",
+    "unreadNotifications": "непрочитаних сповіщень"
   },
   "sections": {
     "overviewPending": "Огляд робочого простору з’явиться тут незабаром.",

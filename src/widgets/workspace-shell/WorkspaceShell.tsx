@@ -86,6 +86,7 @@ export function WorkspaceShell({
       <WorkspaceHeader
         workspaceId={workspaceId}
         workspaceName={workspace.data.name}
+        userId={user.data.id}
         onOpenSidebar={() => setDrawerOpened(true)}
       />
       <div className={styles.body}>

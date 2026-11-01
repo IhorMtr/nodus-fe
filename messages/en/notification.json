@@ -1,0 +1,21 @@
+{
+  "title": "Notifications",
+  "subtitle": "Updates from all your workspaces",
+  "markAllRead": "Mark all read",
+  "markRead": "Mark as read",
+  "unread": "Unread",
+  "loading": "Loading notifications…",
+  "loadingMore": "Loading more…",
+  "loadMore": "Load more",
+  "loadMoreError": "Could not load more notifications. Try again.",
+  "loadError": "Notifications could not be loaded.",
+  "actionError": "Could not update notifications. Try again.",
+  "retry": "Try again",
+  "emptyTitle": "All caught up",
+  "emptyDescription": "Your notifications will appear here.",
+  "types": {
+    "AnnouncementPublished": "Announcement",
+    "WorkspaceRoleChanged": "Workspace role",
+    "WorkspaceRemoved": "Workspace removed"
+  }
+}

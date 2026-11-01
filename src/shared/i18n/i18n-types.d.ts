@@ -1,11 +1,13 @@
 import type appearance from '../../../messages/uk/appearance.json';
 import type auth from '../../../messages/uk/auth.json';
+import type announcement from '../../../messages/uk/announcement.json';
 import type channel from '../../../messages/uk/channel.json';
 import type common from '../../../messages/uk/common.json';
 import type language from '../../../messages/uk/language.json';
 import type invite from '../../../messages/uk/invite.json';
 import type message from '../../../messages/uk/message.json';
 import type navigation from '../../../messages/uk/navigation.json';
+import type notification from '../../../messages/uk/notification.json';
 import type product from '../../../messages/uk/product.json';
 import type presence from '../../../messages/uk/presence.json';
 import type user from '../../../messages/uk/user.json';
@@ -19,6 +21,7 @@ declare module 'next-intl' {
     Messages: {
       appearance: typeof appearance;
       auth: typeof auth;
+      announcement: typeof announcement;
       channel: typeof channel;
       common: typeof common;
       language: typeof language;
@@ -27,6 +30,7 @@ declare module 'next-intl' {
       user: typeof user;
       product: typeof product;
       navigation: typeof navigation;
+      notification: typeof notification;
       presence: typeof presence;
       workspace: typeof workspace;
     };

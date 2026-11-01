@@ -11,7 +11,8 @@
     "announcements": "Announcements",
     "search": "Search",
     "channels": "Channels",
-    "notificationsPending": "Notifications are coming soon"
+    "notifications": "Notifications",
+    "unreadNotifications": "unread notifications"
   },
   "sections": {
     "overviewPending": "Your workspace overview will appear here soon.",

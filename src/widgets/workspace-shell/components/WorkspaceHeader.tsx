@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Tooltip } from '@mantine/core';
+import { Menu, Popover, Tooltip } from '@mantine/core';
 import {
   Bell,
   Check,
@@ -11,19 +11,23 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { NotificationPanel } from '@/domains/notification/ui/notification-panel';
 import { Link } from '@/shared/i18n/navigation';
 import { IconButton } from '@/shared/ui/icon-button';
 
 import styles from './WorkspaceHeader.module.scss';
 import { useWorkspaceHeader } from './use-workspace-header';
+import { useNotificationCenter } from './use-notification-center';
 
 export function WorkspaceHeader({
   workspaceId,
   workspaceName,
+  userId,
   onOpenSidebar,
 }: {
   workspaceId: string;
   workspaceName: string;
+  userId: string;
   onOpenSidebar: () => void;
 }) {
   // ==================== VIEW STATE ====================
@@ -32,6 +36,11 @@ export function WorkspaceHeader({
   const product = useTranslations('product');
   const { workspaces, openSearch, retryWorkspaces } =
     useWorkspaceHeader(workspaceId);
+  const notifications = useNotificationCenter(
+    userId,
+    workspaceId,
+    workspaces.data?.map(workspace => workspace.id) ?? []
+  );
 
   // ==================== RENDER ====================
 
@@ -104,16 +113,72 @@ export function WorkspaceHeader({
             onClick={openSearch}
           />
         </Tooltip>
-        <Tooltip label={t('navigation.notificationsPending')}>
-          <span>
-            <IconButton
-              icon={<Bell />}
-              variant="ghost"
-              aria-label={t('navigation.notificationsPending')}
-              disabled
+        {/* ==================== NOTIFICATION CENTER ==================== */}
+
+        <Popover
+          opened={notifications.opened}
+          onClose={notifications.close}
+          position="bottom-end"
+          offset={8}
+          shadow="md"
+          withinPortal
+          classNames={{ dropdown: styles.notificationDropdown }}
+        >
+          <Popover.Target>
+            <span className={styles.bellWrap}>
+              <Tooltip label={t('navigation.notifications')}>
+                <IconButton
+                  icon={<Bell />}
+                  variant="ghost"
+                  aria-label={t('navigation.notifications')}
+                  aria-expanded={notifications.opened}
+                  onClick={() =>
+                    notifications.opened
+                      ? notifications.close()
+                      : notifications.open()
+                  }
+                />
+              </Tooltip>
+              {(notifications.count.data ?? 0) > 0 && (
+                <span
+                  className={styles.badge}
+                  aria-label={`${notifications.count.data} ${t('navigation.unreadNotifications')}`}
+                >
+                  {notifications.count.data! > 99
+                    ? '99+'
+                    : notifications.count.data}
+                </span>
+              )}
+            </span>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <NotificationPanel
+              items={notifications.items}
+              navigableIds={notifications.navigableIds}
+              canMarkAll={notifications.canMarkAll}
+              loading={notifications.list.isPending}
+              error={notifications.list.isError}
+              loadingMore={notifications.list.isFetchingNextPage}
+              loadMoreError={notifications.list.isFetchNextPageError}
+              hasMore={notifications.list.hasNextPage}
+              markingAll={notifications.markAllRead.isPending}
+              markingId={
+                notifications.markRead.isPending
+                  ? notifications.markRead.variables
+                  : null
+              }
+              actionError={
+                notifications.markRead.isError ||
+                notifications.markAllRead.isError
+              }
+              onRetry={() => void notifications.list.refetch()}
+              onLoadMore={() => void notifications.list.fetchNextPage()}
+              onMarkAllRead={notifications.onMarkAllRead}
+              onMarkRead={notifications.onMarkRead}
+              onSelect={notifications.onSelect}
             />
-          </span>
-        </Tooltip>
+          </Popover.Dropdown>
+        </Popover>
       </div>
     </header>
   );
