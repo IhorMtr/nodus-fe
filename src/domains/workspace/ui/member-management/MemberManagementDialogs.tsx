@@ -3,20 +3,24 @@
 import { Modal, Select } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 
-import { getWorkspaceManagementErrorKey } from '@/domains/workspace/model/workspace';
-import type { WorkspaceMember } from '@/domains/workspace/model/members';
 import { Button } from '@/shared/ui/button';
 
-import type { useMemberManagement } from '../hooks/use-member-management';
-import styles from '../MembersView.module.scss';
+import {
+  getWorkspaceMemberName,
+  type MemberManagement,
+} from '../../model/members';
+import { getWorkspaceManagementErrorKey } from '../../model/workspace';
+import styles from './MemberManagementDialogs.module.scss';
 
 // ==================== MEMBER MANAGEMENT DIALOGS ====================
 
 export function MemberManagementDialogs({
   state,
 }: {
-  state: ReturnType<typeof useMemberManagement>;
+  state: MemberManagement;
 }) {
+  // ==================== CONTEXT ====================
+
   const t = useTranslations('invite');
   const management = useTranslations('workspace.management');
   const {
@@ -31,8 +35,6 @@ export function MemberManagementDialogs({
     closeRemove,
     confirmRemove,
   } = state;
-  const memberName = (member: WorkspaceMember) =>
-    `${member.firstName} ${member.lastName}`.trim() || member.email;
 
   // ==================== RENDER ====================
 
@@ -52,7 +54,7 @@ export function MemberManagementDialogs({
         <div className={styles.modalBody}>
           <p>
             {management('changeRoleFor', {
-              name: roleTarget ? memberName(roleTarget) : '',
+              name: roleTarget ? getWorkspaceMemberName(roleTarget) : '',
             })}
           </p>
           <Select
@@ -109,7 +111,7 @@ export function MemberManagementDialogs({
         <div className={styles.modalBody}>
           <p>
             {management('removeConfirmation', {
-              name: removeTarget ? memberName(removeTarget) : '',
+              name: removeTarget ? getWorkspaceMemberName(removeTarget) : '',
             })}
           </p>
           {removeMember.isError && (

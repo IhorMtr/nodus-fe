@@ -1,4 +1,17 @@
 {
   "online": "{count} online",
-  "doNotDisturb": "Do not disturb"
+  "doNotDisturb": "Do not disturb",
+  "status": {
+    "online": "Online",
+    "away": "Away",
+    "dnd": "Do not disturb",
+    "offline": "Offline"
+  },
+  "menu": {
+    "label": "Status",
+    "current": "Current status: {status}"
+  },
+  "errors": {
+    "updateFailed": "Could not update your status. Please try again."
+  }
 }

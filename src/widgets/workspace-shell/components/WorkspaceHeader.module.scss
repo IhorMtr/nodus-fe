@@ -1,49 +1,50 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
+// ==================== HEADER ====================
+
+// Geometry comes from the shell, so the header columns line up with the
+// sidebar border below it.
 .header {
   display: flex;
-  height: 64px;
-  min-height: 64px;
+  height: var(--shell-header-height);
+  min-height: var(--shell-header-height);
   min-width: 0;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding: 0 var(--space-6);
   border-bottom: 1px solid var(--color-divider);
   background: linear-gradient(
     180deg,
     var(--color-surface-elevated) 0%,
     var(--color-surface) 100%
   );
+  padding-right: var(--space-4);
 
   @include mixins.down(breakpoints.$breakpoint-md) {
-    height: 56px;
-    min-height: 56px;
-    gap: var(--space-2);
-    padding-inline: var(--space-3);
+    padding-right: var(--space-2);
   }
 }
 
-.identity,
-.actions {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-}
+// ==================== WORKSPACE IDENTITY ====================
 
 .identity {
-  flex: 1;
-  gap: var(--space-5);
+  display: flex;
+  width: var(--shell-sidebar-width);
+  height: 100%;
+  min-width: 0;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--space-5) var(--space-3);
+  border-right: 1px solid var(--color-divider);
 
   @include mixins.down(breakpoints.$breakpoint-md) {
-    gap: var(--space-2);
+    width: auto;
+    max-width: 50%;
+    flex: 0 1 auto;
+    gap: var(--space-1);
+    padding-inline: var(--space-2) 0;
+    border-right: 0;
   }
-}
-
-.actions {
-  flex-shrink: 0;
-  gap: var(--space-1);
 }
 
 .mobileMenu {
@@ -64,18 +65,18 @@
 
   @include mixins.focus-ring;
 
-  @include mixins.down(breakpoints.$breakpoint-xs) {
+  @include mixins.down(breakpoints.$breakpoint-md) {
     display: none;
   }
 }
 
 .divider {
   width: 1px;
-  height: 24px;
+  height: 20px;
   flex-shrink: 0;
   background: var(--color-divider);
 
-  @include mixins.down(breakpoints.$breakpoint-xs) {
+  @include mixins.down(breakpoints.$breakpoint-md) {
     display: none;
   }
 }
@@ -83,10 +84,9 @@
 .switcher {
   display: flex;
   min-width: 0;
-  max-width: 320px;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2);
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
@@ -111,11 +111,6 @@
     flex-shrink: 0;
     color: var(--color-text-muted);
   }
-
-  @include mixins.down(breakpoints.$breakpoint-md) {
-    max-width: 100%;
-    padding-inline: var(--space-2);
-  }
 }
 
 .dropdown {
@@ -129,32 +124,35 @@
   white-space: nowrap;
 }
 
-.notificationDropdown {
-  padding: 0;
-  border: 0;
-  background: transparent;
+// ==================== CURRENT CONTEXT ====================
+
+.context {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--space-2);
+  padding-inline: var(--space-6) var(--space-3);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  // The context icon separates it from the workspace switcher on small screens.
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    gap: var(--space-1);
+    padding-inline: var(--space-2);
+  }
 }
 
-.bellWrap {
-  position: relative;
-  display: inline-flex;
-}
-
-.badge {
-  position: absolute;
-  top: -4px;
-  right: -5px;
-  display: grid;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  place-items: center;
-  border: 2px solid var(--color-surface-elevated);
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  font-size: 10px;
-  font-weight: var(--font-weight-semibold);
-  line-height: 1;
-  pointer-events: none;
+.contextTitle {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

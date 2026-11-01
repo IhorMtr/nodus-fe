@@ -38,5 +38,8 @@
     "sessionChanged": "Your session changed. Please try again.",
     "networkError": "Unable to connect. Check your connection and try again.",
     "requestFailed": "Unable to save the channel. Please try again."
+  },
+  "unread": {
+    "linkLabel": "{name}, {count, plural, one {# unread message} other {# unread messages}}"
   }
 }

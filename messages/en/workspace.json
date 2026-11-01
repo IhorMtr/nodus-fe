@@ -14,6 +14,14 @@
     "notifications": "Notifications",
     "unreadNotifications": "unread notifications"
   },
+  "membersPanel": {
+    "title": "Members",
+    "show": "Show members",
+    "hide": "Hide members",
+    "online": "Online — {count}",
+    "offline": "Offline — {count}",
+    "loadError": "Unable to load members."
+  },
   "sections": {
     "overviewPending": "Your workspace overview will appear here soon.",
     "conversationsPending": "Conversations will be available here soon.",

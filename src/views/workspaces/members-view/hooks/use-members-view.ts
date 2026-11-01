@@ -1,11 +1,13 @@
 'use client';
 
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
-import { useWorkspaceMembersQuery } from '@/domains/workspace/model/members';
+import {
+  useMemberManagement,
+  useWorkspaceMembersQuery,
+} from '@/domains/workspace/model/members';
 import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
 
 import { useInvitationManagement } from './use-invitation-management';
-import { useMemberManagement } from './use-member-management';
 
 // ==================== PAGE ORCHESTRATION ====================
 

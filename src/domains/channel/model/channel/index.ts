@@ -1,4 +1,8 @@
-export { useChannelsQuery, useChannelQuery } from './channel-queries';
+export {
+  channelQueryKeys,
+  useChannelsQuery,
+  useChannelQuery,
+} from './channel-queries';
 export type { Channel } from './channel-types';
 export {
   useCreateChannelMutation,

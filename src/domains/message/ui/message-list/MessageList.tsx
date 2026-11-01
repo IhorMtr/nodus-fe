@@ -32,6 +32,8 @@ type MessageListProps = {
   onSaveEdit: (content: string) => Promise<void>;
   onCancelEdit: () => void;
   onDelete: (message: Message) => void;
+  // Reports whether the reader can see the latest messages; called on change only.
+  onBottomChange?: (isAtBottom: boolean) => void;
 };
 
 type ScrollSnapshot = {
@@ -82,12 +84,14 @@ export function MessageList({
   onSaveEdit,
   onCancelEdit,
   onDelete,
+  onBottomChange,
 }: MessageListProps) {
   const t = useTranslations('message');
   const locale = useLocale();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const snapshotRef = useRef<ScrollSnapshot | null>(null);
   const handledScrollTargetRef = useRef<string | undefined>(undefined);
+  const reportedBottomRef = useRef<boolean | null>(null);
 
   // ==================== DERIVED STATE ====================
 
@@ -144,11 +148,23 @@ export function MessageList({
     }
   }, [messages, scrollToMessageId]);
 
+  // ==================== BOTTOM POSITION ====================
+
+  function reportBottom(snapshot: ScrollSnapshot) {
+    if (!onBottomChange || snapshot.isAtBottom === reportedBottomRef.current) {
+      return;
+    }
+
+    reportedBottomRef.current = snapshot.isAtBottom;
+    onBottomChange(snapshot.isAtBottom);
+  }
+
   // Runs after every render so edits and other height changes never leave a
   // stale snapshot behind.
   useLayoutEffect(() => {
     if (scrollerRef.current) {
       snapshotRef.current = captureScroll(scrollerRef.current, messages);
+      reportBottom(snapshotRef.current);
     }
   });
 
@@ -169,6 +185,7 @@ export function MessageList({
   function handleScroll() {
     if (scrollerRef.current) {
       snapshotRef.current = captureScroll(scrollerRef.current, messages);
+      reportBottom(snapshotRef.current);
     }
     loadOlderIfNeeded();
   }

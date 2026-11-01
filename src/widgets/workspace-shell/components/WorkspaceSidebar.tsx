@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   Megaphone,
   MessagesSquare,
-  Search,
   Users,
   MoreHorizontal,
   Plus,
@@ -28,14 +27,18 @@ import styles from './WorkspaceSidebar.module.scss';
 
 // ==================== NAVIGATION SECTIONS ====================
 
+// Search is opened from the shell toolbar, so it is not repeated here.
 const sections = [
   { route: 'overview', icon: LayoutDashboard },
   { route: 'conversations', icon: MessagesSquare },
   { route: 'announcements', icon: Megaphone },
-  { route: 'search', icon: Search },
   { route: 'members', icon: Users },
   { route: 'settings', icon: Settings },
 ] as const;
+
+// ==================== CONSTANTS ====================
+
+const MAX_VISIBLE_UNREAD = 99;
 
 export function WorkspaceSidebar({
   workspaceId,
@@ -140,6 +143,8 @@ export function WorkspaceSidebar({
             <ul className={styles.channelList}>
               {channels.data.map(item => (
                 <li key={item.id} className={styles.channelRow}>
+                  {/* ==================== CHANNEL LINK ==================== */}
+
                   <Link
                     href={{
                       pathname:
@@ -148,11 +153,30 @@ export function WorkspaceSidebar({
                     }}
                     className={styles.navLink}
                     aria-current={channelId === item.id ? 'page' : undefined}
+                    aria-label={
+                      item.unreadCount > 0
+                        ? channel('unread.linkLabel', {
+                            name: item.name,
+                            count: item.unreadCount,
+                          })
+                        : undefined
+                    }
+                    data-unread={item.hasUnread || undefined}
                     onClick={onNavigate}
                     title={item.name}
                   >
                     <Hash size={17} strokeWidth={1.8} aria-hidden="true" />
                     <span>{item.name}</span>
+
+                    {/* ==================== UNREAD INDICATOR ==================== */}
+
+                    {item.unreadCount > 0 && (
+                      <span className={styles.unreadBadge} aria-hidden="true">
+                        {item.unreadCount > MAX_VISIBLE_UNREAD
+                          ? `${MAX_VISIBLE_UNREAD}+`
+                          : item.unreadCount}
+                      </span>
+                    )}
                   </Link>
                   {canManage && (
                     <Menu position="bottom-end" shadow="sm" withinPortal>

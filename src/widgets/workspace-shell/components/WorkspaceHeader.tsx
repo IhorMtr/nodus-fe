@@ -1,40 +1,85 @@
 'use client';
 
-import { Menu, Popover, Tooltip } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import {
-  Bell,
   Check,
   ChevronDown,
+  Hash,
+  LayoutDashboard,
+  Megaphone,
   Menu as MenuIcon,
+  MessagesSquare,
   Plus,
   Search,
+  Settings,
+  Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { NotificationPanel } from '@/domains/notification/ui/notification-panel';
 import { Link } from '@/shared/i18n/navigation';
 import { IconButton } from '@/shared/ui/icon-button';
 
-import styles from './WorkspaceHeader.module.scss';
-import { useWorkspaceHeader } from './use-workspace-header';
 import { useNotificationCenter } from './use-notification-center';
+import {
+  useWorkspaceHeader,
+  type WorkspaceContext,
+} from './use-workspace-header';
+import styles from './WorkspaceHeader.module.scss';
+import { WorkspaceToolbar } from './WorkspaceToolbar';
 
+// ==================== TYPES ====================
+
+interface WorkspaceHeaderProps {
+  workspaceId: string;
+  workspaceName: string;
+  userId: string;
+  membersPanel: {
+    expanded: boolean;
+    controls?: string;
+    onToggle: () => void;
+  };
+  onOpenSidebar: () => void;
+}
+
+// ==================== CONSTANTS ====================
+
+const sectionIcons = {
+  overview: LayoutDashboard,
+  conversations: MessagesSquare,
+  announcements: Megaphone,
+  search: Search,
+  members: Users,
+  settings: Settings,
+} as const;
+
+// ==================== HELPERS ====================
+
+function ContextIcon({ context }: { context: NonNullable<WorkspaceContext> }) {
+  const Icon =
+    context.kind === 'channel' ? Hash : sectionIcons[context.section];
+
+  return <Icon size={18} strokeWidth={1.8} aria-hidden="true" />;
+}
+
+// ==================== RENDER ====================
+
+// The single header of the workspace shell. Routes never render their own
+// bar: the current channel or section is shown here beside the toolbar.
 export function WorkspaceHeader({
   workspaceId,
   workspaceName,
   userId,
+  membersPanel,
   onOpenSidebar,
-}: {
-  workspaceId: string;
-  workspaceName: string;
-  userId: string;
-  onOpenSidebar: () => void;
-}) {
-  // ==================== VIEW STATE ====================
+}: WorkspaceHeaderProps) {
+  // ==================== CONTEXT ====================
 
   const t = useTranslations('workspace');
   const product = useTranslations('product');
-  const { workspaces, openSearch, retryWorkspaces } =
+
+  // ==================== FEATURE HOOKS ====================
+
+  const { workspaces, context, isSearchActive, openSearch, retryWorkspaces } =
     useWorkspaceHeader(workspaceId);
   const notifications = useNotificationCenter(
     userId,
@@ -42,10 +87,19 @@ export function WorkspaceHeader({
     workspaces.data?.map(workspace => workspace.id) ?? []
   );
 
-  // ==================== RENDER ====================
+  // ==================== DERIVED STATE ====================
+
+  const contextTitle =
+    context?.kind === 'channel'
+      ? context.name
+      : context
+        ? t(`navigation.${context.section}`)
+        : null;
 
   return (
     <header className={styles.header}>
+      {/* ==================== WORKSPACE IDENTITY ==================== */}
+
       <div className={styles.identity}>
         <span className={styles.mobileMenu}>
           <IconButton
@@ -104,82 +158,28 @@ export function WorkspaceHeader({
           </Menu.Dropdown>
         </Menu>
       </div>
-      <div className={styles.actions}>
-        <Tooltip label={t('navigation.search')}>
-          <IconButton
-            icon={<Search />}
-            variant="ghost"
-            aria-label={t('navigation.search')}
-            onClick={openSearch}
-          />
-        </Tooltip>
-        {/* ==================== NOTIFICATION CENTER ==================== */}
 
-        <Popover
-          opened={notifications.opened}
-          onClose={notifications.close}
-          position="bottom-end"
-          offset={8}
-          shadow="md"
-          withinPortal
-          classNames={{ dropdown: styles.notificationDropdown }}
-        >
-          <Popover.Target>
-            <span className={styles.bellWrap}>
-              <Tooltip label={t('navigation.notifications')}>
-                <IconButton
-                  icon={<Bell />}
-                  variant="ghost"
-                  aria-label={t('navigation.notifications')}
-                  aria-expanded={notifications.opened}
-                  onClick={() =>
-                    notifications.opened
-                      ? notifications.close()
-                      : notifications.open()
-                  }
-                />
-              </Tooltip>
-              {(notifications.count.data ?? 0) > 0 && (
-                <span
-                  className={styles.badge}
-                  aria-label={`${notifications.count.data} ${t('navigation.unreadNotifications')}`}
-                >
-                  {notifications.count.data! > 99
-                    ? '99+'
-                    : notifications.count.data}
-                </span>
-              )}
+      {/* ==================== CURRENT CONTEXT ==================== */}
+
+      <div className={styles.context}>
+        {context && contextTitle && (
+          <>
+            <ContextIcon context={context} />
+            <span className={styles.contextTitle} title={contextTitle}>
+              {contextTitle}
             </span>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <NotificationPanel
-              items={notifications.items}
-              navigableIds={notifications.navigableIds}
-              canMarkAll={notifications.canMarkAll}
-              loading={notifications.list.isPending}
-              error={notifications.list.isError}
-              loadingMore={notifications.list.isFetchingNextPage}
-              loadMoreError={notifications.list.isFetchNextPageError}
-              hasMore={notifications.list.hasNextPage}
-              markingAll={notifications.markAllRead.isPending}
-              markingId={
-                notifications.markRead.isPending
-                  ? notifications.markRead.variables
-                  : null
-              }
-              actionError={
-                notifications.markRead.isError ||
-                notifications.markAllRead.isError
-              }
-              onRetry={() => void notifications.list.refetch()}
-              onLoadMore={() => void notifications.list.fetchNextPage()}
-              onMarkAllRead={notifications.onMarkAllRead}
-              onMarkRead={notifications.onMarkRead}
-              onSelect={notifications.onSelect}
-            />
-          </Popover.Dropdown>
-        </Popover>
+          </>
+        )}
       </div>
+
+      {/* ==================== TOOLBAR ==================== */}
+
+      <WorkspaceToolbar
+        isSearchActive={isSearchActive}
+        onOpenSearch={openSearch}
+        notifications={notifications}
+        membersPanel={membersPanel}
+      />
     </header>
   );
 }

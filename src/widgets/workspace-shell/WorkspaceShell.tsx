@@ -5,14 +5,151 @@ import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 
+import type { User } from '@/domains/user/model/current-user';
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
+import { MemberManagementDialogs } from '@/domains/workspace/ui/member-management';
+import type { Workspace } from '@/domains/workspace/model/workspace';
 import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
 import { useRouter } from '@/shared/i18n/navigation';
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
+import { MembersPanel } from './components/MembersPanel';
+import { useChannelUnreadRecovery } from './components/use-channel-unread-recovery';
+import { useMembersPanel } from './components/use-members-panel';
+import { useMembersPanelLayout } from './components/use-members-panel-layout';
+import { usePresenceRealtime } from './components/use-presence-realtime';
 import { WorkspaceHeader } from './components/WorkspaceHeader';
 import { WorkspaceSidebar } from './components/WorkspaceSidebar';
 import styles from './WorkspaceShell.module.scss';
+
+// ==================== CONSTANTS ====================
+
+const MEMBERS_PANEL_ID = 'workspace-members-panel';
+
+// ==================== SHELL LAYOUT ====================
+
+// Rendered only once the user and workspace are known, so the members panel
+// hooks always receive a real user id and workspace role.
+function WorkspaceShellLayout({
+  workspaceId,
+  workspace,
+  user,
+  children,
+}: {
+  workspaceId: string;
+  workspace: Workspace;
+  user: User;
+  children: ReactNode;
+}) {
+  // ==================== CONTEXT ====================
+
+  const t = useTranslations('workspace');
+
+  // ==================== STATE ====================
+
+  const [sidebarOpened, setSidebarOpened] = useState(false);
+
+  // ==================== FEATURE HOOKS ====================
+
+  const panelLayout = useMembersPanelLayout(user.id);
+  const panel = useMembersPanel(workspaceId, user.id, workspace.role);
+
+  // ==================== DERIVED STATE ====================
+
+  const panelProps = {
+    groups: panel.groups,
+    total: panel.total,
+    loading: panel.loading,
+    error: panel.error,
+    onRetry: panel.retry,
+    canChangeRole: panel.management.canChangeRole,
+    canRemove: panel.management.canRemove,
+    onChangeRole: panel.management.openRole,
+    onRemove: panel.management.openRemove,
+  };
+
+  // ==================== RENDER ====================
+
+  return (
+    <div className={styles.shell}>
+      {/* ==================== WORKSPACE HEADER ==================== */}
+
+      <WorkspaceHeader
+        workspaceId={workspaceId}
+        workspaceName={workspace.name}
+        userId={user.id}
+        membersPanel={{
+          expanded: panelLayout.expanded,
+          controls: panelLayout.compact ? undefined : MEMBERS_PANEL_ID,
+          onToggle: panelLayout.toggle,
+        }}
+        onOpenSidebar={() => setSidebarOpened(true)}
+      />
+
+      <div className={styles.body}>
+        {/* ==================== DESKTOP SIDEBAR ==================== */}
+
+        <div className={styles.desktopSidebar}>
+          <WorkspaceSidebar workspaceId={workspaceId} user={user} />
+        </div>
+
+        {/* ==================== MAIN CONTENT ==================== */}
+
+        <main className={styles.content}>{children}</main>
+
+        {/* ==================== DESKTOP MEMBERS PANEL ==================== */}
+
+        <div
+          id={MEMBERS_PANEL_ID}
+          className={styles.desktopMembers}
+          data-open={panelLayout.desktopOpen || undefined}
+          inert={!panelLayout.desktopOpen}
+        >
+          <div className={styles.desktopMembersInner}>
+            <MembersPanel {...panelProps} />
+          </div>
+        </div>
+      </div>
+
+      {/* ==================== MOBILE SIDEBAR ==================== */}
+
+      <Drawer
+        opened={sidebarOpened}
+        onClose={() => setSidebarOpened(false)}
+        title={workspace.name}
+        size="min(320px, 88vw)"
+        position="left"
+        classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
+        aria-label={t('navigation.sidebar')}
+      >
+        <WorkspaceSidebar
+          workspaceId={workspaceId}
+          user={user}
+          onNavigate={() => setSidebarOpened(false)}
+        />
+      </Drawer>
+
+      {/* ==================== MOBILE MEMBERS PANEL ==================== */}
+
+      <Drawer
+        opened={panelLayout.drawerOpen}
+        onClose={panelLayout.closeDrawer}
+        title={t('membersPanel.title')}
+        size="min(300px, 88vw)"
+        position="right"
+        classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
+      >
+        <MembersPanel {...panelProps} withHeading={false} />
+      </Drawer>
+
+      {/* ==================== MEMBER MANAGEMENT ==================== */}
+
+      <MemberManagementDialogs state={panel.management} />
+    </div>
+  );
+}
+
+// ==================== WORKSPACE SHELL ====================
 
 export function WorkspaceShell({
   workspaceId,
@@ -26,11 +163,15 @@ export function WorkspaceShell({
   const t = useTranslations('workspace');
   const auth = useTranslations('auth.messages');
   const router = useRouter();
-  const [drawerOpened, setDrawerOpened] = useState(false);
   const user = useCurrentUserQuery();
   const workspace = useWorkspaceQuery(workspaceId, {
     enabled: user.isSuccess,
   });
+
+  // ==================== REALTIME ====================
+
+  usePresenceRealtime();
+  useChannelUnreadRecovery(workspaceId);
 
   // ==================== DERIVED FEEDBACK ====================
 
@@ -80,44 +221,12 @@ export function WorkspaceShell({
   // ==================== RENDER ====================
 
   return (
-    <div className={styles.shell}>
-      {/* ==================== WORKSPACE HEADER ==================== */}
-
-      <WorkspaceHeader
-        workspaceId={workspaceId}
-        workspaceName={workspace.data.name}
-        userId={user.data.id}
-        onOpenSidebar={() => setDrawerOpened(true)}
-      />
-      <div className={styles.body}>
-        {/* ==================== DESKTOP SIDEBAR ==================== */}
-
-        <div className={styles.desktopSidebar}>
-          <WorkspaceSidebar workspaceId={workspaceId} user={user.data} />
-        </div>
-
-        {/* ==================== MAIN CONTENT ==================== */}
-
-        <main className={styles.content}>{children}</main>
-      </div>
-
-      {/* ==================== MOBILE SIDEBAR ==================== */}
-
-      <Drawer
-        opened={drawerOpened}
-        onClose={() => setDrawerOpened(false)}
-        title={workspace.data.name}
-        size="min(320px, 88vw)"
-        position="left"
-        classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
-        aria-label={t('navigation.sidebar')}
-      >
-        <WorkspaceSidebar
-          workspaceId={workspaceId}
-          user={user.data}
-          onNavigate={() => setDrawerOpened(false)}
-        />
-      </Drawer>
-    </div>
+    <WorkspaceShellLayout
+      workspaceId={workspaceId}
+      workspace={workspace.data}
+      user={user.data}
+    >
+      {children}
+    </WorkspaceShellLayout>
   );
 }

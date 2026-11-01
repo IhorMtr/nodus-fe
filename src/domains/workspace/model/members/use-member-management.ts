@@ -5,10 +5,17 @@ import { useState } from 'react';
 import {
   useChangeWorkspaceMemberRoleMutation,
   useRemoveWorkspaceMemberMutation,
-  type WorkspaceMember,
-} from '@/domains/workspace/model/members';
+} from './workspace-member-mutations';
+import type { WorkspaceMember } from './workspace-member-types';
+
+// ==================== TYPES ====================
+
+export type MemberManagement = ReturnType<typeof useMemberManagement>;
 
 // ==================== MEMBER MANAGEMENT ====================
+
+// Shared by the members page and the shell's members panel, so permissions
+// and dialog state follow one set of rules.
 
 export function useMemberManagement(
   workspaceId: string,

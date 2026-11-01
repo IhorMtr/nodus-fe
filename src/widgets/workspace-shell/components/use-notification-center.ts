@@ -16,6 +16,10 @@ import {
 import { useRouter } from '@/shared/i18n/navigation';
 import { useAppSocket } from '@/shared/realtime/socket-context';
 
+// ==================== TYPES ====================
+
+export type NotificationCenter = ReturnType<typeof useNotificationCenter>;
+
 // ==================== NOTIFICATION CENTER STATE ====================
 
 export function useNotificationCenter(

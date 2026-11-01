@@ -1,4 +1,17 @@
 {
   "online": "{count} онлайн",
-  "doNotDisturb": "Не турбувати"
+  "doNotDisturb": "Не турбувати",
+  "status": {
+    "online": "У мережі",
+    "away": "Немає на місці",
+    "dnd": "Не турбувати",
+    "offline": "Не в мережі"
+  },
+  "menu": {
+    "label": "Статус",
+    "current": "Поточний статус: {status}"
+  },
+  "errors": {
+    "updateFailed": "Не вдалося оновити статус. Спробуйте ще раз."
+  }
 }

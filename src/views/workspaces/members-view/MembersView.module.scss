@@ -107,6 +107,16 @@
   align-items: center;
   flex: none;
   gap: var(--space-2);
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+.presence {
+  font-size: var(--font-size-sm);
 }
 
 .moreAction {
@@ -205,10 +215,4 @@
     font: inherit;
     @include mixins.focus-ring;
   }
-}
-
-.modalActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-2);
 }

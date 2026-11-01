@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { useChannelMessages } from './hooks/use-channel-messages';
+import { useChannelReadState } from './hooks/use-channel-read-state';
 import { useMessageActions } from './hooks/use-message-actions';
 import styles from './ChannelConversation.module.scss';
 
@@ -17,14 +18,28 @@ import styles from './ChannelConversation.module.scss';
 export function ChannelConversation({
   workspaceId,
   channelId,
+  hasUnread,
 }: {
   workspaceId: string;
   channelId: string;
+  hasUnread: boolean;
 }) {
+  // ==================== CONTEXT ====================
+
   const t = useTranslations('message');
   const auth = useTranslations('auth.messages');
+
+  // ==================== PAGE HOOKS ====================
+
   const history = useChannelMessages(workspaceId, channelId);
   const actions = useMessageActions(workspaceId, channelId);
+  const readState = useChannelReadState({
+    workspaceId,
+    channelId,
+    messages: history.messages,
+    isHistoryReady: !history.isLoading && !history.loadError,
+    hasUnread,
+  });
 
   // ==================== LOADING AND ERROR STATES ====================
 
@@ -79,6 +94,7 @@ export function ChannelConversation({
         onSaveEdit={actions.editing.onSave}
         onCancelEdit={actions.editing.onCancel}
         onDelete={actions.deletion.onRequest}
+        onBottomChange={readState.onBottomChange}
       />
       <MessageComposer
         onSubmit={actions.composer.onSubmit}

@@ -14,6 +14,14 @@
     "notifications": "Сповіщення",
     "unreadNotifications": "непрочитаних сповіщень"
   },
+  "membersPanel": {
+    "title": "Учасники",
+    "show": "Показати учасників",
+    "hide": "Сховати учасників",
+    "online": "У мережі — {count}",
+    "offline": "Не в мережі — {count}",
+    "loadError": "Не вдалося завантажити учасників."
+  },
   "sections": {
     "overviewPending": "Огляд робочого простору з’явиться тут незабаром.",
     "conversationsPending": "Розмови з’являться тут незабаром.",

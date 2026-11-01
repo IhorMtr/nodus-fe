@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Hash } from 'lucide-react';
 
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
@@ -89,18 +88,16 @@ export function ChannelView({
 
   // ==================== CHANNEL CONTENT ====================
 
+  // The visible channel title lives in the shell header; the page keeps an
+  // accessible heading for screen reader navigation.
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <Hash size={18} aria-hidden="true" />
-        <h1 id="channel-title" title={state.channel.name}>
-          {state.channel.name}
-        </h1>
-      </header>
+      <h1 className={styles.title}>{state.channel.name}</h1>
       <ChannelConversation
         key={`${workspaceId}:${state.channel.id}`}
         workspaceId={workspaceId}
         channelId={state.channel.id}
+        hasUnread={state.channel.hasUnread}
       />
     </div>
   );

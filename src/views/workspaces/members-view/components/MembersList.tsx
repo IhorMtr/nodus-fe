@@ -1,10 +1,15 @@
 'use client';
 
 import { Menu } from '@mantine/core';
-import { MoreHorizontal, Pencil, RefreshCw, Trash2 } from 'lucide-react';
+import { MoreHorizontal, RefreshCw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import type { WorkspaceMember } from '@/domains/workspace/model/members';
+import { PresenceIndicator } from '@/domains/presence/ui/presence-indicator';
+import {
+  getWorkspaceMemberName,
+  type WorkspaceMember,
+} from '@/domains/workspace/model/members';
+import { MemberActionItems } from '@/domains/workspace/ui/member-management';
 import { Button } from '@/shared/ui/button';
 
 import styles from '../MembersView.module.scss';
@@ -30,8 +35,6 @@ export function MembersList({
 }) {
   const t = useTranslations('invite');
   const management = useTranslations('workspace.management');
-  const memberName = (member: WorkspaceMember) =>
-    `${member.firstName} ${member.lastName}`.trim() || member.email;
 
   // ==================== RENDER ====================
 
@@ -67,6 +70,10 @@ export function MembersList({
                 <span>{member.email}</span>
               </div>
               <div className={styles.memberActions}>
+                <PresenceIndicator
+                  status={member.status}
+                  className={styles.presence}
+                />
                 <span className={styles.role}>{t(`roles.${member.role}`)}</span>
                 {(canChangeRole(member) || canRemove(member)) && (
                   <Menu position="bottom-end" shadow="sm" withinPortal>
@@ -75,30 +82,20 @@ export function MembersList({
                         type="button"
                         className={styles.moreAction}
                         aria-label={management('memberActions', {
-                          name: memberName(member),
+                          name: getWorkspaceMemberName(member),
                         })}
                       >
                         <MoreHorizontal size={18} aria-hidden="true" />
                       </button>
                     </Menu.Target>
                     <Menu.Dropdown>
-                      {canChangeRole(member) && (
-                        <Menu.Item
-                          leftSection={<Pencil size={15} />}
-                          onClick={() => onChangeRole(member)}
-                        >
-                          {management('changeRole')}
-                        </Menu.Item>
-                      )}
-                      {canRemove(member) && (
-                        <Menu.Item
-                          color="red"
-                          leftSection={<Trash2 size={15} />}
-                          onClick={() => onRemove(member)}
-                        >
-                          {management('removeMember')}
-                        </Menu.Item>
-                      )}
+                      <MemberActionItems
+                        member={member}
+                        canChangeRole={canChangeRole(member)}
+                        canRemove={canRemove(member)}
+                        onChangeRole={onChangeRole}
+                        onRemove={onRemove}
+                      />
                     </Menu.Dropdown>
                   </Menu>
                 )}

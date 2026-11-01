@@ -53,6 +53,12 @@
     font-weight: var(--font-weight-medium);
   }
 
+  // Unread channels stand out by weight only; the active state keeps its surface.
+  &[data-unread] {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
   svg {
     flex-shrink: 0;
   }
@@ -119,6 +125,23 @@
 
 .channelAction {
   margin-right: var(--space-1);
+}
+
+.navLink .unreadBadge {
+  min-width: 20px;
+  height: 20px;
+  flex: none;
+  margin-left: auto;
+  padding: 0 var(--space-1);
+  overflow: visible;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: 20px;
+  text-align: center;
 }
 
 .modalActions {

@@ -4,11 +4,11 @@ import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { getInviteErrorKey } from '@/domains/invite/model/invitations';
+import { MemberManagementDialogs } from '@/domains/workspace/ui/member-management';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { InvitationsSection } from './components/InvitationsSection';
-import { MemberManagementDialogs } from './components/MemberManagementDialogs';
 import { MembersList } from './components/MembersList';
 import styles from './MembersView.module.scss';
 import { useMembersView } from './hooks/use-members-view';

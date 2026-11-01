@@ -1,0 +1,36 @@
+.indicator {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--radius-full);
+  background: var(--color-presence-offline);
+
+  &[data-status='online'] {
+    background: var(--color-presence-online);
+  }
+
+  &[data-status='away'] {
+    background: var(--color-presence-away);
+  }
+
+  &[data-status='dnd'] {
+    background: var(--color-presence-dnd);
+  }
+
+  // Offline stays a hollow ring so it does not read as an active state.
+  &[data-status='offline'] {
+    border: 1.5px solid var(--color-presence-offline);
+    background: transparent;
+  }
+}

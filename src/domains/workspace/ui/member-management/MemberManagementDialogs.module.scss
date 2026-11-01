@@ -1,0 +1,25 @@
+// ==================== DIALOG BODY ====================
+
+.modalBody {
+  display: grid;
+  gap: var(--space-4);
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+}
+
+// ==================== FEEDBACK ====================
+
+.error.error {
+  color: var(--color-danger);
+}
+
+// ==================== ACTIONS ====================
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}

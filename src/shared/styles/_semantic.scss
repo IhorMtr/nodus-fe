@@ -57,6 +57,7 @@
 
   --color-presence-online: #4f8057;
   --color-presence-busy: #9d792f;
+  --color-presence-dnd: #a3564e;
 
   --color-selection: rgb(17 17 17 / 14%);
 }
@@ -120,6 +121,7 @@
 
   --color-presence-online: #72a878;
   --color-presence-busy: #c9a35c;
+  --color-presence-dnd: #cf7f75;
 
   --color-selection: rgb(255 255 255 / 18%);
 }
@@ -128,6 +130,6 @@
 
 :root {
   --color-presence-idle: var(--color-presence-busy);
-  --color-presence-dnd: var(--color-presence-busy);
+  --color-presence-away: var(--color-presence-busy);
   --color-presence-offline: var(--color-text-muted);
 }
