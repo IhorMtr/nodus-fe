@@ -4,7 +4,7 @@
 
 .profile {
   display: flex;
-  height: 64px; // Matches the composer bar so the dividers line up.
+  height: 64px;
   flex-shrink: 0;
   align-items: center;
   padding: 0 var(--space-2);
@@ -69,4 +69,47 @@
 .chevron {
   flex-shrink: 0;
   color: var(--color-text-muted);
+}
+
+// ==================== DROPDOWN IDENTITY ====================
+
+.dropdown {
+  padding: var(--space-2);
+}
+
+.menuIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+}
+
+.menuAvatar {
+  @extend .avatar;
+
+  width: 36px;
+  height: 36px;
+}
+
+.menuIdentityText {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+
+  strong,
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  span {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
 }

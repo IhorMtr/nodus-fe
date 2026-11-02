@@ -5,7 +5,7 @@
 // ==================== FOCUS ====================
 
 // Mantine draws its own focus outline in the primary color; align it with the
-// shared steel ring used by every other control.
+// shared focus ring used by every other control.
 .mantine-focus-auto:focus-visible,
 .mantine-focus-always:focus {
   outline: var(--focus-ring-width) solid var(--color-focus);

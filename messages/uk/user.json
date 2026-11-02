@@ -16,5 +16,22 @@
     "email": "Електронна пошта",
     "password": "Пароль",
     "confirmPassword": "Підтвердження пароля"
+  },
+  "settings": {
+    "title": "Особисті налаштування",
+    "description": "Налаштуйте Nodus для себе на цьому пристрої.",
+    "account": "Обліковий запис",
+    "accountDescription": "Ви ввійшли як",
+    "appearance": "Вигляд",
+    "appearanceDescription": "Оберіть вигляд Nodus на цьому пристрої.",
+    "light": "Світла",
+    "dark": "Темна",
+    "language": "Мова",
+    "languageDescription": "Оберіть мову інтерфейсу Nodus.",
+    "backToWorkspace": "Повернутися до простору",
+    "categories": "Розділи налаштувань",
+    "accountDetails": "Інформація вашого облікового запису.",
+    "theme": "Тема",
+    "close": "Закрити особисті налаштування"
   }
 }

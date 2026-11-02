@@ -1,6 +1,7 @@
 'use client';
 
 import { isToday } from 'date-fns';
+import { Hash } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 
@@ -16,6 +17,7 @@ import styles from './MessageList.module.scss';
 // ==================== TYPES ====================
 
 type MessageListProps = {
+  channelName: string;
   // Chronological order: the oldest message first.
   messages: Message[];
   canEdit: (message: Message) => boolean;
@@ -70,6 +72,7 @@ function captureScroll(
 // ==================== COMPONENT ====================
 
 export function MessageList({
+  channelName,
   messages,
   canEdit,
   canDelete,
@@ -87,6 +90,8 @@ export function MessageList({
   onDelete,
   onBottomChange,
 }: MessageListProps) {
+  // ==================== CONTEXT AND REFS ====================
+
   const t = useTranslations('message');
   const locale = useLocale();
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -120,7 +125,10 @@ export function MessageList({
   // captured after the previous render.
   useLayoutEffect(() => {
     const scroller = scrollerRef.current;
-    if (!scroller) return;
+
+    if (!scroller) {
+      return;
+    }
 
     const previous = snapshotRef.current;
     const firstId = messages[0]?.id;
@@ -188,6 +196,7 @@ export function MessageList({
       snapshotRef.current = captureScroll(scrollerRef.current, messages);
       reportBottom(snapshotRef.current);
     }
+
     loadOlderIfNeeded();
   }
 
@@ -206,7 +215,10 @@ export function MessageList({
         <div className={styles.inner}>
           {messages.length === 0 && !hasOlder ? (
             <div className={styles.empty}>
-              <strong>{t('states.empty')}</strong>
+              <span className={styles.emptyIcon} aria-hidden="true">
+                <Hash size={24} />
+              </span>
+              <strong>{t('states.empty', { channel: channelName })}</strong>
               <p>{t('states.emptyDescription')}</p>
             </div>
           ) : (

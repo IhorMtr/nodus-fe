@@ -25,8 +25,8 @@
   "states": {
     "loading": "Loading messages",
     "loadingOlder": "Loading earlier messages",
-    "empty": "No messages yet",
-    "emptyDescription": "Start the conversation by sending the first message.",
+    "empty": "Welcome to #{channel}",
+    "emptyDescription": "This is the beginning of the conversation in this channel. Write the first message to get started.",
     "loadError": "Unable to load messages",
     "loadErrorDescription": "Check your connection and try again.",
     "olderLoadError": "Unable to load earlier messages",

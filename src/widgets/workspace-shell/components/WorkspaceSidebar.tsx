@@ -55,7 +55,7 @@ export function WorkspaceSidebar({
   const t = useTranslations('workspace');
   const channel = useTranslations('channel');
   const {
-    pathname,
+    section,
     channelId,
     channels,
     canManage,
@@ -86,7 +86,7 @@ export function WorkspaceSidebar({
               return null;
             }
 
-            const active = pathname.endsWith(`/${route}`);
+            const active = section === route;
             return (
               <li key={route}>
                 <Link
@@ -218,8 +218,6 @@ export function WorkspaceSidebar({
       <UserProfile
         user={user}
         workspaceId={workspaceId}
-        pathname={pathname}
-        channelId={channelId}
         onNavigate={onNavigate}
       />
       {canManage && (

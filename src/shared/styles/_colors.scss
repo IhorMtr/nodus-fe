@@ -4,54 +4,53 @@
 :root {
   // ==================== MIST (LIGHT NEUTRALS) ====================
 
-  // Cool off-whites for the light theme, from page canvas to strong borders.
+  // Neutral light surfaces, from page canvas to strong borders.
   --mist-0: #ffffff;
-  --mist-1: #f8f9fb;
-  --mist-2: #f2f4f7;
-  --mist-3: #eaedf1;
-  --mist-4: #e2e6eb;
-  --mist-5: #d6dbe2;
-  --mist-6: #c4cad3;
-  --mist-7: #a9b0bb;
-  --mist-8: #8a929e;
-  --mist-9: #6b7380;
+  --mist-1: #f6f6f6;
+  --mist-2: #eeeeee;
+  --mist-3: #eaeaea;
+  --mist-4: #e1e1e1;
+  --mist-5: #d4d4d4;
+  --mist-6: #c4c4c4;
+  --mist-7: #aaaaaa;
+  --mist-8: #8b8b8b;
+  --mist-9: #6c6c6c;
 
   // ==================== GRAPHITE (DARK NEUTRALS) ====================
 
-  // Graphite with a slight cold undertone, so surfaces read as layers of one
-  // material rather than flat black and grey.
-  --graphite-0: #0d0f12;
-  --graphite-1: #111317;
-  --graphite-2: #15181c;
-  --graphite-3: #191c21;
-  --graphite-4: #1e2228;
-  --graphite-5: #242930;
-  --graphite-6: #2b3139;
-  --graphite-7: #353c46;
-  --graphite-8: #434b57;
-  --graphite-9: #58616e;
+  // Neutral graphite surfaces, from the canvas to strong borders.
+  --graphite-0: #101010;
+  --graphite-1: #191919;
+  --graphite-2: #141414;
+  --graphite-3: #1c1c1c;
+  --graphite-4: #222222;
+  --graphite-5: #2b2b2b;
+  --graphite-6: #343434;
+  --graphite-7: #3d3d3d;
+  --graphite-8: #505050;
+  --graphite-9: #666666;
 
   // ==================== INK (TEXT) ====================
 
-  --ink-dark-1: #181b20;
-  --ink-dark-2: #464d58;
-  --ink-dark-3: #646c78;
-  --ink-light-1: #e3e6eb;
-  --ink-light-2: #a9b0bb;
-  --ink-light-3: #7f8793;
+  --ink-dark-1: #1b1b1b;
+  --ink-dark-2: #494949;
+  --ink-dark-3: #686868;
+  --ink-light-1: #e6e6e6;
+  --ink-light-2: #aaaaaa;
+  --ink-light-3: #909090;
 
-  // ==================== STEEL (ACCENT) ====================
+  // ==================== NEUTRAL (INTERACTION) ====================
 
-  // A desaturated steel blue: the only hue used for interaction.
-  --steel-1: #edf2f8;
-  --steel-2: #d3deec;
-  --steel-3: #a7bbd6;
-  --steel-4: #86a2c6;
-  --steel-5: #6787b0;
-  --steel-6: #52729c;
-  --steel-7: #436186;
-  --steel-8: #36506f;
-  --steel-9: #283c54;
+  // Neutral interaction scale shared with the component theme.
+  --neutral-1: #f2f2f2;
+  --neutral-2: #dedede;
+  --neutral-3: #c8c8c8;
+  --neutral-4: #b5b5b5;
+  --neutral-5: #969696;
+  --neutral-6: #777777;
+  --neutral-7: #555555;
+  --neutral-8: #404040;
+  --neutral-9: #303030;
 
   // ==================== FUNCTIONAL HUES ====================
 

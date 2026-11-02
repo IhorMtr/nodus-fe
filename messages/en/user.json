@@ -16,5 +16,22 @@
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm password"
+  },
+  "settings": {
+    "title": "Personal settings",
+    "description": "Preferences for your Nodus experience on this device.",
+    "account": "Account",
+    "accountDescription": "Signed in as",
+    "appearance": "Appearance",
+    "appearanceDescription": "Choose how Nodus looks on this device.",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language",
+    "languageDescription": "Choose the language used throughout Nodus.",
+    "backToWorkspace": "Back to workspace",
+    "categories": "Settings categories",
+    "accountDetails": "Your account information.",
+    "theme": "Theme",
+    "close": "Close personal settings"
   }
 }

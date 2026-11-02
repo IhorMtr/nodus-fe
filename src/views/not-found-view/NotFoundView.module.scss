@@ -9,11 +9,7 @@
   min-height: 100dvh;
   flex-direction: column;
   overflow: hidden;
-  background:
-    effects.glow(50%, 45%, 520px), effects.ring(50%, 45%, 220px),
-    effects.ring(50%, 45%, 340px), effects.ring(50%, 45%, 460px),
-    effects.ring(50%, 45%, 580px), effects.lines(115deg, 120px),
-    var(--color-background);
+  background: var(--color-background);
 }
 
 .header {
@@ -70,21 +66,13 @@
   }
 }
 
-// A short tonal fade on the numeral only; the page itself stays flat.
 .code {
   margin: 0 0 var(--space-4);
-  background: linear-gradient(
-    180deg,
-    var(--color-text-secondary) 0%,
-    var(--color-border) 100%
-  );
-  background-clip: text;
-  color: transparent;
+  color: var(--color-text-secondary);
   font-size: clamp(6rem, 18vw, 11rem);
   font-weight: var(--font-weight-semibold);
   letter-spacing: -0.06em;
   line-height: 1;
-  -webkit-background-clip: text;
 }
 
 .description {

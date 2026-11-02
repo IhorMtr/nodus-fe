@@ -45,5 +45,10 @@
     "sessionExpired": "Your session has expired. Sign in again.",
     "networkError": "Unable to connect. Check your connection and try again.",
     "requestFailed": "Something went wrong. Try again."
-  }
+  },
+  "filterLabel": "Filter announcements",
+  "moreActions": "Actions for {title}",
+  "emptyScheduledTitle": "No scheduled announcements",
+  "emptyScheduledDescription": "Schedule an update to share it with your workspace later.",
+  "emptyManageDescription": "Share your first update with everyone in this workspace."
 }

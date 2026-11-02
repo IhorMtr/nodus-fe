@@ -3,6 +3,7 @@
 import { Popover, Tooltip } from '@mantine/core';
 import { Bell, PanelRightClose, PanelRightOpen, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { RefObject } from 'react';
 
 import { NotificationPanel } from '@/domains/notification/ui/notification-panel';
 import { IconButton } from '@/shared/ui/icon-button';
@@ -14,9 +15,10 @@ import styles from './WorkspaceToolbar.module.scss';
 
 interface WorkspaceToolbarProps {
   isSearchActive: boolean;
-  onOpenSearch: () => void;
+  searchButtonRef: RefObject<HTMLButtonElement | null>;
+  onOpenSearch?: () => void;
   notifications: NotificationCenter;
-  membersPanel: {
+  membersPanel?: {
     expanded: boolean;
     // Present only while the inline desktop panel is the controlled element.
     controls?: string;
@@ -32,6 +34,7 @@ const MAX_VISIBLE_NOTIFICATIONS = 99;
 
 export function WorkspaceToolbar({
   isSearchActive,
+  searchButtonRef,
   onOpenSearch,
   notifications,
   membersPanel,
@@ -43,7 +46,7 @@ export function WorkspaceToolbar({
   // ==================== DERIVED STATE ====================
 
   const unreadCount = notifications.count.data ?? 0;
-  const membersLabel = membersPanel.expanded
+  const membersLabel = membersPanel?.expanded
     ? t('membersPanel.hide')
     : t('membersPanel.show');
 
@@ -62,15 +65,18 @@ export function WorkspaceToolbar({
     <div className={styles.toolbar}>
       {/* ==================== SEARCH ==================== */}
 
-      <Tooltip label={t('navigation.search')}>
-        <IconButton
-          icon={<Search />}
-          variant="ghost"
-          aria-label={t('navigation.search')}
-          aria-current={isSearchActive ? 'page' : undefined}
-          onClick={onOpenSearch}
-        />
-      </Tooltip>
+      {onOpenSearch && (
+        <Tooltip label={t('navigation.search')}>
+          <IconButton
+            ref={searchButtonRef}
+            icon={<Search />}
+            variant="ghost"
+            aria-label={t('navigation.search')}
+            aria-pressed={isSearchActive}
+            onClick={onOpenSearch}
+          />
+        </Tooltip>
+      )}
 
       {/* ==================== NOTIFICATION CENTER ==================== */}
 
@@ -137,18 +143,20 @@ export function WorkspaceToolbar({
 
       {/* ==================== MEMBERS PANEL TOGGLE ==================== */}
 
-      <Tooltip label={membersLabel}>
-        <IconButton
-          icon={
-            membersPanel.expanded ? <PanelRightClose /> : <PanelRightOpen />
-          }
-          variant="ghost"
-          aria-label={membersLabel}
-          aria-expanded={membersPanel.expanded}
-          aria-controls={membersPanel.controls}
-          onClick={membersPanel.onToggle}
-        />
-      </Tooltip>
+      {membersPanel && (
+        <Tooltip label={membersLabel}>
+          <IconButton
+            icon={
+              membersPanel.expanded ? <PanelRightClose /> : <PanelRightOpen />
+            }
+            variant="ghost"
+            aria-label={membersLabel}
+            aria-expanded={membersPanel.expanded}
+            aria-controls={membersPanel.controls}
+            onClick={membersPanel.onToggle}
+          />
+        </Tooltip>
+      )}
     </div>
   );
 }

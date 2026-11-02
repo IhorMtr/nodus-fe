@@ -6,10 +6,9 @@
 // One source for the column widths and header height, shared with the header
 // so panel borders line up from top to bottom.
 //
-// Depth comes from flat neighbouring tones: the header and side columns use
-// the darker chrome surface, the content area the page canvas between them.
+// Flat neighbouring tones distinguish navigation from the page canvas.
 .shell {
-  --shell-header-height: 52px;
+  --shell-header-height: 60px;
   --shell-sidebar-width: 260px;
   --shell-members-width: 248px;
 
@@ -24,7 +23,7 @@
   // Side columns narrow slightly so the conversation keeps most of the width.
   @include mixins.down(breakpoints.$breakpoint-xl) {
     --shell-sidebar-width: 240px;
-    --shell-members-width: 228px;
+    --shell-members-width: 224px;
   }
 }
 
@@ -73,6 +72,10 @@
   transition:
     width var(--transition-normal),
     border-color var(--transition-normal);
+
+  &[data-search] {
+    --shell-members-width: 320px;
+  }
 
   &[data-open] {
     width: var(--shell-members-width);

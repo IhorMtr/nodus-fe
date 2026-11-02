@@ -31,6 +31,8 @@ export function MessageComposer({
   isSubmitting,
   error,
 }: MessageComposerProps) {
+  // ==================== CONTEXT AND STATE ====================
+
   const t = useTranslations('message');
   const validation = useTranslations('message.validation');
   const submissionLock = useRef(false);
@@ -46,10 +48,17 @@ export function MessageComposer({
     defaultValues: { content: '' },
   });
 
+  // ==================== DERIVED STATE ====================
+
+  const message = errors.content?.message ?? error;
+
   // ==================== HANDLERS ====================
 
   async function send({ content }: MessageContentForm) {
-    if (submissionLock.current) return;
+    if (submissionLock.current) {
+      return;
+    }
+
     submissionLock.current = true;
 
     try {
@@ -68,19 +77,25 @@ export function MessageComposer({
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key !== 'Enter' || event.shiftKey) return;
+    if (event.key !== 'Enter' || event.shiftKey) {
+      return;
+    }
+
     // Enter confirms an IME candidate and must not send the message.
-    if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+    if (event.nativeEvent.isComposing || event.keyCode === 229) {
+      return;
+    }
 
     event.preventDefault();
     // Blank drafts are ignored silently instead of showing a validation error.
-    if (event.currentTarget.value.trim() === '' || isSubmitting) return;
+    if (event.currentTarget.value.trim() === '' || isSubmitting) {
+      return;
+    }
+
     event.currentTarget.form?.requestSubmit();
   }
 
   // ==================== RENDER ====================
-
-  const message = errors.content?.message ?? error;
 
   return (
     <form

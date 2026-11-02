@@ -44,6 +44,9 @@
   "management": {
     "settingsTitle": "Workspace settings",
     "settingsDescription": "Manage the name and lifecycle of this workspace.",
+    "workspaceLabel": "Workspace",
+    "generalTitle": "General",
+    "dangerZone": "Danger zone",
     "nameTitle": "Workspace name",
     "nameDescription": "This name appears in the workspace switcher and navigation.",
     "save": "Save changes",
@@ -92,5 +95,18 @@
   "actions": {
     "retry": "Try again",
     "openAvailable": "Open an available workspace"
+  },
+  "searchPanel": {
+    "title": "Search this channel",
+    "close": "Close search",
+    "input": "Search messages in this channel",
+    "placeholder": "Search messages",
+    "submit": "Search",
+    "hint": "Enter at least 3 characters to search this channel.",
+    "loading": "Searching messages",
+    "error": "Could not load search results.",
+    "retry": "Try again",
+    "empty": "No messages found. Try another search.",
+    "more": "Load older results"
   }
 }

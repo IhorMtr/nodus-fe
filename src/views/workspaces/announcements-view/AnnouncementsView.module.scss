@@ -4,7 +4,7 @@
 // ==================== PAGE ====================
 
 .page {
-  width: min(100%, var(--content-width));
+  width: min(100%, 1100px);
   margin-inline: auto;
   padding: var(--space-8) var(--space-8) var(--space-12);
 
@@ -18,8 +18,7 @@
   align-items: flex-end;
   flex-wrap: wrap;
   gap: var(--space-4);
-  padding-bottom: var(--space-5);
-  border-bottom: 1px solid var(--color-divider);
+  padding-bottom: var(--space-6);
 
   h1 {
     @include mixins.page-title;
@@ -39,10 +38,51 @@
 
 // ==================== LIST ====================
 
+.filters {
+  display: flex;
+  gap: var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+
+  button {
+    @include mixins.focus-ring(2px);
+
+    position: relative;
+    padding: var(--space-3) 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+
+    &:hover,
+    &[aria-pressed='true'] {
+      color: var(--color-text-primary);
+    }
+
+    &[aria-pressed='true']::after {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      background: var(--color-text-primary);
+      content: '';
+    }
+  }
+
+  span {
+    margin-left: var(--space-1);
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
 .list {
   display: grid;
   gap: 1px;
-  margin-top: var(--space-3);
+  margin-top: var(--space-1);
 
   // Hairlines between entries, inset to the entry padding.
   > * + * {
@@ -64,17 +104,11 @@
   display: grid;
   justify-items: center;
   gap: var(--space-1);
-  margin-top: var(--space-6);
+  min-height: 320px;
+  align-content: center;
   padding: var(--space-12) var(--space-6);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-lg);
   color: var(--color-text-secondary);
   text-align: center;
-
-  svg {
-    margin-bottom: var(--space-2);
-    color: var(--color-text-muted);
-  }
 
   h2 {
     margin: 0;
@@ -88,6 +122,22 @@
     margin: 0;
     font-size: var(--font-size-base);
   }
+
+  button {
+    margin-top: var(--space-4);
+  }
+}
+
+.emptyIcon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  margin-bottom: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
 }
 
 .state {

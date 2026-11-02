@@ -1,15 +1,13 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-// ==================== BAR ====================
+// ==================== COMPOSER ====================
 
 .composer {
   display: flex;
-  min-height: 64px; // Matches the sidebar profile bar so the dividers line up.
+  min-width: 0;
   flex-shrink: 0;
-  align-items: center;
-  padding: var(--space-3) var(--space-8);
-  border-top: 1px solid var(--color-divider);
+  padding: var(--space-2) var(--space-8) var(--space-5);
   background: var(--color-background);
 
   @include mixins.down(breakpoints.$breakpoint-sm) {
@@ -19,29 +17,27 @@
 
 .inner {
   width: 100%;
-  max-width: 960px;
+  min-width: 0;
 }
 
 // ==================== FIELD ====================
 
 .row {
   display: flex;
-  align-items: flex-end;
-  gap: var(--space-2);
 
   > :first-child {
     flex: 1;
     min-width: 0;
   }
 
-  // Roomier than a default field since it is the main input of the page.
-  // Focus comes from the shared field style: a steel border with a soft halo,
-  // identical for single-line and multi-line drafts.
-  textarea {
-    padding: var(--space-2) 14px;
-    border-radius: var(--radius-md);
+  // Keep the shared field focus treatment while giving the draft its own surface.
+  &.row textarea {
+    min-height: 56px;
+    padding: 16px var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
     font-size: var(--font-size-md);
-    line-height: 1.45;
+    line-height: 1.5;
   }
 }
 

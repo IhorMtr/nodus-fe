@@ -32,6 +32,8 @@ export function InvitationsSection({
     inviteLink,
     copyState,
     createInvite,
+    revokeInvite,
+    retryInvites,
     copyInvite,
     closeInvite,
     formatDate,
@@ -47,7 +49,12 @@ export function InvitationsSection({
 
           <div className={styles.sectionHeader}>
             <div>
-              <h2 id="invites-heading">{t('management.title')}</h2>
+              <div className={styles.sectionHeading}>
+                <h2 id="invites-heading">{t('management.title')}</h2>
+                {invites.isSuccess && (
+                  <span className={styles.count}>{invites.data.length}</span>
+                )}
+              </div>
               <p>{t('management.description')}</p>
             </div>
             <Button
@@ -88,11 +95,7 @@ export function InvitationsSection({
               role="alert"
               className={styles.error}
               action={
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => void invites.refetch()}
-                >
+                <Button variant="ghost" size="sm" onClick={retryInvites}>
                   {t('actions.retry')}
                 </Button>
               }
@@ -104,7 +107,7 @@ export function InvitationsSection({
             <p className={styles.empty}>{t('management.empty')}</p>
           )}
           {invites.isSuccess && invites.data.length > 0 && (
-            <ul className={styles.list}>
+            <ul className={`${styles.list} ${styles.inviteList}`}>
               {invites.data.map(invite => (
                 <li key={invite.id} className={styles.inviteRow}>
                   <span className={styles.status} data-status={invite.status}>
@@ -127,7 +130,7 @@ export function InvitationsSection({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => revoke.mutate(invite.id)}
+                        onClick={() => revokeInvite(invite.id)}
                         disabled={revoke.isPending}
                       >
                         {t('actions.revoke')}

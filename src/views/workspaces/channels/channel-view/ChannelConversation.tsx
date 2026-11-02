@@ -20,10 +20,12 @@ import styles from './ChannelConversation.module.scss';
 export function ChannelConversation({
   workspaceId,
   channelId,
+  channelName,
   hasUnread,
 }: {
   workspaceId: string;
   channelId: string;
+  channelName: string;
   hasUnread: boolean;
 }) {
   // ==================== CONTEXT ====================
@@ -91,6 +93,7 @@ export function ChannelConversation({
       {/* ==================== MESSAGES ==================== */}
 
       <MessageList
+        channelName={channelName}
         messages={history.messages}
         canEdit={history.canEdit}
         canDelete={history.canDelete}

@@ -1,6 +1,7 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
-@use '@/shared/styles/effects' as effects;
 @use '@/shared/styles/mixins' as mixins;
+
+// ==================== PANEL LAYOUT ====================
 
 .root {
   display: flex;
@@ -27,6 +28,8 @@
     padding-inline: var(--space-5);
   }
 }
+
+// ==================== FORM PANEL ====================
 
 .header {
   display: flex;
@@ -83,22 +86,15 @@
   min-width: 0;
 }
 
+// ==================== PRODUCT PREVIEW ====================
+
 .previewPanel {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-8);
+  padding: clamp(var(--space-8), 4vw, var(--space-16));
   border-left: 1px solid var(--color-divider);
-  // A flat chrome panel with the same faint rings and hairlines as the landing
-  // page, so the form side stays calm and the preview side carries identity.
-  background:
-    effects.glow(30%, 20%, 420px), effects.ring(80%, 85%, 160px),
-    effects.ring(80%, 85%, 260px), effects.ring(80%, 85%, 360px),
-    effects.lines(115deg, 120px), var(--color-chrome);
-
-  @include mixins.up(breakpoints.$breakpoint-xl) {
-    padding: var(--space-12);
-  }
+  background: var(--color-chrome);
 
   @include mixins.down(breakpoints.$breakpoint-lg) {
     display: none;

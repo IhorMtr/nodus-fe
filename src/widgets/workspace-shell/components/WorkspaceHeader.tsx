@@ -15,6 +15,7 @@ import {
   Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { RefObject } from 'react';
 
 import { Link } from '@/shared/i18n/navigation';
 import { IconButton } from '@/shared/ui/icon-button';
@@ -33,12 +34,15 @@ interface WorkspaceHeaderProps {
   workspaceId: string;
   workspaceName: string;
   userId: string;
-  membersPanel: {
+  membersPanel?: {
     expanded: boolean;
     controls?: string;
     onToggle: () => void;
   };
   onOpenSidebar: () => void;
+  onOpenSearch?: () => void;
+  isSearchActive: boolean;
+  searchButtonRef: RefObject<HTMLButtonElement | null>;
 }
 
 // ==================== CONSTANTS ====================
@@ -50,6 +54,7 @@ const sectionIcons = {
   search: Search,
   members: Users,
   settings: Settings,
+  'personal-settings': Settings,
 } as const;
 
 // ==================== HELPERS ====================
@@ -71,15 +76,19 @@ export function WorkspaceHeader({
   userId,
   membersPanel,
   onOpenSidebar,
+  onOpenSearch,
+  isSearchActive,
+  searchButtonRef,
 }: WorkspaceHeaderProps) {
   // ==================== CONTEXT ====================
 
   const t = useTranslations('workspace');
   const product = useTranslations('product');
+  const user = useTranslations('user');
 
   // ==================== FEATURE HOOKS ====================
 
-  const { workspaces, context, isSearchActive, openSearch, retryWorkspaces } =
+  const { workspaces, context, retryWorkspaces } =
     useWorkspaceHeader(workspaceId);
   const notifications = useNotificationCenter(
     userId,
@@ -93,7 +102,9 @@ export function WorkspaceHeader({
     context?.kind === 'channel'
       ? context.name
       : context
-        ? t(`navigation.${context.section}`)
+        ? context.section === 'personal-settings'
+          ? user('settings.title')
+          : t(`navigation.${context.section}`)
         : null;
 
   return (
@@ -105,6 +116,7 @@ export function WorkspaceHeader({
           <IconButton
             icon={<MenuIcon />}
             variant="ghost"
+            data-settings-return-focus
             aria-label={t('navigation.openSidebar')}
             onClick={onOpenSidebar}
           />
@@ -176,7 +188,8 @@ export function WorkspaceHeader({
 
       <WorkspaceToolbar
         isSearchActive={isSearchActive}
-        onOpenSearch={openSearch}
+        searchButtonRef={searchButtonRef}
+        onOpenSearch={onOpenSearch}
         notifications={notifications}
         membersPanel={membersPanel}
       />

@@ -15,6 +15,8 @@ export function ChannelView({
   workspaceId: string;
   channelId: string;
 }) {
+  // ==================== CONTEXT AND PAGE STATE ====================
+
   const t = useTranslations('channel');
   const workspace = useTranslations('workspace');
   const auth = useTranslations('auth.messages');
@@ -97,6 +99,7 @@ export function ChannelView({
         key={`${workspaceId}:${state.channel.id}`}
         workspaceId={workspaceId}
         channelId={state.channel.id}
+        channelName={state.channel.name}
         hasUnread={state.channel.hasUnread}
       />
     </div>

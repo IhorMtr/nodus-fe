@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react';
 
-import { WorkspaceShell } from '@/widgets/workspace-shell/WorkspaceShell';
-
-export default async function WorkspaceLayout({
+export default function WorkspaceLayout({
   children,
-  params,
+  settingsModal,
 }: {
   children: ReactNode;
-  params: Promise<{ workspaceId: string }>;
+  settingsModal: ReactNode;
 }) {
-  const { workspaceId } = await params;
-
-  return <WorkspaceShell workspaceId={workspaceId}>{children}</WorkspaceShell>;
+  return (
+    <>
+      {children}
+      {settingsModal}
+    </>
+  );
 }

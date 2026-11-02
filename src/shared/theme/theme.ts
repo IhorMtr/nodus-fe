@@ -10,17 +10,17 @@ import {
 // Mantine needs ten shades per color. They point at the raw palette in
 // `_colors.scss`; components still read semantic tokens, not these.
 
-const steel: MantineColorsTuple = [
-  'var(--steel-1)',
-  'var(--steel-2)',
-  'var(--steel-3)',
-  'var(--steel-4)',
-  'var(--steel-5)',
-  'var(--steel-6)',
-  'var(--steel-7)',
-  'var(--steel-8)',
-  'var(--steel-9)',
-  'var(--steel-9)',
+const neutral: MantineColorsTuple = [
+  'var(--neutral-1)',
+  'var(--neutral-2)',
+  'var(--neutral-3)',
+  'var(--neutral-4)',
+  'var(--neutral-5)',
+  'var(--neutral-6)',
+  'var(--neutral-7)',
+  'var(--neutral-8)',
+  'var(--neutral-9)',
+  'var(--neutral-9)',
 ];
 
 const gray: MantineColorsTuple = [
@@ -52,8 +52,8 @@ const dark: MantineColorsTuple = [
 // ==================== THEME ====================
 
 export const theme = createTheme({
-  colors: { steel, gray, dark },
-  primaryColor: 'steel',
+  colors: { neutral, gray, dark },
+  primaryColor: 'neutral',
   primaryShade: { light: 6, dark: 5 },
   fontFamily: 'var(--font-family-sans)',
   headings: {
@@ -66,7 +66,7 @@ export const theme = createTheme({
 
     // Mantine cannot infer contrast from CSS variable palette entries.
     if (
-      (input.color ?? input.theme.primaryColor) === 'steel' &&
+      (input.color ?? input.theme.primaryColor) === 'neutral' &&
       input.variant === 'filled'
     ) {
       return {
@@ -110,15 +110,15 @@ const semanticColors = {
   '--mantine-primary-color-light-hover': 'var(--color-surface-hover)',
   '--mantine-primary-color-light-color': 'var(--color-primary-text)',
   '--mantine-primary-color-contrast': 'var(--color-on-primary)',
-  '--mantine-color-steel-contrast': 'var(--color-on-primary)',
-  '--mantine-color-steel-text': 'var(--color-primary-text)',
-  '--mantine-color-steel-filled': 'var(--color-primary)',
-  '--mantine-color-steel-filled-hover': 'var(--color-primary-hover)',
-  '--mantine-color-steel-light': 'var(--color-primary-subtle)',
-  '--mantine-color-steel-light-hover': 'var(--color-surface-hover)',
-  '--mantine-color-steel-light-color': 'var(--color-primary-text)',
-  '--mantine-color-steel-outline': 'var(--color-primary-text)',
-  '--mantine-color-steel-outline-hover': 'var(--color-primary-subtle)',
+  '--mantine-color-neutral-contrast': 'var(--color-on-primary)',
+  '--mantine-color-neutral-text': 'var(--color-primary-text)',
+  '--mantine-color-neutral-filled': 'var(--color-primary)',
+  '--mantine-color-neutral-filled-hover': 'var(--color-primary-hover)',
+  '--mantine-color-neutral-light': 'var(--color-primary-subtle)',
+  '--mantine-color-neutral-light-hover': 'var(--color-surface-hover)',
+  '--mantine-color-neutral-light-color': 'var(--color-primary-text)',
+  '--mantine-color-neutral-outline': 'var(--color-primary-text)',
+  '--mantine-color-neutral-outline-hover': 'var(--color-primary-subtle)',
 
   // ---------- Status ----------
 

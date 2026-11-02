@@ -17,13 +17,13 @@
   --color-chrome: var(--mist-2);
   --color-background: var(--mist-0);
   --color-surface: var(--mist-1);
-  --color-surface-elevated: var(--mist-0);
+  --color-surface-elevated: var(--mist-2);
   --color-surface-overlay: var(--mist-0);
-  --color-surface-hover: rgb(30 42 60 / 5%);
-  --color-surface-active: rgb(30 42 60 / 8%);
-  --color-surface-selected: rgb(67 97 134 / 10%);
+  --color-surface-hover: rgb(0 0 0 / 7%);
+  --color-surface-active: rgb(0 0 0 / 10%);
+  --color-surface-selected: rgb(0 0 0 / 9%);
   --color-field: var(--mist-0);
-  --color-overlay-backdrop: rgb(24 30 40 / 32%);
+  --color-overlay-backdrop: rgb(0 0 0 / 32%);
 
   // ---------- Borders ----------
 
@@ -41,25 +41,25 @@
 
   // ---------- Primary action ----------
 
-  --color-primary: var(--steel-7);
-  --color-primary-hover: var(--steel-8);
-  --color-primary-active: var(--steel-9);
-  --color-primary-subtle: rgb(67 97 134 / 8%);
-  --color-primary-border: rgb(67 97 134 / 26%);
-  --color-primary-text: var(--steel-7);
+  --color-primary: var(--neutral-7);
+  --color-primary-hover: var(--neutral-8);
+  --color-primary-active: var(--neutral-9);
+  --color-primary-subtle: rgb(0 0 0 / 6%);
+  --color-primary-border: rgb(0 0 0 / 26%);
+  --color-primary-text: var(--neutral-7);
   --color-on-primary: var(--mist-0);
 
   // ---------- Focus ----------
 
-  --color-focus: var(--steel-6);
-  --color-focus-ring: rgb(82 114 156 / 22%);
+  --color-focus: var(--neutral-6);
+  --color-focus-ring: rgb(70 70 70 / 22%);
 
   // ---------- Accent ----------
 
-  --color-accent: var(--steel-6);
-  --color-accent-muted: var(--steel-5);
-  --color-accent-subtle: rgb(82 114 156 / 8%);
-  --color-accent-border: rgb(82 114 156 / 24%);
+  --color-accent: var(--neutral-6);
+  --color-accent-muted: var(--neutral-5);
+  --color-accent-subtle: rgb(0 0 0 / 6%);
+  --color-accent-border: rgb(0 0 0 / 24%);
 
   // ---------- Success ----------
 
@@ -87,11 +87,11 @@
 
   // ---------- Info ----------
 
-  --color-info: var(--steel-6);
-  --color-info-hover: var(--steel-7);
-  --color-info-subtle: rgb(67 97 134 / 7%);
-  --color-info-border: rgb(67 97 134 / 24%);
-  --color-info-text: var(--steel-7);
+  --color-info: var(--neutral-6);
+  --color-info-hover: var(--neutral-7);
+  --color-info-subtle: rgb(0 0 0 / 6%);
+  --color-info-border: rgb(0 0 0 / 24%);
+  --color-info-text: var(--neutral-7);
 
   // ---------- Presence ----------
 
@@ -99,7 +99,7 @@
   --color-presence-busy: var(--amber-base);
   --color-presence-dnd: var(--red-base);
 
-  --color-selection: rgb(82 114 156 / 20%);
+  --color-selection: rgb(80 80 80 / 20%);
 }
 
 // ==================== DARK THEME ====================
@@ -112,11 +112,11 @@
   --color-surface: var(--graphite-3);
   --color-surface-elevated: var(--graphite-4);
   --color-surface-overlay: var(--graphite-4);
-  --color-surface-hover: rgb(200 214 235 / 5%);
-  --color-surface-active: rgb(200 214 235 / 8%);
-  --color-surface-selected: rgb(103 135 176 / 16%);
-  --color-field: rgb(4 6 9 / 28%);
-  --color-overlay-backdrop: rgb(4 6 9 / 62%);
+  --color-surface-hover: rgb(255 255 255 / 5%);
+  --color-surface-active: rgb(255 255 255 / 8%);
+  --color-surface-selected: rgb(255 255 255 / 10%);
+  --color-field: rgb(0 0 0 / 20%);
+  --color-overlay-backdrop: rgb(0 0 0 / 62%);
 
   // ---------- Borders ----------
 
@@ -135,25 +135,25 @@
 
   // ---------- Primary action ----------
 
-  --color-primary: var(--steel-6);
-  --color-primary-hover: color-mix(in srgb, var(--steel-6) 80%, var(--steel-4));
-  --color-primary-active: var(--steel-7);
-  --color-primary-subtle: rgb(103 135 176 / 14%);
-  --color-primary-border: rgb(134 162 198 / 34%);
-  --color-primary-text: var(--steel-3);
-  --color-on-primary: #f6f8fb;
+  --color-primary: var(--neutral-3);
+  --color-primary-hover: var(--neutral-2);
+  --color-primary-active: var(--neutral-4);
+  --color-primary-subtle: rgb(255 255 255 / 9%);
+  --color-primary-border: rgb(255 255 255 / 30%);
+  --color-primary-text: var(--neutral-3);
+  --color-on-primary: var(--graphite-1);
 
   // ---------- Focus ----------
 
-  --color-focus: var(--steel-4);
-  --color-focus-ring: rgb(134 162 198 / 26%);
+  --color-focus: var(--neutral-4);
+  --color-focus-ring: rgb(210 210 210 / 26%);
 
   // ---------- Accent ----------
 
-  --color-accent: var(--steel-4);
-  --color-accent-muted: var(--steel-5);
-  --color-accent-subtle: rgb(134 162 198 / 10%);
-  --color-accent-border: rgb(134 162 198 / 26%);
+  --color-accent: var(--neutral-4);
+  --color-accent-muted: var(--neutral-5);
+  --color-accent-subtle: rgb(255 255 255 / 8%);
+  --color-accent-border: rgb(210 210 210 / 26%);
 
   // ---------- Success ----------
 
@@ -181,11 +181,11 @@
 
   // ---------- Info ----------
 
-  --color-info: var(--steel-5);
-  --color-info-hover: var(--steel-4);
-  --color-info-subtle: rgb(103 135 176 / 12%);
-  --color-info-border: rgb(134 162 198 / 32%);
-  --color-info-text: var(--steel-3);
+  --color-info: var(--neutral-5);
+  --color-info-hover: var(--neutral-4);
+  --color-info-subtle: rgb(255 255 255 / 8%);
+  --color-info-border: rgb(255 255 255 / 28%);
+  --color-info-text: var(--neutral-3);
 
   // ---------- Presence ----------
 
@@ -193,7 +193,7 @@
   --color-presence-busy: var(--amber-base);
   --color-presence-dnd: var(--red-base);
 
-  --color-selection: rgb(134 162 198 / 28%);
+  --color-selection: rgb(210 210 210 / 28%);
 }
 
 // ==================== PRESENCE ALIASES ====================

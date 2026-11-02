@@ -16,7 +16,7 @@
 // ==================== FOCUS ====================
 
 // The one keyboard focus indicator for buttons, links and other compact
-// controls: a steel outline with a small gap, shown only for keyboard focus.
+// controls: a neutral outline with a small gap, shown only for keyboard focus.
 @mixin focus-ring($offset: var(--focus-ring-offset)) {
   &:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus);

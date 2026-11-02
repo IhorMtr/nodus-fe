@@ -4,7 +4,10 @@
     "description": "People in {workspace}",
     "listTitle": "Workspace members",
     "loading": "Loading members",
-    "empty": "No members to show."
+    "empty": "No members to show.",
+    "person": "Person",
+    "presence": "Status",
+    "role": "Role"
   },
   "management": {
     "title": "Invitations",

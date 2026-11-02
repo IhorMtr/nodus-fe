@@ -68,13 +68,60 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
         )}
       </header>
 
+      {/* ==================== PUBLICATION FILTERS ==================== */}
+
+      <div
+        className={styles.filters}
+        role="group"
+        aria-label={t('filterLabel')}
+      >
+        <button
+          type="button"
+          aria-pressed={state.filter === 'published' || !state.canManage}
+          onClick={() => state.setFilter('published')}
+        >
+          {t('published')} <span>{state.publishedItems.length}</span>
+        </button>
+        {state.canManage && (
+          <button
+            type="button"
+            aria-pressed={state.filter === 'scheduled'}
+            onClick={() => state.setFilter('scheduled')}
+          >
+            {t('scheduled')} <span>{state.scheduledItems.length}</span>
+          </button>
+        )}
+      </div>
+
       {/* ==================== ANNOUNCEMENT LIST ==================== */}
 
       {state.items.length === 0 ? (
         <div className={styles.empty}>
-          <Megaphone size={24} aria-hidden="true" />
-          <h2>{t('emptyTitle')}</h2>
-          <p>{t('emptyDescription')}</p>
+          <span className={styles.emptyIcon}>
+            <Megaphone size={24} aria-hidden="true" />
+          </span>
+          <h2>
+            {state.filter === 'scheduled' && state.canManage
+              ? t('emptyScheduledTitle')
+              : t('emptyTitle')}
+          </h2>
+          <p>
+            {state.filter === 'scheduled' && state.canManage
+              ? t('emptyScheduledDescription')
+              : state.canManage
+                ? t('emptyManageDescription')
+                : t('emptyDescription')}
+          </p>
+          {state.canManage && (
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<Plus size={16} />}
+              onClick={state.openCreate}
+            >
+              {t('create')}
+            </Button>
+          )}
         </div>
       ) : (
         <div className={styles.list}>
@@ -86,6 +133,10 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
                 state.authorNames.get(item.authorId) ?? t('unknownAuthor')
               }
               onOpen={() => state.openDetail(item.id)}
+              onEdit={state.canManage ? () => state.openEdit(item) : undefined}
+              onDelete={
+                state.canManage ? () => state.openDelete(item) : undefined
+              }
             />
           ))}
         </div>
@@ -192,7 +243,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
           register={state.announcementEditor.form.register}
           errors={state.announcementEditor.form.formState.errors}
           publication={state.announcementEditor.publication}
-          published={state.editor === 'edit' && Boolean(selected?.publishedAt)}
+          published={
+            state.editor === 'edit' && Boolean(state.editingTarget?.publishedAt)
+          }
           saving={state.announcementEditor.isSaving}
           error={
             editorError
@@ -200,7 +253,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
               : null
           }
           onSubmit={state.announcementEditor.submit(
-            state.editor === 'edit' ? (selected ?? null) : null
+            state.editor === 'edit' ? state.editingTarget : null
           )}
           onCancel={() => {
             if (!state.announcementEditor.isSaving) {

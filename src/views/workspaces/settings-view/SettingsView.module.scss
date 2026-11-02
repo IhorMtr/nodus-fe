@@ -1,12 +1,13 @@
-@use '@/shared/styles/breakpoints' as breakpoints;
+﻿@use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
 // ==================== PAGE ====================
 
 .page {
-  width: min(100%, var(--content-width));
+  width: min(100%, 1040px);
   margin-inline: auto;
   padding: var(--space-8) var(--space-8) var(--space-12);
+  container-type: inline-size;
 
   @include mixins.down(breakpoints.$breakpoint-sm) {
     padding: var(--space-6) var(--space-4) var(--space-10);
@@ -14,47 +15,117 @@
 }
 
 .intro {
-  padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--color-divider);
-
   h1 {
     @include mixins.page-title;
   }
 
   p {
-    margin: 6px 0 0;
+    max-width: 60ch;
+    margin: var(--space-2) 0 0;
     color: var(--color-text-secondary);
     font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
   }
 }
 
-// ==================== SECTIONS ====================
+// ==================== WORKSPACE IDENTITY ====================
 
-// Each setting is a row of one page: an explanation on the left and the
-// control on the right, separated by hairlines rather than boxes.
-.section {
+.identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.identityIcon {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  width: 40px;
+  height: 40px;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+}
+
+.identityText {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  strong {
+    overflow: hidden;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.identityRole {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+// ==================== SETTINGS GROUPS ====================
+
+.group {
+  margin-top: var(--space-8);
+}
+
+.groupHeading {
+  margin: 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.setting {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
   align-items: start;
   gap: var(--space-4) var(--space-8);
-  padding-block: var(--space-6);
+  padding-block: var(--space-5) var(--space-6);
   border-bottom: 1px solid var(--color-divider);
 
-  @include mixins.down(breakpoints.$breakpoint-md) {
+  @container (max-width: 660px) {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-.sectionText {
-  h2 {
-    @include mixins.section-title;
-
+.settingText {
+  h3 {
+    margin: 0;
+    color: var(--color-text-primary);
     font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
   }
 
   p {
-    max-width: 44ch;
-    margin: var(--space-1) 0 0;
+    max-width: 42ch;
+    margin: var(--space-2) 0 0;
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
@@ -64,6 +135,7 @@
 .form {
   display: grid;
   gap: var(--space-3);
+  width: min(100%, 440px);
   min-width: 0;
 }
 
@@ -76,22 +148,13 @@
 
 // ==================== DANGER ZONE ====================
 
-// Only the heading and the outlined button carry the warning tone; the row
-// otherwise matches the rest of the page.
-.dangerSection {
-  border-bottom: 0;
-
-  .sectionText h2 {
-    color: var(--color-danger-text);
-  }
+.dangerSection .groupHeading {
+  color: var(--color-danger-text);
 }
 
 .dangerAction {
   display: flex;
-
-  @include mixins.up(breakpoints.$breakpoint-md) {
-    justify-content: flex-end;
-  }
+  align-items: flex-start;
 }
 
 // ==================== DELETE DIALOG ====================
