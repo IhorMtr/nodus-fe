@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { useSelectedLayoutSegments } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -21,7 +21,7 @@ import { messageHistoryKey } from '@/domains/message/model/message-history';
 import type { User } from '@/domains/user/model/current-user';
 import { workspaceNavigation } from '@/domains/workspace/model/navigation';
 import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
-import { usePathname, useRouter } from '@/shared/i18n/navigation';
+import { useRouter } from '@/shared/i18n/navigation';
 
 // ==================== CHANNEL MANAGEMENT ====================
 
@@ -34,10 +34,11 @@ export function useWorkspaceSidebar(
 
   const channel = useTranslations('channel');
   const validation = useTranslations('channel.validation');
-  const pathname = usePathname();
+  const segments = useSelectedLayoutSegments();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { channelId } = useParams<{ channelId?: string }>();
+  const [section, selectedChannelId] = segments;
+  const channelId = section === 'channels' ? selectedChannelId : undefined;
 
   // ==================== QUERIES AND MUTATIONS ====================
 
@@ -196,7 +197,7 @@ export function useWorkspaceSidebar(
   }
 
   return {
-    pathname,
+    section,
     channelId,
     channels,
     canManage,

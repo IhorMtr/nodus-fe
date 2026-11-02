@@ -72,9 +72,9 @@
   padding: var(--space-1);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-container);
-  background: var(--color-surface-elevated);
+  background: var(--color-surface-overlay);
   color: var(--color-text-primary);
-  box-shadow: none;
+  box-shadow: var(--shadow-overlay);
 }
 
 .options.options {
@@ -106,14 +106,19 @@
     font-weight: var(--font-weight-medium);
   }
 
+  &[data-checked] {
+    color: var(--color-primary-text);
+  }
+
   &[data-checked] > svg {
     color: inherit;
     opacity: 1;
   }
 
+  // Keyboard highlight: a tinted row rather than a solid fill.
   &[data-combobox-selected] {
-    background: var(--color-primary);
-    color: var(--color-on-primary);
+    background: var(--color-surface-selected);
+    color: var(--color-text-primary);
   }
 
   &[data-combobox-disabled] {

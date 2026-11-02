@@ -27,7 +27,7 @@ export function useInvitationManagement(
   const [inviteLink, setInviteLink] = useState<string | null>(null);
   const [copyState, setCopyState] = useState<'copied' | 'failed' | null>(null);
 
-  // ==================== HANDLERS ====================
+  // ==================== INVITATION ACTIONS ====================
 
   const createInvite = async () => {
     try {
@@ -40,6 +40,16 @@ export function useInvitationManagement(
       // The mutation error is displayed beside the action.
     }
   };
+
+  const revokeInvite = (inviteId: string) => {
+    revoke.mutate(inviteId);
+  };
+
+  const retryInvites = () => {
+    void invites.refetch();
+  };
+
+  // ==================== SHARE ACTIONS ====================
 
   const copyInvite = async () => {
     if (!inviteLink) {
@@ -73,6 +83,8 @@ export function useInvitationManagement(
     inviteLink,
     copyState,
     createInvite,
+    revokeInvite,
+    retryInvites,
     copyInvite,
     closeInvite,
     formatDate,

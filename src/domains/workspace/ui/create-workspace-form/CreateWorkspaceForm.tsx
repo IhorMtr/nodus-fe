@@ -5,6 +5,7 @@ import type { FormEventHandler } from 'react';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 
 import styles from './CreateWorkspaceForm.module.scss';
@@ -41,9 +42,9 @@ export function CreateWorkspaceForm({
         required
       />
       {formError && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" role="alert">
           {formError}
-        </p>
+        </InlineStatus>
       )}
       <Button
         type="submit"

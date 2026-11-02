@@ -18,6 +18,7 @@ import { useTranslations } from 'next-intl';
 import type { User } from '@/domains/user/model/current-user';
 import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
@@ -54,7 +55,7 @@ export function WorkspaceSidebar({
   const t = useTranslations('workspace');
   const channel = useTranslations('channel');
   const {
-    pathname,
+    section,
     channelId,
     channels,
     canManage,
@@ -85,7 +86,7 @@ export function WorkspaceSidebar({
               return null;
             }
 
-            const active = pathname.endsWith(`/${route}`);
+            const active = section === route;
             return (
               <li key={route}>
                 <Link
@@ -217,8 +218,6 @@ export function WorkspaceSidebar({
       <UserProfile
         user={user}
         workspaceId={workspaceId}
-        pathname={pathname}
-        channelId={channelId}
         onNavigate={onNavigate}
       />
       {canManage && (
@@ -249,9 +248,13 @@ export function WorkspaceSidebar({
                 required
               />
               {errors.root?.server?.message && (
-                <p className={styles.formError} role="alert">
+                <InlineStatus
+                  tone="danger"
+                  role="alert"
+                  className={styles.formError}
+                >
                   {errors.root.server.message}
-                </p>
+                </InlineStatus>
               )}
               <div className={styles.modalActions}>
                 <Button
@@ -287,9 +290,13 @@ export function WorkspaceSidebar({
               })}
             </p>
             {deleteError && (
-              <p className={styles.formError} role="alert">
+              <InlineStatus
+                tone="danger"
+                role="alert"
+                className={styles.formError}
+              >
                 {deleteError}
-              </p>
+              </InlineStatus>
             )}
             <div className={styles.modalActions}>
               <Button

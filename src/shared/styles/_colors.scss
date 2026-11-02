@@ -1,53 +1,69 @@
+// Raw palette. Components never read these directly: they go through the
+// semantic tokens in `_semantic.scss`, which pick values per theme.
+
 :root {
-  --light-0: #ffffff;
-  --light-1: #f7f7f7;
-  --light-2: #f1f1f1;
-  --light-3: #ebebeb;
-  --light-4: #e4e4e4;
-  --light-5: #dddddd;
-  --light-6: #d1d1d1;
-  --light-7: #c3c3c3;
-  --light-8: #b4b4b4;
-  --light-9: #a3a3a3;
+  // ==================== MIST (LIGHT NEUTRALS) ====================
 
-  --dark-0: #0a0a0a;
-  --dark-1: #111111;
-  --dark-2: #171717;
-  --dark-3: #1d1d1d;
-  --dark-4: #232323;
-  --dark-5: #2a2a2a;
-  --dark-6: #313131;
-  --dark-7: #3a3a3a;
-  --dark-8: #444444;
-  --dark-9: #505050;
+  // Neutral light surfaces, from page canvas to strong borders.
+  --mist-0: #ffffff;
+  --mist-1: #f6f6f6;
+  --mist-2: #eeeeee;
+  --mist-3: #eaeaea;
+  --mist-4: #e1e1e1;
+  --mist-5: #d4d4d4;
+  --mist-6: #c4c4c4;
+  --mist-7: #aaaaaa;
+  --mist-8: #8b8b8b;
+  --mist-9: #6c6c6c;
 
-  --primary-0: #111111;
-  --primary-1: #1a1a1a;
-  --primary-2: #242424;
-  --primary-3: #2e2e2e;
-  --primary-4: #393939;
-  --primary-5: #454545;
-  --primary-6: #525252;
-  --primary-7: #606060;
-  --primary-8: #707070;
-  --primary-9: #828282;
+  // ==================== GRAPHITE (DARK NEUTRALS) ====================
 
-  --accent-0: #e5ded4;
-  --accent-1: #c9beaf;
-  --accent-2: #ad9f8d;
-  --accent-3: #91816d;
-  --accent-4: #756756;
-  --accent-5: #5d5246;
+  // Neutral graphite surfaces, from the canvas to strong borders.
+  --graphite-0: #101010;
+  --graphite-1: #191919;
+  --graphite-2: #141414;
+  --graphite-3: #1c1c1c;
+  --graphite-4: #222222;
+  --graphite-5: #2b2b2b;
+  --graphite-6: #343434;
+  --graphite-7: #3d3d3d;
+  --graphite-8: #505050;
+  --graphite-9: #666666;
 
-  --green-base: #5f5f5f;
-  --green-dark: #4e4e4e;
+  // ==================== INK (TEXT) ====================
 
-  --amber-base: #6a6a6a;
-  --amber-dark: #585858;
+  --ink-dark-1: #1b1b1b;
+  --ink-dark-2: #494949;
+  --ink-dark-3: #686868;
+  --ink-light-1: #e6e6e6;
+  --ink-light-2: #aaaaaa;
+  --ink-light-3: #909090;
 
-  --red-base: #7a7a7a;
-  --red-dark: #636363;
+  // ==================== NEUTRAL (INTERACTION) ====================
 
-  --blue-base: #666666;
-  --blue-dark: #555555;
+  // Neutral interaction scale shared with the component theme.
+  --neutral-1: #f2f2f2;
+  --neutral-2: #dedede;
+  --neutral-3: #c8c8c8;
+  --neutral-4: #b5b5b5;
+  --neutral-5: #969696;
+  --neutral-6: #777777;
+  --neutral-7: #555555;
+  --neutral-8: #404040;
+  --neutral-9: #303030;
+
+  // ==================== FUNCTIONAL HUES ====================
+
+  // Muted so they sit next to graphite without turning the UI into a dashboard.
+  --green-light: #7fbf98;
+  --green-base: #4f9a6e;
+  --green-dark: #2f7550;
+
+  --amber-light: #d9b56c;
+  --amber-base: #c09445;
+  --amber-dark: #8c6418;
+
+  --red-light: #e3928a;
+  --red-base: #c9675f;
+  --red-dark: #a8423a;
 }

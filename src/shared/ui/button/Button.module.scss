@@ -1,6 +1,8 @@
 @use '@/shared/styles/controls' as controls;
 @use '@/shared/styles/mixins' as mixins;
 
+// ==================== ROOT ====================
+
 .root.root {
   @include controls.sizes;
   @include mixins.focus-ring;
@@ -20,14 +22,16 @@
   color: var(--button-foreground);
   font-family: var(--font-family-sans);
   font-size: var(--control-font-size);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast),
     color var(--transition-fast);
 
+  // ==================== VARIANTS ====================
+
   &[data-variant='secondary'] {
-    --button-background: var(--color-surface);
+    --button-background: var(--color-surface-elevated);
     --button-background-hover: var(--color-surface-hover);
     --button-background-active: var(--color-surface-active);
     --button-foreground: var(--color-text-primary);
@@ -43,14 +47,18 @@
     --button-border: transparent;
   }
 
+  // Destructive actions are outlined in muted red rather than filled, so they
+  // read as serious without becoming the loudest element on the page.
   &[data-variant='danger'] {
     --button-background: transparent;
     --button-background-hover: var(--color-danger-subtle);
-    --button-background-active: var(--color-surface-active);
+    --button-background-active: var(--color-danger-subtle);
     --button-foreground: var(--color-danger-text);
-    --button-border: var(--color-border);
-    --button-border-hover: var(--color-border-strong);
+    --button-border: var(--color-danger-border);
+    --button-border-hover: var(--color-danger);
   }
+
+  // ==================== STATES ====================
 
   &::before {
     content: none;
@@ -86,6 +94,8 @@
     cursor: not-allowed;
   }
 }
+
+// ==================== CONTENT ====================
 
 .inner.inner {
   gap: var(--control-gap);

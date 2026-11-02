@@ -1,74 +1,173 @@
-@use '@/shared/styles/breakpoints' as breakpoints;
+﻿@use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-.page {
-  display: grid;
-  width: min(100%, 760px);
-  gap: var(--space-5);
-  margin-inline: auto;
-  padding: var(--space-8);
+// ==================== PAGE ====================
 
-  @include mixins.down(breakpoints.$breakpoint-xs) {
-    padding: var(--space-5);
+.page {
+  width: min(100%, 1040px);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-8) var(--space-12);
+  container-type: inline-size;
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-6) var(--space-4) var(--space-10);
   }
 }
 
 .intro {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-3);
-
-  svg {
-    flex: none;
-    color: var(--color-text-secondary);
-  }
-
   h1 {
-    margin: 0 0 var(--space-1);
-    font-size: var(--font-size-2xl);
+    @include mixins.page-title;
   }
 
   p {
-    margin: 0;
+    max-width: 60ch;
+    margin: var(--space-2) 0 0;
     color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
   }
 }
 
-.section {
-  padding: var(--space-6);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-container);
+// ==================== WORKSPACE IDENTITY ====================
+
+.identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
+}
 
-  h2 {
-    margin: 0 0 var(--space-2);
-    font-size: var(--font-size-lg);
+.identityIcon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+}
+
+.identityText {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
   }
 
-  p {
-    margin: 0 0 var(--space-5);
-    color: var(--color-text-secondary);
-  }
-
-  form {
-    display: grid;
-    gap: var(--space-4);
-    justify-items: start;
-  }
-
-  form > div {
-    width: 100%;
+  strong {
+    overflow: hidden;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
-.dangerSection {
+.identityRole {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+// ==================== SETTINGS GROUPS ====================
+
+.group {
   margin-top: var(--space-8);
 }
+
+.groupHeading {
+  margin: 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.setting {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  align-items: start;
+  gap: var(--space-4) var(--space-8);
+  padding-block: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+
+  @container (max-width: 660px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.settingText {
+  h3 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+  }
+
+  p {
+    max-width: 42ch;
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+}
+
+.form {
+  display: grid;
+  gap: var(--space-3);
+  width: min(100%, 440px);
+  min-width: 0;
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+// ==================== DANGER ZONE ====================
+
+.dangerSection .groupHeading {
+  color: var(--color-danger-text);
+}
+
+.dangerAction {
+  display: flex;
+  align-items: flex-start;
+}
+
+// ==================== DELETE DIALOG ====================
 
 .modalBody {
   display: grid;
   gap: var(--space-4);
+
+  > p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
 }
 
 .actions {
@@ -78,16 +177,10 @@
   gap: var(--space-2);
 }
 
-.error,
-.section .error {
-  color: var(--color-danger);
-}
-
-.success,
-.section .success {
-  color: var(--color-text-secondary);
-}
+// ==================== STATES ====================
 
 .state {
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
   padding: var(--space-8);
 }

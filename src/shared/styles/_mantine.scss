@@ -1,0 +1,152 @@
+// Global look of Mantine's floating layers (modals, drawers, menus, popovers,
+// tooltips, notifications) so they share the Nodus surfaces, borders and focus
+// ring wherever they are used. Component modules may still refine them.
+
+// ==================== FOCUS ====================
+
+// Mantine draws its own focus outline in the primary color; align it with the
+// shared focus ring used by every other control.
+.mantine-focus-auto:focus-visible,
+.mantine-focus-always:focus {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+// ==================== MODALS AND DRAWERS ====================
+
+.mantine-Modal-overlay,
+.mantine-Drawer-overlay {
+  --overlay-bg: var(--color-overlay-backdrop);
+}
+
+.mantine-Modal-content,
+.mantine-Drawer-content {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-overlay);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-overlay);
+}
+
+.mantine-Modal-content {
+  border-radius: var(--radius-lg);
+}
+
+.mantine-Drawer-content {
+  border-block: 0;
+  border-radius: 0;
+}
+
+.mantine-Modal-header,
+.mantine-Drawer-header {
+  min-height: 56px;
+  padding: var(--space-4) var(--space-5);
+  background: inherit;
+}
+
+.mantine-Modal-title,
+.mantine-Drawer-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.mantine-Modal-body {
+  padding: 0 var(--space-5) var(--space-5);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.mantine-Modal-close,
+.mantine-Drawer-close {
+  color: var(--color-text-muted);
+
+  &:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+// ==================== MENUS AND POPOVERS ====================
+
+.mantine-Menu-dropdown,
+.mantine-Popover-dropdown {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: var(--color-surface-overlay);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-overlay);
+}
+
+.mantine-Menu-dropdown {
+  padding: var(--space-1);
+}
+
+.mantine-Menu-item {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+
+  &[data-hovered] {
+    background: var(--color-surface-hover);
+  }
+}
+
+.mantine-Menu-itemSection {
+  color: var(--color-text-muted);
+
+  .mantine-Menu-item[data-hovered] &,
+  .mantine-Menu-item[data-menu-item-color] & {
+    color: inherit;
+  }
+}
+
+.mantine-Menu-label {
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.mantine-Menu-divider {
+  margin-block: var(--space-1);
+  border-color: var(--color-divider);
+}
+
+// ==================== TOOLTIPS ====================
+
+.mantine-Tooltip-tooltip {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-overlay);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  box-shadow: var(--shadow-md);
+}
+
+// ==================== NOTIFICATIONS ====================
+
+.mantine-Notification-root {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: var(--color-surface-overlay);
+  box-shadow: var(--shadow-overlay);
+
+  // The colored edge carries the status; keep it slim.
+  &::before {
+    width: 3px;
+  }
+}
+
+.mantine-Notification-title {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.mantine-Notification-description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}

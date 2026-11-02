@@ -5,10 +5,12 @@
 
 // One source for the column widths and header height, shared with the header
 // so panel borders line up from top to bottom.
+//
+// Flat neighbouring tones distinguish navigation from the page canvas.
 .shell {
-  --shell-header-height: 56px;
-  --shell-sidebar-width: 272px;
-  --shell-members-width: 256px;
+  --shell-header-height: 60px;
+  --shell-sidebar-width: 260px;
+  --shell-members-width: 248px;
 
   display: flex;
   width: 100%;
@@ -20,8 +22,8 @@
 
   // Side columns narrow slightly so the conversation keeps most of the width.
   @include mixins.down(breakpoints.$breakpoint-xl) {
-    --shell-sidebar-width: 248px;
-    --shell-members-width: 232px;
+    --shell-sidebar-width: 240px;
+    --shell-members-width: 224px;
   }
 }
 
@@ -39,11 +41,7 @@
   min-width: var(--shell-sidebar-width);
   min-height: 0;
   border-right: 1px solid var(--color-divider);
-  background: linear-gradient(
-    180deg,
-    var(--color-surface-elevated) 0%,
-    var(--color-surface) 40%
-  );
+  background: var(--color-chrome);
 
   @include mixins.down(breakpoints.$breakpoint-md) {
     display: none;
@@ -70,14 +68,14 @@
   flex: none;
   overflow: hidden;
   border-left: 1px solid transparent;
-  background: linear-gradient(
-    180deg,
-    var(--color-surface) 0%,
-    var(--color-background) 100%
-  );
+  background: var(--color-chrome);
   transition:
     width var(--transition-normal),
     border-color var(--transition-normal);
+
+  &[data-search] {
+    --shell-members-width: 320px;
+  }
 
   &[data-open] {
     width: var(--shell-members-width);
@@ -101,8 +99,8 @@
 
 // ==================== DRAWERS ====================
 
-.drawerContent {
-  background: var(--color-surface);
+.drawerContent.drawerContent {
+  background: var(--color-chrome);
 }
 
 .drawerBody {

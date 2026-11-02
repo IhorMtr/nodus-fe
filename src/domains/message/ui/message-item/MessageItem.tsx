@@ -103,7 +103,7 @@ export function MessageItem({
                 aria-label={t('actions.more')}
               />
             </Menu.Target>
-            <Menu.Dropdown className={styles.dropdown}>
+            <Menu.Dropdown>
               {canEdit && (
                 <Menu.Item
                   leftSection={<Pencil size={16} />}

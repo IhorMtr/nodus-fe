@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import type { Notification } from '../../model/notifications';
 import styles from './NotificationPanel.module.scss';
+import { InlineStatus } from '@/shared/ui/inline-status';
 
 // ==================== TYPES ====================
 
@@ -60,9 +61,9 @@ export function NotificationPanel(props: NotificationPanelProps) {
       {/* ==================== FEEDBACK STATES ==================== */}
 
       {props.actionError && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" role="alert" className={styles.error}>
           {t('actionError')}
-        </p>
+        </InlineStatus>
       )}
       {props.loading && <p className={styles.feedback}>{t('loading')}</p>}
       {props.error && (
@@ -142,9 +143,9 @@ export function NotificationPanel(props: NotificationPanelProps) {
       {/* ==================== PAGINATION ==================== */}
 
       {props.loadMoreError && (
-        <p className={styles.error} role="alert">
+        <InlineStatus tone="danger" role="alert" className={styles.error}>
           {t('loadMoreError')}
-        </p>
+        </InlineStatus>
       )}
       {props.hasMore && !props.error && (
         <div className={styles.footer}>

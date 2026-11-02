@@ -10,7 +10,31 @@ function messagesPath(workspaceId: string, channelId: string) {
   return `/workspaces/${encodeURIComponent(workspaceId)}/channels/${encodeURIComponent(channelId)}/messages`;
 }
 
+// ==================== SEARCH TYPES ====================
+
+interface MessageSearchPage {
+  items: { message: Message; channel: { id: string; name: string } }[];
+  nextCursor: string | null;
+}
+
+// ==================== MESSAGE API ====================
+
 export const messageApi = {
+  async search(
+    workspaceId: string,
+    params: { q: string; channelId: string; cursor?: string },
+    signal?: AbortSignal
+  ): Promise<MessageSearchPage> {
+    const { data } = await httpClient.get<
+      ApiSuccessResponse<MessageSearchPage>
+    >(`/workspaces/${encodeURIComponent(workspaceId)}/search/messages`, {
+      params,
+      signal,
+    });
+
+    return data.data;
+  },
+
   async list(
     workspaceId: string,
     channelId: string,

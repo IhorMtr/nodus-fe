@@ -1,6 +1,5 @@
 'use client';
 
-import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { getInviteErrorKey } from '@/domains/invite/model/invitations';
@@ -14,6 +13,8 @@ import styles from './MembersView.module.scss';
 import { useMembersView } from './hooks/use-members-view';
 
 export function MembersView({ workspaceId }: { workspaceId: string }) {
+  // ==================== VIEW STATE ====================
+
   const t = useTranslations('invite');
   const {
     workspace,
@@ -44,7 +45,7 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
       <div className={styles.state} role="alert">
         <h1>{t('members.title')}</h1>
         <p>{t(`errors.${getInviteErrorKey(error)}`)}</p>
-        <Button variant="secondary" onClick={retry}>
+        <Button variant="secondary" size="sm" onClick={retry}>
           {t('actions.retry')}
         </Button>
       </div>
@@ -55,14 +56,11 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
 
   return (
     <div className={styles.page}>
+      {/* ==================== PAGE HEADER ==================== */}
+
       <header className={styles.intro}>
-        <span className={styles.icon}>
-          <Users size={22} aria-hidden="true" />
-        </span>
-        <div>
-          <h1>{t('members.title')}</h1>
-          <p>{t('members.description', { workspace: workspace.data.name })}</p>
-        </div>
+        <h1>{t('members.title')}</h1>
+        <p>{t('members.description', { workspace: workspace.data.name })}</p>
       </header>
 
       {/* ==================== MEMBERS LIST ==================== */}

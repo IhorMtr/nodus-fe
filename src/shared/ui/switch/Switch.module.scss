@@ -52,9 +52,8 @@
 
 .input.input {
   &:focus-visible + .track {
-    border-color: var(--color-focus);
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
   }
 
   &:checked + .track {
@@ -95,10 +94,6 @@
 .body:hover .input:not(:disabled) + .track[data-error],
 .body:hover .input[aria-invalid='true']:not(:disabled) + .track {
   border-color: var(--color-danger-text);
-}
-
-.input.input:focus-visible:not(:disabled) + .track {
-  border-color: var(--color-focus);
 }
 
 .labelWrapper.labelWrapper {

@@ -23,6 +23,8 @@ export function useAnnouncementsView(workspaceId: string) {
   const searchParams = useSearchParams();
   const selectedId = searchParams.get('announcement');
   const [editor, setEditor] = useState<'create' | 'edit' | null>(null);
+  const [editingTarget, setEditingTarget] = useState<Announcement | null>(null);
+  const [filter, setFilter] = useState<'published' | 'scheduled'>('published');
   const [deleteTarget, setDeleteTarget] = useState<Announcement | null>(null);
 
   // ==================== QUERIES AND MUTATIONS ====================
@@ -51,14 +53,24 @@ export function useAnnouncementsView(workspaceId: string) {
       ),
     [members.data]
   );
-  const items = useMemo(
+  const publishedItems = useMemo(
     () =>
-      [...(announcements.data ?? [])].sort(
-        (a, b) =>
-          b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id)
-      ),
+      (announcements.data ?? [])
+        .filter(item => Boolean(item.publishedAt))
+        .sort((a, b) =>
+          (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '')
+        ),
     [announcements.data]
   );
+  const scheduledItems = useMemo(
+    () =>
+      (announcements.data ?? [])
+        .filter(item => !item.publishedAt)
+        .sort((a, b) => (a.publishAt ?? '').localeCompare(b.publishAt ?? '')),
+    [announcements.data]
+  );
+  const items =
+    canManage && filter === 'scheduled' ? scheduledItems : publishedItems;
 
   // ==================== NAVIGATION ====================
 
@@ -80,11 +92,13 @@ export function useAnnouncementsView(workspaceId: string) {
   // ==================== EDITOR HANDLERS ====================
 
   const openCreate = () => {
+    setEditingTarget(null);
     announcementEditor.openCreate();
     setEditor('create');
   };
 
   const openEdit = (announcement: Announcement) => {
+    setEditingTarget(announcement);
     announcementEditor.openEdit(announcement);
     setEditor('edit');
   };
@@ -137,12 +151,17 @@ export function useAnnouncementsView(workspaceId: string) {
     remove,
     publish,
     editor,
+    editingTarget,
     setEditor,
+    filter,
+    setFilter,
     deleteTarget,
     announcementEditor,
     canManage,
     authorNames,
     items,
+    publishedItems,
+    scheduledItems,
     selectedId,
     openDetail,
     closeDetail,

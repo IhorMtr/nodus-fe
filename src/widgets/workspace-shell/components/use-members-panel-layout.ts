@@ -14,7 +14,7 @@ const COMPACT_QUERY = '(width < 1024px)';
 
 // Desktop shows the panel inline and remembers the user's choice. Narrower
 // screens use a drawer that always starts closed and is never persisted.
-export function useMembersPanelLayout(userId: string) {
+export function useMembersPanelLayout(userId: string, suppressed = false) {
   // ==================== STATE ====================
 
   const preference = useMembersPanelPreference(userId);
@@ -25,12 +25,13 @@ export function useMembersPanelLayout(userId: string) {
 
   // Leaving the compact layout closes the drawer, so it does not reappear
   // when the window is narrowed again.
-  if (!compact && drawerOpened) {
+  if ((!compact || suppressed) && drawerOpened) {
     setDrawerOpened(false);
   }
 
-  const drawerOpen = compact && drawerOpened;
-  const expanded = compact ? drawerOpen : preference.open;
+  const drawerOpen = !suppressed && compact && drawerOpened;
+  const desktopOpen = !suppressed && preference.open;
+  const expanded = compact ? drawerOpen : desktopOpen;
 
   // ==================== HANDLERS ====================
 
@@ -49,7 +50,7 @@ export function useMembersPanelLayout(userId: string) {
 
   return {
     compact,
-    desktopOpen: preference.open,
+    desktopOpen,
     drawerOpen,
     expanded,
     toggle,

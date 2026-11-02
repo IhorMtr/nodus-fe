@@ -3,7 +3,8 @@
 import { Drawer } from '@mantine/core';
 import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
-import { useState, type ReactNode } from 'react';
+import { useSelectedLayoutSegments } from 'next/navigation';
+import { useRef, useState, type ReactNode } from 'react';
 
 import type { User } from '@/domains/user/model/current-user';
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
@@ -13,6 +14,7 @@ import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
 import { useRouter } from '@/shared/i18n/navigation';
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
+import { ChannelSearchPanel } from './components/ChannelSearchPanel';
 import { MembersPanel } from './components/MembersPanel';
 import { useChannelUnreadRecovery } from './components/use-channel-unread-recovery';
 import { useMembersPanel } from './components/use-members-panel';
@@ -44,14 +46,27 @@ function WorkspaceShellLayout({
   // ==================== CONTEXT ====================
 
   const t = useTranslations('workspace');
+  const segments = useSelectedLayoutSegments();
+  const channelId = segments[0] === 'channels' ? segments[1] : undefined;
 
   // ==================== STATE ====================
 
   const [sidebarOpened, setSidebarOpened] = useState(false);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const [searchChannelId, setSearchChannelId] = useState<string>();
+  const [previousChannelId, setPreviousChannelId] = useState(channelId);
+
+  // Reset the transient search when leaving or changing the channel.
+  if (previousChannelId !== channelId) {
+    setPreviousChannelId(channelId);
+    setSearchChannelId(undefined);
+  }
 
   // ==================== FEATURE HOOKS ====================
 
-  const panelLayout = useMembersPanelLayout(user.id);
+  const isMembersPage = segments[0] === 'members';
+  const searchOpen = Boolean(channelId && searchChannelId === channelId);
+  const panelLayout = useMembersPanelLayout(user.id, isMembersPage);
   const panel = useMembersPanel(workspaceId, user.id, workspace.role);
 
   // ==================== DERIVED STATE ====================
@@ -68,6 +83,16 @@ function WorkspaceShellLayout({
     onRemove: panel.management.openRemove,
   };
 
+  // ==================== HANDLERS ====================
+
+  const closeSearch = () => {
+    setSearchChannelId(undefined);
+
+    if (!panelLayout.compact) {
+      searchButtonRef.current?.focus();
+    }
+  };
+
   // ==================== RENDER ====================
 
   return (
@@ -78,12 +103,26 @@ function WorkspaceShellLayout({
         workspaceId={workspaceId}
         workspaceName={workspace.name}
         userId={user.id}
-        membersPanel={{
-          expanded: panelLayout.expanded,
-          controls: panelLayout.compact ? undefined : MEMBERS_PANEL_ID,
-          onToggle: panelLayout.toggle,
-        }}
+        membersPanel={
+          isMembersPage || searchOpen
+            ? undefined
+            : {
+                expanded: panelLayout.expanded,
+                controls: panelLayout.compact ? undefined : MEMBERS_PANEL_ID,
+                onToggle: panelLayout.toggle,
+              }
+        }
         onOpenSidebar={() => setSidebarOpened(true)}
+        isSearchActive={searchOpen}
+        searchButtonRef={searchButtonRef}
+        onOpenSearch={
+          channelId
+            ? () => {
+                panelLayout.closeDrawer();
+                setSearchChannelId(searchOpen ? undefined : channelId);
+              }
+            : undefined
+        }
       />
 
       <div className={styles.body}>
@@ -102,11 +141,21 @@ function WorkspaceShellLayout({
         <div
           id={MEMBERS_PANEL_ID}
           className={styles.desktopMembers}
-          data-open={panelLayout.desktopOpen || undefined}
-          inert={!panelLayout.desktopOpen}
+          data-open={searchOpen || panelLayout.desktopOpen || undefined}
+          data-search={searchOpen || undefined}
+          inert={!(searchOpen || panelLayout.desktopOpen)}
         >
           <div className={styles.desktopMembersInner}>
-            <MembersPanel {...panelProps} />
+            {searchOpen && channelId && !panelLayout.compact ? (
+              <ChannelSearchPanel
+                key={channelId}
+                workspaceId={workspaceId}
+                channelId={channelId}
+                onClose={closeSearch}
+              />
+            ) : (
+              <MembersPanel {...panelProps} />
+            )}
           </div>
         </div>
       </div>
@@ -140,6 +189,27 @@ function WorkspaceShellLayout({
         classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
       >
         <MembersPanel {...panelProps} withHeading={false} />
+      </Drawer>
+
+      {/* ==================== MOBILE SEARCH ==================== */}
+
+      <Drawer
+        opened={Boolean(searchOpen && panelLayout.compact)}
+        onClose={closeSearch}
+        title={t('searchPanel.title')}
+        size="min(360px, 90vw)"
+        position="right"
+        classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
+      >
+        {searchOpen && channelId && panelLayout.compact && (
+          <ChannelSearchPanel
+            key={channelId}
+            workspaceId={workspaceId}
+            channelId={channelId}
+            onClose={closeSearch}
+            withHeading={false}
+          />
+        )}
       </Drawer>
 
       {/* ==================== MEMBER MANAGEMENT ==================== */}

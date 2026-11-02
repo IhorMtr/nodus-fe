@@ -1,14 +1,17 @@
 @use '@/shared/styles/controls' as controls;
 @use '@/shared/styles/mixins' as mixins;
 
+// ==================== ROOT ====================
+
 .root.root {
   @include controls.sizes;
   @include mixins.focus-ring;
 
-  --icon-button-background: var(--color-surface);
+  --icon-button-background: var(--color-surface-elevated);
   --icon-button-background-hover: var(--color-surface-hover);
   --icon-button-background-active: var(--color-surface-active);
-  --icon-button-foreground: var(--color-text-primary);
+  --icon-button-foreground: var(--color-text-secondary);
+  --icon-button-foreground-hover: var(--color-text-primary);
   --icon-button-border: var(--color-border);
   --icon-button-border-hover: var(--color-border-strong);
 
@@ -26,6 +29,8 @@
     border-color var(--transition-fast),
     color var(--transition-fast);
 
+  // ==================== VARIANTS ====================
+
   &[data-variant='ghost'] {
     --icon-button-background: transparent;
     --icon-button-border: transparent;
@@ -37,9 +42,12 @@
     --icon-button-background-hover: var(--color-danger-subtle);
     --icon-button-background-active: var(--color-surface-active);
     --icon-button-foreground: var(--color-danger-text);
-    --icon-button-border: var(--color-border);
-    --icon-button-border-hover: var(--color-border-strong);
+    --icon-button-foreground-hover: var(--color-danger-text);
+    --icon-button-border: var(--color-danger-border);
+    --icon-button-border-hover: var(--color-danger);
   }
+
+  // ==================== STATES ====================
 
   &[data-loading] {
     cursor: progress;
@@ -53,13 +61,17 @@
     &:hover:not(:disabled, [data-disabled], [data-loading]) {
       border-color: var(--icon-button-border-hover);
       background: var(--icon-button-background-hover);
-      color: var(--icon-button-foreground);
+      color: var(--icon-button-foreground-hover);
     }
   }
 
-  &:active:not(:disabled, [data-disabled], [data-loading]) {
+  // Pressed, or holding an open menu or popover.
+  &:active:not(:disabled, [data-disabled], [data-loading]),
+  &[data-expanded],
+  &[aria-expanded='true'] {
     border-color: var(--icon-button-border-hover);
     background: var(--icon-button-background-active);
+    color: var(--icon-button-foreground-hover);
   }
 
   &:disabled:not([data-loading]),
@@ -71,6 +83,8 @@
     cursor: not-allowed;
   }
 }
+
+// ==================== CONTENT ====================
 
 .icon.icon {
   transition: opacity var(--transition-fast);

@@ -4,6 +4,7 @@ import { Modal, Select } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 
 import {
   getWorkspaceMemberName,
@@ -73,11 +74,11 @@ export function MemberManagementDialogs({
             allowDeselect={false}
           />
           {changeRole.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert">
               {management(
                 `errors.${getWorkspaceManagementErrorKey(changeRole.error)}`
               )}
-            </p>
+            </InlineStatus>
           )}
           <div className={styles.modalActions}>
             <Button
@@ -115,11 +116,11 @@ export function MemberManagementDialogs({
             })}
           </p>
           {removeMember.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert">
               {management(
                 `errors.${getWorkspaceManagementErrorKey(removeMember.error)}`
               )}
-            </p>
+            </InlineStatus>
           )}
           <div className={styles.modalActions}>
             <Button

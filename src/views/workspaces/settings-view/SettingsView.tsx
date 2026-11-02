@@ -1,11 +1,12 @@
 'use client';
 
 import { Modal } from '@mantine/core';
-import { Settings } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { getWorkspaceManagementErrorKey } from '@/domains/workspace/model/workspace';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
@@ -17,6 +18,7 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
 
   const t = useTranslations('workspace');
   const management = useTranslations('workspace.management');
+  const roles = useTranslations('invite.roles');
   const {
     user,
     workspace,
@@ -49,19 +51,28 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
 
   if (workspace.isError || user.isError) {
     return (
-      <div className={styles.state} role="alert">
-        <p>{t('states.loadErrorDescription')}</p>
-        <Button variant="secondary" onClick={retry}>
-          {t('actions.retry')}
-        </Button>
+      <div className={styles.state}>
+        <InlineStatus
+          tone="danger"
+          role="alert"
+          action={
+            <Button variant="ghost" size="sm" onClick={retry}>
+              {t('actions.retry')}
+            </Button>
+          }
+        >
+          {t('states.loadErrorDescription')}
+        </InlineStatus>
       </div>
     );
   }
 
   if (!canManage) {
     return (
-      <div className={styles.state} role="alert">
-        {t('states.accessDenied')}
+      <div className={styles.state}>
+        <InlineStatus tone="warning" role="alert">
+          {t('states.accessDenied')}
+        </InlineStatus>
       </div>
     );
   }
@@ -70,63 +81,101 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
 
   return (
     <div className={styles.page}>
+      {/* ==================== PAGE HEADER ==================== */}
+
       <header className={styles.intro}>
-        <Settings size={22} aria-hidden="true" />
-        <div>
-          <h1>{management('settingsTitle')}</h1>
-          <p>{management('settingsDescription')}</p>
-        </div>
+        <h1>{management('settingsTitle')}</h1>
+        <p>{management('settingsDescription')}</p>
       </header>
 
-      {/* ==================== WORKSPACE NAME ==================== */}
+      {/* ==================== WORKSPACE IDENTITY ==================== */}
+
+      <div className={styles.identity}>
+        <span className={styles.identityIcon} aria-hidden="true">
+          <Building2 size={20} />
+        </span>
+        <div className={styles.identityText}>
+          <span>{management('workspaceLabel')}</span>
+          <strong>{workspace.data.name}</strong>
+        </div>
+        <span className={styles.identityRole}>
+          {roles(workspace.data.role)}
+        </span>
+      </div>
+
+      {/* ==================== GENERAL SETTINGS ==================== */}
 
       <section
-        className={styles.section}
-        aria-labelledby="workspace-name-heading"
+        className={styles.group}
+        aria-labelledby="general-settings-heading"
       >
-        <h2 id="workspace-name-heading">{management('nameTitle')}</h2>
-        <p>{management('nameDescription')}</p>
-        <form onSubmit={event => void saveName(event)} noValidate>
-          <Input
-            {...register('name')}
-            label={t('fields.name')}
-            error={errors.name?.message}
-            maxLength={100}
-            readOnly={rename.isPending}
-            required
-          />
-          {rename.isError && (
-            <p className={styles.error} role="alert">
-              {management(
-                `errors.${getWorkspaceManagementErrorKey(rename.error)}`
+        <h2 id="general-settings-heading" className={styles.groupHeading}>
+          {management('generalTitle')}
+        </h2>
+        <div className={styles.setting}>
+          <div className={styles.settingText}>
+            <h3>{management('nameTitle')}</h3>
+            <p>{management('nameDescription')}</p>
+          </div>
+          <form
+            className={styles.form}
+            onSubmit={event => void saveName(event)}
+            noValidate
+          >
+            <Input
+              {...register('name')}
+              label={t('fields.name')}
+              error={errors.name?.message}
+              maxLength={100}
+              readOnly={rename.isPending}
+              required
+            />
+            {rename.isError && (
+              <InlineStatus tone="danger" role="alert">
+                {management(
+                  `errors.${getWorkspaceManagementErrorKey(rename.error)}`
+                )}
+              </InlineStatus>
+            )}
+            <div className={styles.formActions}>
+              <Button type="submit" loading={rename.isPending}>
+                {management('save')}
+              </Button>
+              {rename.isSuccess && (
+                <InlineStatus tone="success" variant="plain" role="status">
+                  {management('saved')}
+                </InlineStatus>
               )}
-            </p>
-          )}
-          {rename.isSuccess && (
-            <p className={styles.success} role="status">
-              {management('saved')}
-            </p>
-          )}
-          <Button type="submit" loading={rename.isPending}>
-            {management('save')}
-          </Button>
-        </form>
+            </div>
+          </form>
+        </div>
       </section>
 
       {/* ==================== DELETE WORKSPACE ==================== */}
 
       {isOwner && (
         <section
-          className={`${styles.section} ${styles.dangerSection}`}
+          className={`${styles.group} ${styles.dangerSection}`}
           aria-labelledby="delete-workspace-heading"
         >
-          <h2 id="delete-workspace-heading">{management('deleteTitle')}</h2>
-          <p>{management('deleteDescription')}</p>
-          <Button variant="danger" onClick={openDelete}>
-            {management('deleteAction')}
-          </Button>
+          <h2 id="delete-workspace-heading" className={styles.groupHeading}>
+            {management('dangerZone')}
+          </h2>
+          <div className={styles.setting}>
+            <div className={styles.settingText}>
+              <h3>{management('deleteTitle')}</h3>
+              <p>{management('deleteDescription')}</p>
+            </div>
+            <div className={styles.dangerAction}>
+              <Button variant="danger" onClick={openDelete}>
+                {management('deleteAction')}
+              </Button>
+            </div>
+          </div>
         </section>
       )}
+
+      {/* ==================== DELETE CONFIRMATION ==================== */}
 
       <Modal
         opened={deleteOpened}
@@ -147,11 +196,11 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
             disabled={remove.isPending || redirecting}
           />
           {remove.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert">
               {management(
                 `errors.${getWorkspaceManagementErrorKey(remove.error)}`
               )}
-            </p>
+            </InlineStatus>
           )}
           <div className={styles.actions}>
             <Button

@@ -8,6 +8,7 @@ import { getAnnouncementErrorKey } from '@/domains/announcement/model/announceme
 import { AnnouncementCard } from '@/domains/announcement/ui/announcement-card';
 import { AnnouncementForm } from '@/domains/announcement/ui/announcement-form';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import styles from './AnnouncementsView.module.scss';
@@ -16,6 +17,8 @@ import { useAnnouncementsView } from './hooks/use-announcements-view';
 // ==================== PAGE VIEW ====================
 
 export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
+  // ==================== VIEW STATE ====================
+
   const t = useTranslations('announcement');
   const locale = useLocale();
   const state = useAnnouncementsView(workspaceId);
@@ -40,7 +43,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
       <div className={styles.state} role="alert">
         <h1>{t('heading')}</h1>
         <p>{t(`errors.${getAnnouncementErrorKey(error)}`)}</p>
-        <Button variant="secondary" onClick={state.retry}>
+        <Button variant="secondary" size="sm" onClick={state.retry}>
           {t('retry')}
         </Button>
       </div>
@@ -54,9 +57,6 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
       {/* ==================== PAGE INTRO ==================== */}
 
       <header className={styles.intro}>
-        <span className={styles.icon}>
-          <Megaphone size={22} aria-hidden="true" />
-        </span>
         <div className={styles.introText}>
           <h1>{t('heading')}</h1>
           <p>{t('description')}</p>
@@ -68,13 +68,60 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
         )}
       </header>
 
+      {/* ==================== PUBLICATION FILTERS ==================== */}
+
+      <div
+        className={styles.filters}
+        role="group"
+        aria-label={t('filterLabel')}
+      >
+        <button
+          type="button"
+          aria-pressed={state.filter === 'published' || !state.canManage}
+          onClick={() => state.setFilter('published')}
+        >
+          {t('published')} <span>{state.publishedItems.length}</span>
+        </button>
+        {state.canManage && (
+          <button
+            type="button"
+            aria-pressed={state.filter === 'scheduled'}
+            onClick={() => state.setFilter('scheduled')}
+          >
+            {t('scheduled')} <span>{state.scheduledItems.length}</span>
+          </button>
+        )}
+      </div>
+
       {/* ==================== ANNOUNCEMENT LIST ==================== */}
 
       {state.items.length === 0 ? (
         <div className={styles.empty}>
-          <Megaphone size={26} aria-hidden="true" />
-          <h2>{t('emptyTitle')}</h2>
-          <p>{t('emptyDescription')}</p>
+          <span className={styles.emptyIcon}>
+            <Megaphone size={24} aria-hidden="true" />
+          </span>
+          <h2>
+            {state.filter === 'scheduled' && state.canManage
+              ? t('emptyScheduledTitle')
+              : t('emptyTitle')}
+          </h2>
+          <p>
+            {state.filter === 'scheduled' && state.canManage
+              ? t('emptyScheduledDescription')
+              : state.canManage
+                ? t('emptyManageDescription')
+                : t('emptyDescription')}
+          </p>
+          {state.canManage && (
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<Plus size={16} />}
+              onClick={state.openCreate}
+            >
+              {t('create')}
+            </Button>
+          )}
         </div>
       ) : (
         <div className={styles.list}>
@@ -86,6 +133,10 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
                 state.authorNames.get(item.authorId) ?? t('unknownAuthor')
               }
               onOpen={() => state.openDetail(item.id)}
+              onEdit={state.canManage ? () => state.openEdit(item) : undefined}
+              onDelete={
+                state.canManage ? () => state.openDelete(item) : undefined
+              }
             />
           ))}
         </div>
@@ -114,7 +165,10 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
         )}
         {selected && !state.detail.isError && (
           <article className={styles.detail}>
-            <span className={styles.status}>
+            <span
+              className={styles.status}
+              data-published={Boolean(selected.publishedAt) || undefined}
+            >
               {selected.publishedAt ? t('published') : t('scheduled')}
             </span>
             <h2>{selected.title}</h2>
@@ -138,9 +192,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
             </p>
             <p className={styles.content}>{selected.content}</p>
             {state.publish.isError && (
-              <p className={styles.error} role="alert">
+              <InlineStatus tone="danger" role="alert" className={styles.error}>
                 {t(`errors.${getAnnouncementErrorKey(state.publish.error)}`)}
-              </p>
+              </InlineStatus>
             )}
             {state.canManage && (
               <div className={styles.actions}>
@@ -189,7 +243,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
           register={state.announcementEditor.form.register}
           errors={state.announcementEditor.form.formState.errors}
           publication={state.announcementEditor.publication}
-          published={state.editor === 'edit' && Boolean(selected?.publishedAt)}
+          published={
+            state.editor === 'edit' && Boolean(state.editingTarget?.publishedAt)
+          }
           saving={state.announcementEditor.isSaving}
           error={
             editorError
@@ -197,7 +253,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
               : null
           }
           onSubmit={state.announcementEditor.submit(
-            state.editor === 'edit' ? (selected ?? null) : null
+            state.editor === 'edit' ? state.editingTarget : null
           )}
           onCancel={() => {
             if (!state.announcementEditor.isSaving) {
@@ -222,9 +278,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
             })}
           </p>
           {state.remove.isError && (
-            <p className={styles.error} role="alert">
+            <InlineStatus tone="danger" role="alert" className={styles.error}>
               {t(`errors.${getAnnouncementErrorKey(state.remove.error)}`)}
-            </p>
+            </InlineStatus>
           )}
           <div className={styles.actions}>
             <Button variant="secondary" onClick={state.closeDelete}>

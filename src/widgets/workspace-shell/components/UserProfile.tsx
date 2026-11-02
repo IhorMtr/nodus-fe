@@ -1,11 +1,12 @@
 'use client';
 
 import { Menu } from '@mantine/core';
-import { Check, ChevronUp, LogOut, Moon, Sun } from 'lucide-react';
+import { Check, ChevronUp, LogOut, Settings } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { selectablePresenceStatuses } from '@/domains/presence/model/presence-status';
 import { PresenceIndicator } from '@/domains/presence/ui/presence-indicator';
+import { Link } from '@/shared/i18n/navigation';
 import type { User } from '@/domains/user/model/current-user';
 
 import { useUserPresence } from './use-user-presence';
@@ -15,33 +16,20 @@ import styles from './UserProfile.module.scss';
 export function UserProfile({
   user,
   workspaceId,
-  pathname,
-  channelId,
   onNavigate,
 }: {
   user: User;
   workspaceId: string;
-  pathname: string;
-  channelId?: string;
   onNavigate?: () => void;
 }) {
   // ==================== CONTEXT ====================
 
   const t = useTranslations('user');
   const presence = useTranslations('presence');
-  const appearance = useTranslations('appearance');
-  const language = useTranslations('language');
 
   // ==================== HOOKS ====================
 
-  const {
-    locale,
-    isDark,
-    loggingOut,
-    toggleColorScheme,
-    switchLocale,
-    logout,
-  } = useUserProfile(workspaceId, pathname, channelId, onNavigate);
+  const { loggingOut, logout } = useUserProfile();
   const { status, updating, selectStatus } = useUserPresence(
     workspaceId,
     user.id
@@ -62,13 +50,14 @@ export function UserProfile({
 
   return (
     <div className={styles.profile}>
-      <Menu position="top-start" width={250} shadow="sm" withinPortal>
+      <Menu position="top-start" width={250} withinPortal>
         {/* ==================== PROFILE TRIGGER ==================== */}
 
         <Menu.Target>
           <button
             type="button"
             className={styles.trigger}
+            data-settings-return-focus
             aria-label={triggerLabel}
           >
             <span className={styles.avatar} aria-hidden="true">
@@ -87,7 +76,16 @@ export function UserProfile({
         </Menu.Target>
 
         <Menu.Dropdown className={styles.dropdown}>
-          <Menu.Label>{name}</Menu.Label>
+          <div className={styles.menuIdentity}>
+            <span className={styles.menuAvatar} aria-hidden="true">
+              {initials}
+            </span>
+            <span className={styles.menuIdentityText}>
+              <strong title={name}>{name}</strong>
+              <span title={user.email}>{user.email}</span>
+            </span>
+          </div>
+          <Menu.Divider />
 
           {/* ==================== PRESENCE STATUS ==================== */}
 
@@ -115,31 +113,18 @@ export function UserProfile({
           ))}
           <Menu.Divider />
 
-          {/* ==================== APPEARANCE ==================== */}
+          {/* ==================== PERSONAL SETTINGS ==================== */}
 
           <Menu.Item
-            leftSection={isDark ? <Sun size={16} /> : <Moon size={16} />}
-            onClick={toggleColorScheme}
+            component={Link}
+            href={{
+              pathname: '/workspaces/[workspaceId]/personal-settings',
+              params: { workspaceId },
+            }}
+            leftSection={<Settings size={16} aria-hidden="true" />}
+            onClick={onNavigate}
           >
-            {appearance(
-              isDark ? 'actions.switchToLight' : 'actions.switchToDark'
-            )}
-          </Menu.Item>
-
-          {/* ==================== LANGUAGE ==================== */}
-
-          <Menu.Label>{language('label')}</Menu.Label>
-          <Menu.Item
-            rightSection={locale === 'uk' ? <Check size={16} /> : null}
-            onClick={() => switchLocale('uk')}
-          >
-            {language('ukrainian')}
-          </Menu.Item>
-          <Menu.Item
-            rightSection={locale === 'en' ? <Check size={16} /> : null}
-            onClick={() => switchLocale('en')}
-          >
-            {language('english')}
+            {t('settings.title')}
           </Menu.Item>
           <Menu.Divider />
 

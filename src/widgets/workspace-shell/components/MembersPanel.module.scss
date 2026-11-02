@@ -15,25 +15,25 @@
 
 .heading {
   display: flex;
-  min-height: 52px;
+  min-height: 56px;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
-  padding: var(--space-4) var(--space-5) var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-1);
 
   h2 {
     margin: 0;
     color: var(--color-text-primary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     font-weight: var(--font-weight-semibold);
   }
 }
 
 .count {
-  min-width: 24px;
-  padding: 0 var(--space-2);
-  border: 1px solid var(--color-border);
+  min-width: 22px;
+  padding: 0 6px;
   border-radius: var(--radius-full);
+  background: var(--color-surface-active);
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -55,22 +55,19 @@
 // ==================== GROUPS ====================
 
 .group + .group {
-  margin-top: var(--space-5);
+  margin-top: var(--space-4);
 }
 
 .group h3 {
+  @include mixins.eyebrow;
+
   margin: 0 0 var(--space-1);
   padding: var(--space-1) var(--space-2);
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
 }
 
 .list {
   display: grid;
-  gap: 2px;
+  gap: 1px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -81,9 +78,9 @@
 .row {
   display: flex;
   min-width: 0;
-  min-height: 44px;
+  min-height: 46px;
   align-items: center;
-  gap: var(--space-3);
+  gap: 10px;
   padding: var(--space-1) var(--space-1) var(--space-1) var(--space-2);
   border-radius: var(--radius-control);
   transition: background-color var(--transition-fast);
@@ -106,15 +103,10 @@
   height: 32px;
   flex: none;
   place-items: center;
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
-  background: linear-gradient(
-    145deg,
-    var(--color-surface-elevated),
-    var(--color-surface-active)
-  );
-  color: var(--color-text-primary);
-  font-size: 11px;
+  background: var(--color-surface-active);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-semibold);
 
   [data-offline] & {
@@ -127,12 +119,12 @@
   position: absolute;
   right: -2px;
   bottom: -2px;
-  width: 11px;
-  height: 11px;
-  box-shadow: 0 0 0 2px var(--color-surface);
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 2px var(--color-chrome);
 
   &[data-status='offline'] {
-    background: var(--color-surface);
+    background: var(--color-chrome);
   }
 }
 
@@ -147,7 +139,7 @@
 .name {
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;

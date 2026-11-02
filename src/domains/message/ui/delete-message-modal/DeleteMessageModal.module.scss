@@ -1,29 +1,14 @@
-.content {
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-elevated);
-}
-
-.header {
-  background: var(--color-surface-elevated);
-}
-
-.title {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-}
+// The dialog surface itself comes from the shared Mantine overrides.
 
 .description {
   margin: 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
 
 .error {
-  margin: var(--space-3) 0 0;
-  color: var(--color-danger-text);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
+  margin-top: var(--space-4);
 }
 
 .actions {

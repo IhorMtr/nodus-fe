@@ -1,129 +1,199 @@
-﻿// ==================== LIGHT THEME ====================
+﻿// Semantic color tokens. Components read only these, so both themes stay
+// consistent and a palette change never touches component styles.
+//
+// Surface ladder, from back to front:
+//   chrome      shell header and side columns
+//   background  page canvas and main content area
+//   surface     quiet grouped blocks, secondary controls
+//   elevated    raised blocks such as cards
+//   overlay     menus, popovers, modals and drawers
+// Hover, active and selected layers are translucent so they work on any rung.
+
+// ==================== LIGHT THEME ====================
 
 [data-mantine-color-scheme='light'] {
-  --color-background: var(--light-0);
-  --color-surface: var(--light-1);
-  --color-surface-elevated: var(--light-0);
-  --color-surface-hover: var(--light-2);
-  --color-surface-active: var(--light-3);
+  // ---------- Surfaces ----------
 
-  --color-border: var(--light-5);
-  --color-border-strong: var(--light-9);
-  --color-divider: var(--light-4);
+  --color-chrome: var(--mist-2);
+  --color-background: var(--mist-0);
+  --color-surface: var(--mist-1);
+  --color-surface-elevated: var(--mist-2);
+  --color-surface-overlay: var(--mist-0);
+  --color-surface-hover: rgb(0 0 0 / 7%);
+  --color-surface-active: rgb(0 0 0 / 10%);
+  --color-surface-selected: rgb(0 0 0 / 9%);
+  --color-field: var(--mist-0);
+  --color-overlay-backdrop: rgb(0 0 0 / 32%);
 
-  --color-text-primary: var(--primary-0);
-  --color-text-secondary: rgb(17 17 17 / 72%);
-  --color-text-muted: rgb(17 17 17 / 60%);
-  --color-text-disabled: rgb(17 17 17 / 34%);
-  --color-text-inverse: var(--light-0);
+  // ---------- Borders ----------
 
-  --color-primary: var(--primary-0);
-  --color-primary-hover: var(--dark-3);
-  --color-primary-active: #000000;
-  --color-primary-subtle: rgb(17 17 17 / 5%);
-  --color-primary-border: rgb(17 17 17 / 14%);
-  --color-primary-text: var(--primary-0);
-  --color-on-primary: var(--light-0);
-  --color-focus: var(--primary-0);
+  --color-border: var(--mist-5);
+  --color-border-strong: var(--mist-7);
+  --color-divider: var(--mist-4);
 
-  --color-accent: var(--accent-4);
-  --color-accent-muted: var(--accent-4);
-  --color-accent-subtle: rgb(117 103 86 / 8%);
-  --color-accent-border: rgb(117 103 86 / 20%);
+  // ---------- Text ----------
 
-  --color-success: var(--green-base);
-  --color-success-hover: var(--green-dark);
-  --color-success-subtle: var(--light-2);
-  --color-success-border: var(--light-9);
+  --color-text-primary: var(--ink-dark-1);
+  --color-text-secondary: var(--ink-dark-2);
+  --color-text-muted: var(--ink-dark-3);
+  --color-text-disabled: var(--mist-7);
+  --color-text-inverse: var(--mist-0);
+
+  // ---------- Primary action ----------
+
+  --color-primary: var(--neutral-7);
+  --color-primary-hover: var(--neutral-8);
+  --color-primary-active: var(--neutral-9);
+  --color-primary-subtle: rgb(0 0 0 / 6%);
+  --color-primary-border: rgb(0 0 0 / 26%);
+  --color-primary-text: var(--neutral-7);
+  --color-on-primary: var(--mist-0);
+
+  // ---------- Focus ----------
+
+  --color-focus: var(--neutral-6);
+  --color-focus-ring: rgb(70 70 70 / 22%);
+
+  // ---------- Accent ----------
+
+  --color-accent: var(--neutral-6);
+  --color-accent-muted: var(--neutral-5);
+  --color-accent-subtle: rgb(0 0 0 / 6%);
+  --color-accent-border: rgb(0 0 0 / 24%);
+
+  // ---------- Success ----------
+
+  --color-success: var(--green-dark);
+  --color-success-hover: var(--green-base);
+  --color-success-subtle: rgb(47 117 80 / 8%);
+  --color-success-border: rgb(47 117 80 / 28%);
   --color-success-text: var(--green-dark);
+
+  // ---------- Warning ----------
 
   --color-warning: var(--amber-base);
   --color-warning-hover: var(--amber-dark);
-  --color-warning-subtle: var(--light-2);
-  --color-warning-border: var(--light-9);
+  --color-warning-subtle: rgb(192 148 69 / 12%);
+  --color-warning-border: rgb(140 100 24 / 30%);
   --color-warning-text: var(--amber-dark);
 
-  --color-danger: var(--red-base);
-  --color-danger-hover: var(--red-dark);
-  --color-danger-subtle: var(--light-2);
-  --color-danger-border: var(--red-base);
-  --color-danger-text: var(--primary-3);
+  // ---------- Danger ----------
 
-  --color-info: var(--blue-base);
-  --color-info-hover: var(--blue-dark);
-  --color-info-subtle: var(--light-2);
-  --color-info-border: var(--light-9);
-  --color-info-text: var(--blue-dark);
+  --color-danger: var(--red-dark);
+  --color-danger-hover: var(--red-base);
+  --color-danger-subtle: rgb(168 66 58 / 7%);
+  --color-danger-border: rgb(168 66 58 / 32%);
+  --color-danger-text: var(--red-dark);
 
-  --color-presence-online: #4f8057;
-  --color-presence-busy: #9d792f;
-  --color-presence-dnd: #a3564e;
+  // ---------- Info ----------
 
-  --color-selection: rgb(17 17 17 / 14%);
+  --color-info: var(--neutral-6);
+  --color-info-hover: var(--neutral-7);
+  --color-info-subtle: rgb(0 0 0 / 6%);
+  --color-info-border: rgb(0 0 0 / 24%);
+  --color-info-text: var(--neutral-7);
+
+  // ---------- Presence ----------
+
+  --color-presence-online: var(--green-base);
+  --color-presence-busy: var(--amber-base);
+  --color-presence-dnd: var(--red-base);
+
+  --color-selection: rgb(80 80 80 / 20%);
 }
 
 // ==================== DARK THEME ====================
 
 [data-mantine-color-scheme='dark'] {
-  --color-background: var(--dark-1);
-  --color-surface: #181818;
-  --color-surface-elevated: var(--dark-3);
-  --color-surface-hover: #202020;
-  --color-surface-active: #262626;
+  // ---------- Surfaces ----------
 
-  --color-border: #333333;
-  --color-border-strong: #484848;
-  --color-divider: var(--dark-5);
+  --color-chrome: var(--graphite-1);
+  --color-background: var(--graphite-2);
+  --color-surface: var(--graphite-3);
+  --color-surface-elevated: var(--graphite-4);
+  --color-surface-overlay: var(--graphite-4);
+  --color-surface-hover: rgb(255 255 255 / 5%);
+  --color-surface-active: rgb(255 255 255 / 8%);
+  --color-surface-selected: rgb(255 255 255 / 10%);
+  --color-field: rgb(0 0 0 / 20%);
+  --color-overlay-backdrop: rgb(0 0 0 / 62%);
 
-  --color-text-primary: var(--light-0);
-  --color-text-secondary: rgb(255 255 255 / 74%);
-  --color-text-muted: rgb(255 255 255 / 56%);
-  --color-text-disabled: rgb(255 255 255 / 34%);
-  --color-text-inverse: var(--dark-1);
+  // ---------- Borders ----------
 
-  --color-primary: #f5f5f5;
-  --color-primary-hover: var(--light-0);
-  --color-primary-active: #e7e7e7;
-  --color-primary-subtle: rgb(255 255 255 / 8%);
-  --color-primary-border: rgb(255 255 255 / 16%);
-  --color-primary-text: var(--light-0);
-  --color-on-primary: var(--dark-1);
-  --color-focus: var(--light-0);
+  --color-border: var(--graphite-6);
+  --color-border-strong: var(--graphite-8);
+  --color-divider: var(--graphite-5);
 
-  --color-accent: var(--accent-2);
-  --color-accent-muted: var(--accent-3);
-  --color-accent-subtle: rgb(173 159 141 / 10%);
-  --color-accent-border: rgb(173 159 141 / 24%);
+  // ---------- Text ----------
+
+  // Soft off-white instead of pure white keeps long reading comfortable.
+  --color-text-primary: var(--ink-light-1);
+  --color-text-secondary: var(--ink-light-2);
+  --color-text-muted: var(--ink-light-3);
+  --color-text-disabled: var(--graphite-9);
+  --color-text-inverse: var(--graphite-1);
+
+  // ---------- Primary action ----------
+
+  --color-primary: var(--neutral-3);
+  --color-primary-hover: var(--neutral-2);
+  --color-primary-active: var(--neutral-4);
+  --color-primary-subtle: rgb(255 255 255 / 9%);
+  --color-primary-border: rgb(255 255 255 / 30%);
+  --color-primary-text: var(--neutral-3);
+  --color-on-primary: var(--graphite-1);
+
+  // ---------- Focus ----------
+
+  --color-focus: var(--neutral-4);
+  --color-focus-ring: rgb(210 210 210 / 26%);
+
+  // ---------- Accent ----------
+
+  --color-accent: var(--neutral-4);
+  --color-accent-muted: var(--neutral-5);
+  --color-accent-subtle: rgb(255 255 255 / 8%);
+  --color-accent-border: rgb(210 210 210 / 26%);
+
+  // ---------- Success ----------
 
   --color-success: var(--green-base);
-  --color-success-hover: var(--primary-9);
-  --color-success-subtle: var(--dark-4);
-  --color-success-border: var(--primary-7);
-  --color-success-text: var(--light-6);
+  --color-success-hover: var(--green-light);
+  --color-success-subtle: rgb(79 154 110 / 12%);
+  --color-success-border: rgb(79 154 110 / 36%);
+  --color-success-text: var(--green-light);
+
+  // ---------- Warning ----------
 
   --color-warning: var(--amber-base);
-  --color-warning-hover: var(--primary-9);
-  --color-warning-subtle: var(--dark-4);
-  --color-warning-border: var(--primary-7);
-  --color-warning-text: var(--light-6);
+  --color-warning-hover: var(--amber-light);
+  --color-warning-subtle: rgb(192 148 69 / 12%);
+  --color-warning-border: rgb(192 148 69 / 36%);
+  --color-warning-text: var(--amber-light);
+
+  // ---------- Danger ----------
 
   --color-danger: var(--red-base);
-  --color-danger-hover: var(--primary-9);
-  --color-danger-subtle: var(--dark-4);
-  --color-danger-border: var(--red-base);
-  --color-danger-text: var(--light-3);
+  --color-danger-hover: var(--red-light);
+  --color-danger-subtle: rgb(201 103 95 / 12%);
+  --color-danger-border: rgb(201 103 95 / 40%);
+  --color-danger-text: var(--red-light);
 
-  --color-info: var(--blue-base);
-  --color-info-hover: var(--primary-9);
-  --color-info-subtle: var(--dark-4);
-  --color-info-border: var(--primary-7);
-  --color-info-text: var(--light-6);
+  // ---------- Info ----------
 
-  --color-presence-online: #72a878;
-  --color-presence-busy: #c9a35c;
-  --color-presence-dnd: #cf7f75;
+  --color-info: var(--neutral-5);
+  --color-info-hover: var(--neutral-4);
+  --color-info-subtle: rgb(255 255 255 / 8%);
+  --color-info-border: rgb(255 255 255 / 28%);
+  --color-info-text: var(--neutral-3);
 
-  --color-selection: rgb(255 255 255 / 18%);
+  // ---------- Presence ----------
+
+  --color-presence-online: var(--green-base);
+  --color-presence-busy: var(--amber-base);
+  --color-presence-dnd: var(--red-base);
+
+  --color-selection: rgb(210 210 210 / 28%);
 }
 
 // ==================== PRESENCE ALIASES ====================

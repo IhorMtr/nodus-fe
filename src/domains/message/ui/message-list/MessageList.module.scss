@@ -1,12 +1,26 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
+// ==================== SCROLLABLE HISTORY ====================
+
 .viewport {
   position: relative;
   display: flex;
   min-height: 0;
   flex: 1;
   flex-direction: column;
+
+  // Mark keyboard focus without outlining the entire reading area.
+  &:has(.scroller:focus-visible)::after {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: var(--space-8);
+    width: 40px;
+    border-top: 2px solid var(--color-focus);
+    content: '';
+    pointer-events: none;
+  }
 }
 
 .scroller {
@@ -17,30 +31,22 @@
   // Scroll position is compensated manually when history is prepended.
   overflow-anchor: none;
   overscroll-behavior: contain;
-  padding-block: var(--space-6);
-  // Faint tonal light on the reading zone, fading into the composer surface.
-  background:
-    radial-gradient(
-      ellipse 80% 60% at 30% 0%,
-      var(--color-surface) 0%,
-      transparent 100%
-    ),
-    linear-gradient(
-      180deg,
-      var(--color-background) 0%,
-      var(--color-surface) 100%
-    );
+  padding-block: var(--space-5);
+  background: var(--color-background);
 
+  // The viewport provides a compact focus indicator for this large region.
   &:focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: -2px;
+    outline: none;
   }
 }
 
 .inner {
+  display: flex;
   width: 100%;
+  min-height: 100%;
+  flex-direction: column;
   // Left-anchored column, aligned with the channel header and composer.
-  max-width: 960px;
+  max-width: calc(960px + 2 * var(--space-8));
   margin-inline: 0;
   padding-inline: var(--space-8);
 
@@ -54,33 +60,53 @@
   margin: 0;
   padding: 0;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 2px;
   list-style: none;
 }
+
+// ==================== EMPTY CHANNEL ====================
 
 .empty {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
-  padding: var(--space-10) 0;
-  color: var(--color-text-muted);
+  margin-top: auto;
+  padding: var(--space-12) 0 var(--space-6);
+  color: var(--color-text-secondary);
   text-align: left;
 
   strong {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    overflow-wrap: anywhere;
   }
 
   p {
-    max-width: 360px;
+    max-width: 460px;
     margin: 0;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     line-height: var(--line-height-relaxed);
   }
 }
 
+.emptyIcon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-3);
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+// ==================== HISTORY FEEDBACK ====================
+
+// Floating pill over the top of the history while older messages load or
+// fail to load; overlaid so it never shifts the messages underneath.
 .status {
   position: absolute;
   z-index: var(--z-sticky);
@@ -90,11 +116,17 @@
   max-width: calc(100% - var(--space-8));
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
-  background: var(--color-surface-elevated);
+  background: var(--color-surface-overlay);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-md);
   transform: translateX(-50%);
+
+  // The loading pill holds only a spinner and stays symmetric.
+  &:not(:has(button)) {
+    padding: var(--space-2);
+  }
 }
