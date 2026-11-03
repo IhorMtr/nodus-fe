@@ -7,6 +7,8 @@ import { useState } from 'react';
 
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 
+import { useModalLocaleSwitch } from './PersonalSettingsSlot';
+
 // ==================== TYPES ====================
 
 type SettingsCategory = 'account' | 'appearance';
@@ -23,6 +25,7 @@ export function usePersonalSettings() {
   const colorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   });
+  const switchModalLocale = useModalLocaleSwitch();
 
   // ==================== LOCAL NAVIGATION ====================
 
@@ -35,6 +38,14 @@ export function usePersonalSettings() {
       return;
     }
 
+    // Inside the intercepted dialog the slot keeps the workspace behind it.
+    if (switchModalLocale) {
+      switchModalLocale(nextLocale);
+      return;
+    }
+
+    // A document load always renders the standalone page, which is exactly
+    // where a direct URL or refresh should stay.
     const destination = new URL(window.location.href);
     destination.pathname = destination.pathname.replace(
       /^\/(?:uk|en)(?=\/|$)/,

@@ -29,6 +29,9 @@ export function PersonalSettingsStandalone({
       <header className={styles.standaloneHeader}>
         <div className={styles.headerInner}>
           <Link href="/app" className={styles.brand}>
+            <span className={styles.brandMark} aria-hidden="true">
+              N
+            </span>
             {product('name')}
           </Link>
           <Link

@@ -1,7 +1,8 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-// Composition shared by workspace pages rendered inside the shell frame.
+// Composition shared by application pages: workspace pages inside the shell
+// frame, and full-page screens such as authentication and onboarding.
 
 // ==================== CONTAINER ====================
 
@@ -14,6 +15,34 @@
   @include mixins.down(breakpoints.$breakpoint-sm) {
     padding: var(--space-6) var(--page-padding-sm) var(--space-12);
   }
+}
+
+// ==================== BRAND ====================
+
+@mixin brand {
+  @include mixins.focus-ring;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-control);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+@mixin brand-mark {
+  display: grid;
+  width: var(--avatar-size-sm);
+  height: var(--avatar-size-sm);
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0;
 }
 
 // ==================== PAGE HEADER ====================

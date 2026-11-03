@@ -1,58 +1,152 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
 
 // ==================== PAGE ====================
 
 .page {
   display: flex;
   min-height: 100dvh;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-8) var(--space-5);
-  background: var(--color-chrome);
+  flex-direction: column;
+  background: var(--color-canvas);
 }
 
-.content {
-  width: 100%;
-  max-width: 460px;
-  min-width: 0;
-  padding: var(--space-8);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-background);
+.topBar {
+  display: flex;
+  height: var(--shell-header-height);
+  flex: none;
+  align-items: center;
+  padding-inline: var(--page-padding-lg);
 
-  --control-height-md: 40px;
-
-  @include mixins.down(breakpoints.$breakpoint-xs) {
-    padding: var(--space-6);
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding-inline: var(--page-padding-sm);
   }
 }
 
-// ==================== INTRODUCTION ====================
-
 .brand {
-  margin: 0 0 var(--space-8);
-  font-size: var(--font-size-xl);
+  @include page.brand;
+}
+
+.brandMark {
+  @include page.brand-mark;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--page-padding-md) var(--space-16);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    align-items: flex-start;
+    padding: var(--space-4) var(--page-padding-sm) var(--space-10);
+  }
+}
+
+// ==================== PANEL ====================
+
+.panel {
+  @include page.panel;
+
+  width: 100%;
+  max-width: 520px;
+  box-shadow: var(--shadow-md);
+}
+
+// ==================== IDENTITY PREVIEW ====================
+
+// Shows the workspace as it will appear in the sidebar switcher.
+.preview {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-10) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-surface);
+}
+
+.previewCard {
+  display: flex;
+  width: min(100%, 280px);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  box-shadow: var(--shadow-sm);
+}
+
+.monogram {
+  display: grid;
+  width: var(--avatar-size-md);
+  height: var(--avatar-size-md);
+  flex: none;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.04em;
+
+  .previewCard[data-empty] & {
+    border: 1px dashed var(--color-border-strong);
+    background: transparent;
+  }
+}
+
+.previewText {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+
+  strong,
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+
+    .previewCard[data-empty] & {
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-medium);
+    }
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+}
+
+// ==================== CREATION FORM ====================
+
+.body {
+  padding: var(--space-8);
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    padding: var(--space-6) var(--space-5);
+  }
 }
 
 .introduction {
   margin-bottom: var(--space-6);
 
   h1 {
-    margin: 0 0 var(--space-2);
+    @include page.title;
+
     font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    letter-spacing: -0.02em;
-    overflow-wrap: anywhere;
   }
 
   p {
-    margin: 0;
+    margin: var(--space-2) 0 0;
     color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-md);
     line-height: var(--line-height-relaxed);
   }
 }

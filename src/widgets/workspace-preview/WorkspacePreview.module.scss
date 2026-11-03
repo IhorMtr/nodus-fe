@@ -1,0 +1,385 @@
+// ==================== MINIATURE SCALE ====================
+
+// The miniature is laid out in em units. Its font size follows the height of
+// the nearest size container, so the whole shell scales as one picture.
+.root {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: 0.9em;
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  line-height: 1.4;
+  user-select: none;
+
+  @supports (font-size: 1cqh) {
+    font-size: calc(100cqh / 44);
+  }
+
+  svg {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+    stroke-width: 1.8;
+  }
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+// ==================== SIDEBAR ====================
+
+.sidebar {
+  display: flex;
+  width: 16em;
+  flex: none;
+  flex-direction: column;
+  padding: 0 0.75em 0.75em;
+}
+
+.brand {
+  display: flex;
+  height: 4.2em;
+  flex: none;
+  align-items: center;
+  padding: 0.6em 0.8em 0;
+  font-size: 1.2em;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.03em;
+}
+
+.switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.55em;
+  border: 1px solid var(--color-divider);
+  border-radius: 0.6em;
+  background: var(--color-background);
+}
+
+.monogram {
+  display: grid;
+  width: 2.2em;
+  height: 2.2em;
+  flex: none;
+  place-items: center;
+  border-radius: 0.45em;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 0.9em;
+  font-weight: var(--font-weight-semibold);
+}
+
+.switcherText {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+
+  strong {
+    overflow: hidden;
+    font-size: 0.95em;
+    font-weight: var(--font-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: 0.8em;
+  }
+}
+
+.navList {
+  display: grid;
+  gap: 1px;
+  margin: 0.9em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navItem {
+  display: flex;
+  height: 2.4em;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0 0.7em;
+  border-radius: 0.45em;
+  color: var(--color-text-secondary);
+  font-size: 0.95em;
+  font-weight: var(--font-weight-medium);
+
+  svg {
+    color: var(--color-text-muted);
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &[data-active] {
+    background: var(--color-surface-selected);
+    color: var(--color-text-primary);
+
+    svg {
+      color: var(--color-text-primary);
+    }
+  }
+
+  &[data-unread] {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+.sectionLabel {
+  margin-top: 1.5em;
+  padding: 0 0.85em;
+  color: var(--color-text-muted);
+  font-size: 0.8em;
+  font-weight: var(--font-weight-semibold);
+}
+
+.badge {
+  min-width: 1.6em;
+  margin-left: auto;
+  padding: 0 0.45em;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 0.8em;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.5em;
+  text-align: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin-top: auto;
+  padding: 0.6em;
+}
+
+.profileText {
+  display: grid;
+
+  strong {
+    font-size: 0.95em;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: 0.8em;
+  }
+}
+
+// ==================== AVATARS AND PRESENCE ====================
+
+.avatar {
+  position: relative;
+  display: grid;
+  width: 2.6em;
+  height: 2.6em;
+  flex: none;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-selected);
+  color: var(--color-text-secondary);
+  font-size: 0.8em;
+  font-weight: var(--font-weight-semibold);
+}
+
+.dot {
+  position: absolute;
+  right: -0.15em;
+  bottom: -0.15em;
+  width: 0.85em;
+  height: 0.85em;
+  border: 0.2em solid var(--color-canvas);
+  border-radius: var(--radius-full);
+  background: var(--color-presence-online);
+
+  &[data-status='away'] {
+    background: var(--color-presence-away);
+  }
+
+  .members & {
+    border-color: var(--color-background);
+  }
+}
+
+// ==================== FRAME ====================
+
+.frame {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  margin: 0.6em 0.6em 0.6em 0;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: 0.75em;
+  background: var(--color-background);
+}
+
+.header {
+  display: flex;
+  height: 3.6em;
+  flex: none;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0 1em 0 1.4em;
+  border-bottom: 1px solid var(--color-divider);
+
+  strong {
+    font-size: 1em;
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+.headerActions {
+  display: flex;
+  gap: 1.1em;
+  margin-left: auto;
+  color: var(--color-text-secondary);
+}
+
+.body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+
+// ==================== MESSAGES ====================
+
+.channel {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.messages {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1.1em;
+  padding: 1em 1.4em;
+}
+
+.dayDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  color: var(--color-text-secondary);
+  font-size: 0.8em;
+  font-weight: var(--font-weight-semibold);
+
+  &::before,
+  &::after {
+    height: 1px;
+    flex: 1;
+    background: var(--color-divider);
+    content: '';
+  }
+}
+
+.message {
+  display: flex;
+  gap: 0.9em;
+
+  p {
+    margin: 0.15em 0 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+  }
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+
+  strong {
+    font-size: 0.95em;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: 0.75em;
+  }
+}
+
+.composer {
+  margin: 0 1.4em 1.2em;
+  padding: 0.95em 1.1em;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75em;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.95em;
+}
+
+// ==================== MEMBERS ====================
+
+.members {
+  display: flex;
+  width: 14em;
+  flex: none;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: 1em 0.8em;
+  border-left: 1px solid var(--color-divider);
+
+  .sectionLabel {
+    margin: 0.4em 0 0.3em;
+    padding: 0 0.4em;
+  }
+}
+
+.membersHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0 0.4em;
+
+  strong {
+    font-size: 0.95em;
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+.count {
+  padding: 0 0.5em;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-selected);
+  color: var(--color-text-secondary);
+  font-size: 0.8em;
+  line-height: 1.6em;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.4em;
+  font-size: 0.95em;
+  font-weight: var(--font-weight-medium);
+
+  .avatar {
+    width: 2.3em;
+    height: 2.3em;
+    font-size: 0.75em;
+  }
+}

@@ -6,6 +6,13 @@ import { useTranslations } from 'next-intl';
 import { usePersonalSettings } from './use-personal-settings';
 import styles from './PersonalSettingsView.module.scss';
 
+// ==================== CONSTANTS ====================
+
+const languageOptions = [
+  { locale: 'uk', code: 'UA', labelKey: 'ukrainian' },
+  { locale: 'en', code: 'EN', labelKey: 'english' },
+] as const;
+
 // ==================== VIEW ====================
 
 export function PersonalSettingsView({
@@ -140,20 +147,40 @@ export function PersonalSettingsView({
                   <h3 id="personal-language">{t('language')}</h3>
                   <p>{t('languageDescription')}</p>
                 </div>
-                <select
-                  className={styles.languageSelect}
+                <div
+                  className={styles.languageOptions}
+                  role="radiogroup"
                   aria-labelledby="personal-language"
-                  value={settings.locale}
-                  onChange={event =>
-                    settings.switchLocale(event.target.value as 'uk' | 'en')
-                  }
                 >
-                  {(['uk', 'en'] as const).map(option => (
-                    <option key={option} value={option}>
-                      {language(option === 'uk' ? 'ukrainian' : 'english')}
-                    </option>
-                  ))}
-                </select>
+                  {languageOptions.map(option => {
+                    const selected = settings.locale === option.locale;
+
+                    return (
+                      <label
+                        key={option.locale}
+                        className={styles.languageOption}
+                      >
+                        <input
+                          type="radio"
+                          name="personal-language"
+                          value={option.locale}
+                          checked={selected}
+                          onChange={() => settings.switchLocale(option.locale)}
+                        />
+                        <span
+                          className={styles.languageCode}
+                          aria-hidden="true"
+                        >
+                          {option.code}
+                        </span>
+                        <span className={styles.languageName}>
+                          {language(option.labelKey)}
+                        </span>
+                        {selected && <Check size={14} aria-hidden="true" />}
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
             </section>
           )}
