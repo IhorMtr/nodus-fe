@@ -1,0 +1,89 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
+@use '@/shared/styles/mixins' as mixins;
+@use '../../landing' as landing;
+
+// ==================== LAYOUT ====================
+
+.root {
+  @include landing.section-spacing;
+
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-surface);
+}
+
+.inner {
+  @include landing.container;
+}
+
+.heading {
+  @include effects.rise-on-scroll;
+
+  display: grid;
+  gap: var(--space-10);
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: end;
+    gap: var(--space-16);
+  }
+}
+
+// ==================== STATEMENT ====================
+
+.statement {
+  max-width: 520px;
+
+  h2 {
+    @include landing.section-title;
+
+    margin-block: var(--space-4) var(--space-5);
+  }
+}
+
+.eyebrow {
+  @include landing.eyebrow;
+}
+
+.description {
+  @include landing.lead;
+}
+
+// ==================== FACTS ====================
+
+.facts {
+  display: grid;
+  gap: var(--space-6) var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include mixins.up(breakpoints.$breakpoint-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  li {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-divider);
+  }
+
+  h3 {
+    margin: 0 0 var(--space-2);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+  }
+
+  p {
+    @include landing.body;
+  }
+}
+
+// ==================== PRODUCT VISUAL ====================
+
+.visual {
+  @include effects.rise-on-scroll;
+
+  margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+}

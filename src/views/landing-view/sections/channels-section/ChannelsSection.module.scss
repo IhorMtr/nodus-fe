@@ -1,0 +1,105 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
+@use '@/shared/styles/mixins' as mixins;
+@use '../../landing' as landing;
+
+// ==================== LIGHT BAND ====================
+
+.root {
+  --band-text-primary: var(--ink-dark-1);
+  --band-text-secondary: var(--ink-dark-2);
+  --band-text-muted: var(--ink-dark-3);
+  --band-divider: var(--mist-5);
+
+  @include landing.section-spacing;
+
+  background: var(--mist-3);
+  color: var(--band-text-primary);
+  color-scheme: light;
+}
+
+.inner {
+  @include landing.container;
+}
+
+// ==================== HEADING ====================
+
+.heading {
+  @include effects.rise-on-scroll;
+
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+
+  h2 {
+    @include landing.section-title;
+
+    margin-block: var(--space-4) var(--space-5);
+    color: var(--band-text-primary);
+  }
+}
+
+.eyebrow {
+  @include landing.eyebrow;
+
+  color: var(--band-text-muted);
+}
+
+.description {
+  @include landing.lead;
+
+  max-width: 600px;
+  margin-inline: auto;
+  color: var(--band-text-secondary);
+}
+
+// ==================== PRODUCT VISUAL ====================
+
+.visual {
+  @include effects.rise-on-scroll;
+
+  margin-top: clamp(var(--space-8), 5vw, var(--space-16));
+}
+
+.image {
+  border-radius: 0;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(180deg, transparent, #000 4%, #000 96%, transparent);
+  mask-composite: intersect;
+}
+
+// ==================== CHANNEL POINTS ====================
+
+.points {
+  display: grid;
+  gap: var(--space-6);
+  margin: clamp(var(--space-8), 4vw, var(--space-12)) 0 0;
+  padding: 0;
+  list-style: none;
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-10);
+  }
+
+  li {
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--band-divider);
+  }
+
+  h3 {
+    margin: 0 0 var(--space-2);
+    color: var(--band-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.015em;
+    line-height: var(--line-height-snug);
+  }
+
+  p {
+    @include landing.body;
+
+    color: var(--band-text-secondary);
+  }
+}

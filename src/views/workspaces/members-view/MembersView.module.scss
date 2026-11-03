@@ -45,7 +45,6 @@
 
 // ==================== LAYOUT ====================
 
-// Invitations sit beside the member list on wide screens and below it otherwise.
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

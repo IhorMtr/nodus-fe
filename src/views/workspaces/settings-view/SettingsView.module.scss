@@ -4,7 +4,6 @@
 
 // ==================== PAGE ====================
 
-// Settings are forms, so the page keeps a comfortable reading width.
 .page {
   @include page.container(
     calc(var(--content-width) + 2 * var(--page-padding-lg))
@@ -150,7 +149,6 @@
 
 // ==================== DANGER ZONE ====================
 
-// A muted semantic border marks the risk without a loud red block.
 .dangerPanel {
   border-color: var(--color-danger-border);
 

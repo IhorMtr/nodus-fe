@@ -1,35 +1,64 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/effects' as effects;
 @use '@/shared/styles/mixins' as mixins;
+@use '../../landing' as landing;
+
+// ==================== LAYOUT ====================
 
 .root {
-  @include effects.full-bleed-backdrop(
-    (effects.glow(50%, 100%, 560px), effects.lines(65deg, 100px))
-  );
+  padding-block: clamp(88px, 12vw, 176px);
+  border-block: 1px solid var(--color-divider);
+  background: var(--color-chrome);
+}
+
+.inner {
+  @include landing.container;
   @include effects.rise-on-scroll;
 
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-6);
-  padding-block: var(--space-12);
-  border-top: 1px solid var(--color-divider);
-
-  @include mixins.up(breakpoints.$breakpoint-md) {
-    padding-block: var(--space-16);
-  }
+  text-align: center;
 
   h2 {
-    margin: 0;
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    letter-spacing: -0.025em;
-  }
+    @include landing.display-title;
 
-  p {
-    margin: var(--space-3) 0 0;
-    color: var(--color-text-secondary);
+    max-width: 14ch;
+    margin-top: var(--space-8);
+    font-size: clamp(2.25rem, 1.5rem + 3.4vw, 4.25rem);
+  }
+}
+
+.mark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.description {
+  @include landing.lead;
+
+  max-width: 520px;
+  margin-top: var(--space-5);
+}
+
+// ==================== ACTIONS ====================
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-10);
+
+  @include mixins.down(breakpoints.$breakpoint-xs) {
+    align-self: stretch;
+    flex-direction: column;
   }
 }

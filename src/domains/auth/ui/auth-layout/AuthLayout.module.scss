@@ -4,7 +4,6 @@
 
 // ==================== PANEL LAYOUT ====================
 
-// The form keeps a fixed comfortable column, while the preview takes the rest.
 .root {
   display: grid;
   min-height: 100dvh;
@@ -103,7 +102,7 @@
 .previewPanel {
   display: none;
   min-width: 0;
-  overflow: hidden;
+  overflow: clip;
   border-left: 1px solid var(--color-divider);
   background: var(--color-canvas);
 

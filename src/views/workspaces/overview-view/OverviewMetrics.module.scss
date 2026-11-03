@@ -3,7 +3,6 @@
 
 // ==================== TOTALS STRIP ====================
 
-// Totals read as one open strip of figures rather than six separate cards.
 .totals {
   margin-bottom: var(--space-10);
   padding-block: var(--space-5);
@@ -39,7 +38,6 @@
     border-left: 0;
   }
 
-  // Wrapped rows drop the vertical rules and rely on the grid gap.
   @container (max-width: 900px) {
     padding-left: 0;
     border-left: 0;

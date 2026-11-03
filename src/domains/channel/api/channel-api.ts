@@ -60,7 +60,6 @@ export const channelApi = {
     return data.data;
   },
 
-  // The backend never moves the boundary backwards; older marks are no-ops.
   async markRead(
     workspaceId: string,
     channelId: string,

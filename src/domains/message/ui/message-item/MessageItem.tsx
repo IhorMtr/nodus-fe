@@ -38,7 +38,6 @@ function getInitials({ firstName, lastName }: Message['author']) {
   return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 }
 
-// The API has no edited flag, so a later updatedAt is the only signal.
 function isEdited({ createdAt, updatedAt }: Omit<Message, 'channelId'>) {
   return Date.parse(updatedAt) - Date.parse(createdAt) > 1000;
 }

@@ -28,7 +28,6 @@
 
 // ==================== TABLE ====================
 
-// Columns are shared by the header row and every member row.
 .table {
   --member-columns: minmax(0, 1fr) 132px 112px 40px;
 
@@ -148,7 +147,6 @@
 
 // ==================== COMPACT TABLE ====================
 
-// Narrow tables move status and role under the person.
 @container (max-width: 600px) {
   .columns {
     display: none;

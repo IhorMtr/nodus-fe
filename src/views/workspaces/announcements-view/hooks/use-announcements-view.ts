@@ -133,9 +133,7 @@ export function useAnnouncementsView(workspaceId: string) {
         closeDetail();
       }
       setDeleteTarget(null);
-    } catch {
-      // The mutation retains the backend error for the dialog to display.
-    }
+    } catch {}
   };
 
   const retry = () => {

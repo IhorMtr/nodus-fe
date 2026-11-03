@@ -449,8 +449,6 @@
   gap: var(--space-2);
 }
 
-// Native radios stay in the label for keyboard and screen reader support;
-// the card mirrors the theme options above.
 .languageOption {
   position: relative;
   display: flex;

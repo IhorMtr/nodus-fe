@@ -1,67 +1,83 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
+@use '../../landing' as landing;
 
 // ==================== LAYOUT ====================
 
 .root {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    'brand actions actions'
-    'locale locale appearance';
-  align-items: center;
-  gap: var(--space-2);
-  padding-block: var(--space-4);
+  position: sticky;
+  z-index: var(--z-sticky);
+  top: 0;
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-background);
 
-  @include mixins.up(breakpoints.$breakpoint-md) {
-    grid-template-columns: auto minmax(0, 1fr) auto auto;
-    grid-template-areas: 'brand locale actions appearance';
-    gap: var(--space-6);
-    padding-block: var(--space-5);
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      animation: reveal-divider linear both;
+      animation-timeline: scroll();
+      animation-range: 0 48px;
+    }
+  }
+}
+
+@keyframes reveal-divider {
+  from {
+    border-bottom-color: transparent;
   }
 
+  to {
+    border-bottom-color: var(--color-divider);
+  }
+}
+
+.bar {
+  @include landing.container(landing.$wide-width);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--landing-header-height);
+
   @include mixins.up(breakpoints.$breakpoint-lg) {
-    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
-    grid-template-areas: 'brand navigation locale actions appearance';
-    gap: var(--space-8);
-    padding-block: var(--space-6);
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
 }
 
 .brand {
-  @include mixins.focus-ring;
+  @include page.brand;
 
-  grid-area: brand;
   justify-self: start;
-  border-radius: var(--radius-control);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.04em;
-  text-decoration: none;
+}
+
+.brandMark {
+  @include page.brand-mark;
 }
 
 // ==================== NAVIGATION ====================
 
 .navigation {
-  grid-area: navigation;
   display: none;
-  gap: var(--space-4);
-  font-size: var(--font-size-sm);
+  align-items: center;
+  gap: var(--space-1);
 
   a {
     @include mixins.focus-ring;
 
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--control-height-sm);
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-control);
     color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
     text-decoration: none;
-    text-underline-offset: var(--space-1);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
 
     &:hover {
+      background: var(--color-surface-hover);
       color: var(--color-text-primary);
-      text-decoration: underline;
     }
   }
 
@@ -70,37 +86,32 @@
   }
 }
 
-// ==================== LOCALE AND APPEARANCE ====================
+// ==================== ACTIONS ====================
 
-.locale {
-  grid-area: locale;
-  justify-self: start;
-
-  @include mixins.up(breakpoints.$breakpoint-md) {
-    justify-self: end;
-  }
-}
-
-.appearance {
-  grid-area: appearance;
-  justify-self: end;
-
-  @include mixins.up(breakpoints.$breakpoint-md) {
-    padding-left: var(--space-4);
-    border-left: 1px solid var(--color-divider);
-  }
-}
-
-// ==================== AUTH ACTIONS ====================
-
-.actions {
-  grid-area: actions;
+.controls {
   display: flex;
   align-items: center;
   justify-self: end;
+  gap: var(--space-2);
+}
+
+.preferences {
+  display: none;
+  align-items: center;
   gap: var(--space-1);
+  margin-right: var(--space-1);
+  padding-right: var(--space-3);
+  border-right: 1px solid var(--color-divider);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    display: flex;
+  }
+}
+
+.signIn {
+  display: none;
 
   @include mixins.up(breakpoints.$breakpoint-sm) {
-    gap: var(--space-2);
+    display: block;
   }
 }

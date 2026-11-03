@@ -1,9 +1,6 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-// Composition shared by application pages: workspace pages inside the shell
-// frame, and full-page screens such as authentication and onboarding.
-
 // ==================== CONTAINER ====================
 
 @mixin container($width: var(--content-width-page)) {

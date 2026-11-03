@@ -19,8 +19,6 @@ const GROUP_WINDOW_MINUTES = 5;
 
 // ==================== TIMELINE ====================
 
-// Consecutive messages from one author within a short window form a group,
-// so only the first one repeats the avatar and name.
 export function buildTimeline<T extends TimelineMessage>(
   messages: T[]
 ): TimelineEntry<T>[] {

@@ -75,7 +75,6 @@ export function useWorkspaceHeader(workspaceId: string) {
   if (channelId && channelName) {
     context = { kind: 'channel', id: channelId, name: channelName };
   } else if (peer) {
-    // Member presence is refreshed in realtime; the conversation copy may lag.
     const member = members.data?.find(item => item.userId === peer.id);
 
     context = {

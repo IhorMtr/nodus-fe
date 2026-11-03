@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
 
 import { AuthLayout } from '@/domains/auth/ui/auth-layout';
-import { AuthPreview } from '@/domains/auth/ui/auth-preview';
-import { WorkspacePreview } from '@/widgets/workspace-preview/WorkspacePreview';
 
 import { AuthEntryGuard } from './_guards/AuthEntryGuard';
+import { AuthRoutePreview } from './_previews/AuthRoutePreview';
 
 export default function AuthenticationLayout({
   children,
@@ -13,15 +12,7 @@ export default function AuthenticationLayout({
 }) {
   return (
     <AuthEntryGuard>
-      <AuthLayout
-        preview={
-          <AuthPreview>
-            <WorkspacePreview />
-          </AuthPreview>
-        }
-      >
-        {children}
-      </AuthLayout>
+      <AuthLayout preview={<AuthRoutePreview />}>{children}</AuthLayout>
     </AuthEntryGuard>
   );
 }

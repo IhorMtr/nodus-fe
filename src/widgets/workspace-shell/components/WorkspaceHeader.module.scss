@@ -102,7 +102,6 @@
   margin-left: var(--space-1);
 }
 
-// Small screens keep the identity and replace the parent crumb with Back.
 @include mixins.down(breakpoints.$breakpoint-sm) {
   .crumb {
     margin-left: 0;

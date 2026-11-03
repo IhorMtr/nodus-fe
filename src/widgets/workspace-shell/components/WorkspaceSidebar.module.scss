@@ -16,7 +16,6 @@
 
 // ==================== BRAND AND WORKSPACE ====================
 
-// The brand row is as tall as the frame header, so both titles share a baseline.
 .brandRow {
   display: flex;
   height: calc(var(--shell-header-height) + var(--shell-gap));

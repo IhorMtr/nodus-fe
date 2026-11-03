@@ -1,12 +1,10 @@
 {
   "profile": {
-    "menu": "Open user menu",
-    "online": "Online"
+    "menu": "Open user menu"
   },
   "actions": {
     "logout": "Log out",
     "signIn": "Sign in",
-    "signInPreview": "Sign in is not available yet. Explore the product preview.",
     "signUp": "Sign up",
     "createAccount": "Create account"
   },

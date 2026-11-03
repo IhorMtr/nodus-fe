@@ -1,7 +1,6 @@
 // ==================== MESSAGE ====================
 
 .item {
-  // --message-inset is provided by the message list and aligns with the composer.
   --message-line: calc(var(--font-size-md) * var(--line-height-normal));
 
   position: relative;
@@ -180,7 +179,6 @@
     pointer-events: auto;
   }
 
-  // Touch screens have no hover, so the actions stay inline and quiet.
   @media (hover: none) {
     top: var(--space-1);
     border-color: transparent;

@@ -84,7 +84,6 @@
     overflow-wrap: anywhere;
   }
 
-  // The title button stretches over the row, so the whole entry opens it.
   h2 button {
     @include mixins.focus-ring(3px);
 
