@@ -1,10 +1,16 @@
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 
-import type { Message, MessageAuthor, MessageHistory } from './message-types';
+import type {
+  Message,
+  MessageAuthor,
+  MessageContext,
+  MessageHistory,
+} from './message-types';
 
 // ==================== TYPES ====================
 
 type MessageHistoryData = InfiniteData<MessageHistory, string | undefined>;
+type MessageContextData = InfiniteData<Omit<MessageContext, 'targetMessageId'>>;
 
 // ==================== QUERY KEY ====================
 
@@ -68,6 +74,27 @@ function updateHistory(
   queryClient.setQueryData<MessageHistoryData>(
     messageHistoryKey(workspaceId, channelId),
     data => (data ? update(data) : data)
+  );
+}
+
+function updateContexts(
+  queryClient: QueryClient,
+  workspaceId: string,
+  channelId: string,
+  mapItems: (items: Message[]) => Message[]
+) {
+  queryClient.setQueriesData<MessageContextData>(
+    { queryKey: ['messages', workspaceId, channelId, 'context'] },
+    data =>
+      data
+        ? {
+            ...data,
+            pages: data.pages.map(page => ({
+              ...page,
+              items: mapItems(page.items),
+            })),
+          }
+        : data
   );
 }
 
@@ -164,6 +191,9 @@ export function replaceMessage(
   updateHistory(queryClient, workspaceId, channelId, data =>
     mapPages(data, items => items.map(item => replaceIfNewer(item, message)))
   );
+  updateContexts(queryClient, workspaceId, channelId, items =>
+    items.map(item => replaceIfNewer(item, message))
+  );
 }
 
 export function applyChannelRead(
@@ -181,6 +211,11 @@ export function applyChannelRead(
       )
     )
   );
+  updateContexts(queryClient, workspaceId, channelId, items =>
+    items.map(item =>
+      addReaderReceipt(item, reader, lastReadCreatedAt, lastReadMessageId)
+    )
+  );
 }
 
 export function removeMessage(
@@ -191,5 +226,8 @@ export function removeMessage(
 ) {
   updateHistory(queryClient, workspaceId, channelId, data =>
     mapPages(data, items => items.filter(item => item.id !== messageId))
+  );
+  updateContexts(queryClient, workspaceId, channelId, items =>
+    items.filter(item => item.id !== messageId)
   );
 }

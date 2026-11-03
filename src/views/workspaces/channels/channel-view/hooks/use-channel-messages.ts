@@ -125,6 +125,9 @@ export function useChannelMessages(workspaceId: string, channelId: string) {
 
   return {
     messages: history.data ?? [],
+    pendingContextEvents: realtime.pendingContextEvents,
+    pendingContextReads: realtime.pendingContextReads,
+    joinEpoch: realtime.joinEpoch,
     joinError: realtime.joinError,
     currentUserId: user.data?.id,
     canEdit,

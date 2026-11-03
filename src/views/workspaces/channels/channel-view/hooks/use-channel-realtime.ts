@@ -35,7 +35,7 @@ type JoinAck =
       errors: null;
     };
 
-type ChannelReadEvent = {
+export type ChannelReadEvent = {
   workspaceId: string;
   channelId: string;
   reader: MessageAuthor;
@@ -77,6 +77,8 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
 
   const pendingEvents = useRef<MessageRealtimeEvent[]>([]);
   const pendingReads = useRef<ChannelReadEvent[]>([]);
+  const pendingContextEvents = useRef<MessageRealtimeEvent[]>([]);
+  const pendingContextReads = useRef<ChannelReadEvent[]>([]);
   const historyReleased = useRef(false);
 
   // ==================== SUBSCRIPTION LIFECYCLE ====================
@@ -110,6 +112,15 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
 
     // ==================== MESSAGE EVENTS ====================
 
+    function isContextFetching() {
+      return queryClient
+        .getQueryCache()
+        .findAll({
+          queryKey: ['messages', workspaceId, channelId, 'context'],
+        })
+        .some(query => query.state.fetchStatus === 'fetching');
+    }
+
     function handleEvent(event: MessageRealtimeEvent) {
       if (!valid() || !joined) {
         return;
@@ -132,6 +143,10 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
 
       if (!query?.data || query.fetchStatus === 'fetching') {
         pendingEvents.current.push(event);
+      }
+
+      if (isContextFetching()) {
+        pendingContextEvents.current.push(event);
       }
 
       applyMessageRealtimeEvent(queryClient, workspaceId, channelId, event);
@@ -329,6 +344,10 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
         pendingReads.current.push(event);
       }
 
+      if (isContextFetching()) {
+        pendingContextReads.current.push(event);
+      }
+
       applyChannelRead(
         queryClient,
         workspaceId,
@@ -391,5 +410,7 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
     joinError,
     pendingEvents,
     pendingReads,
+    pendingContextEvents,
+    pendingContextReads,
   };
 }

@@ -101,7 +101,6 @@
     "close": "Close search",
     "input": "Search messages in this channel",
     "placeholder": "Search messages",
-    "submit": "Search",
     "hint": "Enter at least 3 characters to search this channel.",
     "loading": "Searching messages",
     "error": "Could not load search results.",

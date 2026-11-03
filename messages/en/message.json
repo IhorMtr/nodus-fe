@@ -13,7 +13,8 @@
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "retry": "Try again"
+    "retry": "Try again",
+    "jumpToLatest": "Jump to latest"
   },
   "meta": {
     "edited": "(edited)",
@@ -28,6 +29,9 @@
   "states": {
     "loading": "Loading messages",
     "loadingOlder": "Loading earlier messages",
+    "loadingContext": "Loading message context",
+    "loadingNewer": "Loading later messages",
+    "newerLoadError": "Unable to load later messages",
     "empty": "Welcome to #{channel}",
     "emptyDescription": "This is the beginning of the conversation in this channel. Write the first message to get started.",
     "loadError": "Unable to load messages",

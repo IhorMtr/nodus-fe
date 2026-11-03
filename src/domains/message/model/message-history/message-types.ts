@@ -24,3 +24,10 @@ export interface MessageHistory {
   items: Message[];
   nextCursor: string | null;
 }
+
+export interface MessageContext {
+  items: Message[];
+  targetMessageId: string;
+  olderCursor: string | null;
+  newerCursor: string | null;
+}

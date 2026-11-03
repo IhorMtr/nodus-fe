@@ -24,7 +24,7 @@
 
 // ==================== SEARCH AND RESULTS ====================
 
-.form {
+.search {
   display: grid;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
@@ -35,6 +35,12 @@
   flex: 1;
   overflow-y: auto;
   padding: 0 var(--space-4) var(--space-6);
+}
+
+.loading {
+  display: grid;
+  min-height: 100%;
+  place-items: center;
 }
 
 .state {
@@ -50,8 +56,34 @@
 }
 
 .result {
-  padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-divider);
+
+  // ==================== INTERACTIVE RESULT ====================
+
+  .resultButton {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-2);
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--color-surface-hover);
+    }
+
+    &:active {
+      background: var(--color-surface-active);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-text-secondary);
+      outline-offset: -2px;
+    }
+  }
 
   p {
     margin: var(--space-2) 0 0;

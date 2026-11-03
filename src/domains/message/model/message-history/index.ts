@@ -1,4 +1,8 @@
 export { useMessagesInfiniteQuery } from './use-messages-infinite-query';
+export {
+  useMessageContextQuery,
+  messageContextKey,
+} from './use-message-context-query';
 export type { Message, MessageAuthor } from './message-types';
 export { messageHistoryKey, applyChannelRead } from './message-history-cache';
 export { applyMessageRealtimeEvent } from './message-realtime';

@@ -3,6 +3,7 @@ import { httpClient } from '@/shared/api/http-client';
 
 import type {
   Message,
+  MessageContext,
   MessageHistory,
 } from '../model/message-history/message-types';
 
@@ -38,13 +39,27 @@ export const messageApi = {
   async list(
     workspaceId: string,
     channelId: string,
-    params: { before?: string; limit?: number },
+    params: { before?: string; after?: string; limit?: number },
     signal?: AbortSignal
   ): Promise<MessageHistory> {
     const { data } = await httpClient.get<ApiSuccessResponse<MessageHistory>>(
       messagesPath(workspaceId, channelId),
       { params, signal }
     );
+    return data.data;
+  },
+
+  async context(
+    workspaceId: string,
+    channelId: string,
+    messageId: string,
+    signal?: AbortSignal
+  ): Promise<MessageContext> {
+    const { data } = await httpClient.get<ApiSuccessResponse<MessageContext>>(
+      `${messagesPath(workspaceId, channelId)}/${encodeURIComponent(messageId)}/context`,
+      { signal }
+    );
+
     return data.data;
   },
 

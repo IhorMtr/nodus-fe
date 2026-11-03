@@ -12,13 +12,12 @@ function SearchHarness({ channelId }: { channelId: string }) {
   const search = useChannelSearch('workspace', channelId);
 
   return (
-    <form onSubmit={search.submit}>
+    <div>
       <input
         aria-label="Search"
         value={search.input}
         onChange={event => search.setInput(event.currentTarget.value)}
       />
-      <button type="submit">Submit</button>
       <output>{search.query}</output>
       <button
         type="button"
@@ -27,14 +26,14 @@ function SearchHarness({ channelId }: { channelId: string }) {
       >
         More
       </button>
-    </form>
+    </div>
   );
 }
 
 // ==================== SEARCH BEHAVIOR ====================
 
 describe('channel search', () => {
-  it('submits a trimmed query for the current channel and paginates with its cursor', async () => {
+  it('searches the trimmed query after a pause and paginates with its cursor', async () => {
     const request = vi.spyOn(messageApi, 'search');
     request
       .mockResolvedValueOnce({ items: [], nextCursor: 'older' })
@@ -52,14 +51,16 @@ describe('channel search', () => {
     fireEvent.change(screen.getByLabelText('Search'), {
       target: { value: '  ab  ' },
     });
-    fireEvent.click(screen.getByText('Submit'));
+    await new Promise(resolve => setTimeout(resolve, 400));
     expect(request).not.toHaveBeenCalled();
 
+    fireEvent.change(screen.getByLabelText('Search'), {
+      target: { value: '  hel  ' },
+    });
     fireEvent.change(screen.getByLabelText('Search'), {
       target: { value: '  hello  ' },
     });
     expect(request).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByText('Submit'));
 
     await waitFor(() => expect(request).toHaveBeenCalledTimes(1));
     expect(request).toHaveBeenNthCalledWith(
@@ -96,7 +97,6 @@ describe('channel search', () => {
     fireEvent.change(screen.getByLabelText('Search'), {
       target: { value: 'hello' },
     });
-    fireEvent.click(screen.getByText('Submit'));
     await waitFor(() => expect(request).toHaveBeenCalledTimes(1));
     const signal = request.mock.calls[0][2];
 

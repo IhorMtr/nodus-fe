@@ -8,6 +8,7 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
+  useState,
   type ReactNode,
 } from 'react';
 
@@ -37,6 +38,12 @@ type MessageListProps<T extends DisplayMessage> = {
   isLoadingOlder: boolean;
   hasOlderError: boolean;
   onLoadOlder: () => void;
+  hasNewer?: boolean;
+  isLoadingNewer?: boolean;
+  hasNewerError?: boolean;
+  onLoadNewer?: () => void;
+  followLatest?: boolean;
+  targetRequest?: { messageId: string; sequence: number };
   scrollToMessageId?: string;
   editingId: string | null;
   isSavingEdit: boolean;
@@ -59,7 +66,9 @@ type ScrollSnapshot = {
 // ==================== CONSTANTS ====================
 
 const LOAD_OLDER_THRESHOLD = 300;
+const LOAD_NEWER_THRESHOLD = 300;
 const BOTTOM_THRESHOLD = 80;
+const HIGHLIGHT_DURATION_MS = 1800;
 
 // ==================== HELPERS ====================
 
@@ -93,6 +102,12 @@ export function MessageList<T extends DisplayMessage>({
   isLoadingOlder,
   hasOlderError,
   onLoadOlder,
+  hasNewer = false,
+  isLoadingNewer = false,
+  hasNewerError = false,
+  onLoadNewer,
+  followLatest = true,
+  targetRequest,
   scrollToMessageId,
   editingId,
   isSavingEdit,
@@ -111,6 +126,8 @@ export function MessageList<T extends DisplayMessage>({
   const snapshotRef = useRef<ScrollSnapshot | null>(null);
   const handledScrollTargetRef = useRef<string | undefined>(undefined);
   const reportedBottomRef = useRef<boolean | null>(null);
+  const handledTargetSequenceRef = useRef<number | null>(null);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
   // ==================== DERIVED STATE ====================
 
@@ -131,6 +148,7 @@ export function MessageList<T extends DisplayMessage>({
   }, [locale]);
 
   const canLoadOlder = hasOlder && !isLoadingOlder && !hasOlderError;
+  const canLoadNewer = hasNewer && !isLoadingNewer && !hasNewerError;
 
   // ==================== SCROLL POSITION ====================
 
@@ -153,17 +171,64 @@ export function MessageList<T extends DisplayMessage>({
       handledScrollTargetRef.current = scrollToMessageId;
       scroller.scrollTop = scroller.scrollHeight;
     } else if (!previous) {
-      scroller.scrollTop = scroller.scrollHeight;
+      if (followLatest) {
+        scroller.scrollTop = scroller.scrollHeight;
+      }
     } else if (
       firstId !== previous.firstId &&
       messages.some(message => message.id === previous.firstId)
     ) {
       scroller.scrollTop =
         previous.top + (scroller.scrollHeight - previous.height);
-    } else if (lastId !== previous.lastId && previous.isAtBottom) {
+    } else if (
+      followLatest &&
+      lastId !== previous.lastId &&
+      previous.isAtBottom
+    ) {
       scroller.scrollTop = scroller.scrollHeight;
     }
-  }, [messages, scrollToMessageId]);
+  }, [messages, scrollToMessageId, followLatest]);
+
+  // ==================== TARGET NAVIGATION ====================
+
+  useLayoutEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller || !targetRequest) {
+      return;
+    }
+
+    if (handledTargetSequenceRef.current === targetRequest.sequence) {
+      return;
+    }
+
+    const item = Array.from(
+      scroller.querySelectorAll<HTMLElement>('[data-message-id]')
+    ).find(element => element.dataset.messageId === targetRequest.messageId);
+    if (!item) {
+      return;
+    }
+
+    handledTargetSequenceRef.current = targetRequest.sequence;
+    const scrollerBounds = scroller.getBoundingClientRect();
+    const itemBounds = item.getBoundingClientRect();
+    scroller.scrollTop +=
+      itemBounds.top -
+      scrollerBounds.top -
+      (scroller.clientHeight - itemBounds.height) / 2;
+    setHighlightedId(targetRequest.messageId);
+  }, [messages, targetRequest]);
+
+  useEffect(() => {
+    if (!highlightedId) {
+      return;
+    }
+
+    const timeout = window.setTimeout(
+      () => setHighlightedId(null),
+      HIGHLIGHT_DURATION_MS
+    );
+    return () => window.clearTimeout(timeout);
+  }, [highlightedId, targetRequest?.sequence]);
 
   // ==================== BOTTOM POSITION ====================
 
@@ -192,8 +257,22 @@ export function MessageList<T extends DisplayMessage>({
     }
   }
 
+  function loadNewerIfNeeded() {
+    const scroller = scrollerRef.current;
+    if (!canLoadNewer || !scroller || !onLoadNewer) {
+      return;
+    }
+
+    const distance =
+      scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight;
+    if (distance < LOAD_NEWER_THRESHOLD) {
+      onLoadNewer();
+    }
+  }
+
   useEffect(() => {
     loadOlderIfNeeded();
+    loadNewerIfNeeded();
   });
 
   function handleScroll() {
@@ -203,6 +282,7 @@ export function MessageList<T extends DisplayMessage>({
     }
 
     loadOlderIfNeeded();
+    loadNewerIfNeeded();
   }
 
   // ==================== RENDER ====================
@@ -234,7 +314,12 @@ export function MessageList<T extends DisplayMessage>({
                 const isEditing = message.id === editingId;
 
                 return (
-                  <li key={message.id}>
+                  <li
+                    key={message.id}
+                    data-message-id={message.id}
+                    data-highlighted={highlightedId === message.id || undefined}
+                    className={styles.messageRow}
+                  >
                     <MessageItem
                       message={message}
                       formatTime={formatTime}
@@ -267,6 +352,21 @@ export function MessageList<T extends DisplayMessage>({
             {t('states.olderLoadError')}
           </InlineStatus>
           <Button variant="secondary" size="sm" onClick={onLoadOlder}>
+            {t('actions.retry')}
+          </Button>
+        </div>
+      )}
+      {isLoadingNewer && (
+        <div className={`${styles.status} ${styles.newerStatus}`}>
+          <Spinner size="sm" label={t('states.loadingNewer')} />
+        </div>
+      )}
+      {hasNewerError && onLoadNewer && (
+        <div className={`${styles.status} ${styles.newerStatus}`} role="alert">
+          <InlineStatus tone="danger" variant="plain">
+            {t('states.newerLoadError')}
+          </InlineStatus>
+          <Button variant="secondary" size="sm" onClick={onLoadNewer}>
             {t('actions.retry')}
           </Button>
         </div>

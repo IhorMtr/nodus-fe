@@ -11,6 +11,7 @@ import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { useChannelMessages } from './hooks/use-channel-messages';
+import { useChannelMessageNavigation } from './hooks/use-channel-message-navigation';
 import { useChannelReadState } from './hooks/use-channel-read-state';
 import { useMessageActions } from './hooks/use-message-actions';
 import styles from './ChannelConversation.module.scss';
@@ -34,12 +35,31 @@ export function ChannelConversation({
   // ==================== PAGE HOOKS ====================
 
   const history = useChannelMessages(workspaceId, channelId);
+  const navigation = useChannelMessageNavigation(
+    workspaceId,
+    channelId,
+    history.joinEpoch,
+    { events: history.pendingContextEvents, reads: history.pendingContextReads }
+  );
   const actions = useMessageActions(workspaceId, channelId);
+  const messages = navigation.isContextActive
+    ? navigation.messages
+    : history.messages;
+  let loadOlder = history.loadOlder;
+  if (navigation.isContextActive) {
+    loadOlder = navigation.loadOlder;
+  } else if (history.hasOlderError) {
+    loadOlder = history.retryOlder;
+  }
+
   const readState = useChannelReadState({
     workspaceId,
     channelId,
     messages: history.messages,
-    isHistoryReady: !history.isLoading && !history.loadError,
+    isHistoryReady:
+      !navigation.isContextRequested &&
+      !history.isLoading &&
+      !history.loadError,
     hasUnread,
   });
 
@@ -88,11 +108,45 @@ export function ChannelConversation({
         </div>
       )}
 
+      {/* ==================== CONTEXT NAVIGATION ==================== */}
+
+      {navigation.isContextRequested && (
+        <div className={styles.contextAction}>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={navigation.jumpToLatest}
+          >
+            {t('actions.jumpToLatest')}
+          </Button>
+        </div>
+      )}
+      {navigation.isLoadingContext && (
+        <div className={styles.contextFeedback} role="status">
+          <Spinner size="sm" label={t('states.loadingContext')} />
+        </div>
+      )}
+      {navigation.error && (
+        <div className={styles.contextFeedback} role="alert">
+          <span>{navigation.error}</span>
+          {navigation.canRetry && (
+            <Button size="sm" variant="secondary" onClick={navigation.retry}>
+              {t('actions.retry')}
+            </Button>
+          )}
+        </div>
+      )}
+
       {/* ==================== MESSAGES ==================== */}
 
       <MessageList
+        key={
+          navigation.isContextActive
+            ? `context:${navigation.targetRequest?.messageId}`
+            : 'latest'
+        }
         channelName={channelName}
-        messages={history.messages}
+        messages={messages}
         canEdit={history.canEdit}
         canDelete={history.canDelete}
         getReceipt={message =>
@@ -105,13 +159,31 @@ export function ChannelConversation({
               }
             : undefined
         }
-        hasOlder={history.hasOlder}
-        isLoadingOlder={history.isLoadingOlder}
-        hasOlderError={history.hasOlderError}
-        onLoadOlder={
-          history.hasOlderError ? history.retryOlder : history.loadOlder
+        hasOlder={
+          navigation.isContextActive ? navigation.hasOlder : history.hasOlder
         }
-        scrollToMessageId={actions.lastSentId}
+        isLoadingOlder={
+          navigation.isContextActive
+            ? navigation.isLoadingOlder
+            : history.isLoadingOlder
+        }
+        hasOlderError={
+          navigation.isContextActive
+            ? navigation.hasOlderError
+            : history.hasOlderError
+        }
+        onLoadOlder={loadOlder}
+        hasNewer={navigation.isContextActive && navigation.hasNewer}
+        isLoadingNewer={navigation.isContextActive && navigation.isLoadingNewer}
+        hasNewerError={navigation.isContextActive && navigation.hasNewerError}
+        onLoadNewer={navigation.loadNewer}
+        followLatest={!navigation.isContextActive}
+        targetRequest={
+          navigation.isContextActive ? navigation.targetRequest : undefined
+        }
+        scrollToMessageId={
+          navigation.isContextActive ? undefined : actions.lastSentId
+        }
         editingId={actions.editing.editingId}
         isSavingEdit={actions.editing.isSaving}
         editError={actions.editing.error}
@@ -119,7 +191,9 @@ export function ChannelConversation({
         onSaveEdit={actions.editing.onSave}
         onCancelEdit={actions.editing.onCancel}
         onDelete={actions.deletion.onRequest}
-        onBottomChange={readState.onBottomChange}
+        onBottomChange={
+          navigation.isContextActive ? undefined : readState.onBottomChange
+        }
       />
 
       {/* ==================== COMPOSER AND DIALOGS ==================== */}

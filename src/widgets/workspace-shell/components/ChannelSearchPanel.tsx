@@ -18,11 +18,13 @@ export function ChannelSearchPanel({
   workspaceId,
   channelId,
   onClose,
+  onSelectMessage,
   withHeading = true,
 }: {
   workspaceId: string;
   channelId: string;
   onClose: () => void;
+  onSelectMessage: (messageId: string) => void;
   withHeading?: boolean;
 }) {
   // ==================== CONTEXT AND STATE ====================
@@ -30,7 +32,7 @@ export function ChannelSearchPanel({
   const t = useTranslations('workspace.searchPanel');
   const locale = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { input, setInput, query, results, items, valid, submit } =
+  const { input, setInput, query, results, items, isDebouncing } =
     useChannelSearch(workspaceId, channelId);
   const dateFormat = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
@@ -58,7 +60,7 @@ export function ChannelSearchPanel({
           />
         </div>
       )}
-      <form className={styles.form} onSubmit={submit}>
+      <div className={styles.search}>
         <Input
           data-autofocus
           ref={inputRef}
@@ -70,14 +72,13 @@ export function ChannelSearchPanel({
           placeholder={t('placeholder')}
           leftIcon={<Search size={16} />}
         />
-        <Button type="submit" size="sm" variant="secondary" disabled={!valid}>
-          {t('submit')}
-        </Button>
-      </form>
+      </div>
       <div className={styles.results} aria-live="polite">
-        {!query && <p className={styles.state}>{t('hint')}</p>}
-        {query && results.isPending && (
-          <Spinner size="sm" label={t('loading')} />
+        {!query && !isDebouncing && <p className={styles.state}>{t('hint')}</p>}
+        {(isDebouncing || (query && results.isPending)) && (
+          <div className={styles.loading}>
+            <Spinner size="sm" label={t('loading')} />
+          </div>
         )}
         {query && results.isError && !results.isFetchNextPageError && (
           <div className={styles.state} role="alert">
@@ -98,17 +99,23 @@ export function ChannelSearchPanel({
           <ul className={styles.list}>
             {items.map(({ message }) => (
               <li key={message.id} className={styles.result}>
-                <div className={styles.meta}>
-                  <strong>
-                    {[message.author.firstName, message.author.lastName]
-                      .filter(Boolean)
-                      .join(' ')}
-                  </strong>
-                  <time dateTime={message.createdAt}>
-                    {dateFormat.format(new Date(message.createdAt))}
-                  </time>
-                </div>
-                <p>{message.content}</p>
+                <button
+                  type="button"
+                  className={styles.resultButton}
+                  onClick={() => onSelectMessage(message.id)}
+                >
+                  <div className={styles.meta}>
+                    <strong>
+                      {[message.author.firstName, message.author.lastName]
+                        .filter(Boolean)
+                        .join(' ')}
+                    </strong>
+                    <time dateTime={message.createdAt}>
+                      {dateFormat.format(new Date(message.createdAt))}
+                    </time>
+                  </div>
+                  <p>{message.content}</p>
+                </button>
               </li>
             ))}
           </ul>

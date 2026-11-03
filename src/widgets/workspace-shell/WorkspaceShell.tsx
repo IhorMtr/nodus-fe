@@ -15,6 +15,10 @@ import { useRouter } from '@/shared/i18n/navigation';
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
 import { ChannelSearchPanel } from './components/ChannelSearchPanel';
+import {
+  ChannelSearchNavigationProvider,
+  type SearchSelection,
+} from './components/channel-search-navigation';
 import { MembersPanel } from './components/MembersPanel';
 import { useChannelUnreadRecovery } from './components/use-channel-unread-recovery';
 import { useMembersPanel } from './components/use-members-panel';
@@ -53,11 +57,13 @@ function WorkspaceShellLayout({
   const [sidebarOpened, setSidebarOpened] = useState(false);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const [searchChannelId, setSearchChannelId] = useState<string>();
+  const [selection, setSelection] = useState<SearchSelection | null>(null);
   const [previousChannelId, setPreviousChannelId] = useState(channelId);
 
   if (previousChannelId !== channelId) {
     setPreviousChannelId(channelId);
     setSearchChannelId(undefined);
+    setSelection(null);
   }
 
   // ==================== FEATURE HOOKS ====================
@@ -97,6 +103,22 @@ function WorkspaceShellLayout({
 
     if (!panelLayout.compact) {
       searchButtonRef.current?.focus();
+    }
+  };
+
+  const selectMessage = (messageId: string) => {
+    if (!channelId) {
+      return;
+    }
+
+    setSelection(previous => ({
+      channelId,
+      messageId,
+      sequence: (previous?.sequence ?? 0) + 1,
+    }));
+
+    if (panelLayout.compact) {
+      closeSearch();
     }
   };
 
@@ -141,7 +163,11 @@ function WorkspaceShellLayout({
 
         {/* ==================== MAIN CONTENT ==================== */}
 
-        <main className={styles.content}>{children}</main>
+        <main className={styles.content}>
+          <ChannelSearchNavigationProvider value={{ selection, selectMessage }}>
+            {children}
+          </ChannelSearchNavigationProvider>
+        </main>
 
         {/* ==================== DESKTOP MEMBERS PANEL ==================== */}
 
@@ -159,6 +185,7 @@ function WorkspaceShellLayout({
                 workspaceId={workspaceId}
                 channelId={channelId}
                 onClose={closeSearch}
+                onSelectMessage={selectMessage}
               />
             ) : (
               <MembersPanel {...panelProps} />
@@ -214,6 +241,7 @@ function WorkspaceShellLayout({
             workspaceId={workspaceId}
             channelId={channelId}
             onClose={closeSearch}
+            onSelectMessage={selectMessage}
             withHeading={false}
           />
         )}
