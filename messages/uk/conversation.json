@@ -16,5 +16,8 @@
   "selectConversation": "Оберіть розмову, щоб переглянути повідомлення.",
   "unavailable": "Ця розмова недоступна в робочому просторі.",
   "backToList": "До списку розмов",
-  "messageMember": "Написати повідомлення"
+  "messageMember": "Написати повідомлення",
+  "summary": "{count, plural, one {# розмова} few {# розмови} many {# розмов} other {# розмови}}",
+  "unreadSummary": "Непрочитані: {count}",
+  "you": "Ви"
 }

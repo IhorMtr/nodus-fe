@@ -36,9 +36,7 @@ export function useInvitationManagement(
 
       setCopyState(null);
       setInviteLink(link);
-    } catch {
-      // The mutation error is displayed beside the action.
-    }
+    } catch {}
   };
 
   const revokeInvite = (inviteId: string) => {

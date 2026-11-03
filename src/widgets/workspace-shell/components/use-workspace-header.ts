@@ -3,6 +3,9 @@
 import { useSelectedLayoutSegments } from 'next/navigation';
 
 import { useChannelsQuery } from '@/domains/channel/model/channel';
+import { useConversationsQuery } from '@/domains/conversation/model/conversations';
+import type { PresenceStatus } from '@/domains/presence/model/presence-status';
+import { useWorkspaceMembersQuery } from '@/domains/workspace/model/members';
 import { useWorkspacesQuery } from '@/domains/workspace/model/workspace';
 
 // ==================== TYPES ====================
@@ -20,7 +23,13 @@ const workspaceSections = [
 type WorkspaceSectionRoute = (typeof workspaceSections)[number];
 
 export type WorkspaceContext =
-  | { kind: 'channel'; name: string }
+  | { kind: 'channel'; id: string; name: string }
+  | {
+      kind: 'conversation';
+      name: string;
+      initials: string;
+      status: PresenceStatus;
+    }
   | { kind: 'section'; section: WorkspaceSectionRoute }
   | null;
 
@@ -39,34 +48,48 @@ export function useWorkspaceHeader(workspaceId: string) {
 
   // ==================== QUERIES ====================
 
+  const channelId = segments[0] === 'channels' ? segments[1] : undefined;
+  const conversationId =
+    segments[0] === 'conversations' ? segments[1] : undefined;
+
   const workspaces = useWorkspacesQuery();
   const channels = useChannelsQuery(workspaceId);
+  const conversations = useConversationsQuery(
+    workspaceId,
+    Boolean(conversationId)
+  );
+  const members = useWorkspaceMembersQuery(workspaceId);
 
   // ==================== DERIVED STATE ====================
 
-  const channelId = segments[0] === 'channels' ? segments[1] : undefined;
   const channelName = channelId
     ? channels.data?.find(item => item.id === channelId)?.name
+    : undefined;
+  const peer = conversationId
+    ? conversations.data?.find(item => item.id === conversationId)?.otherUser
     : undefined;
   const section = channelId ? null : getSection(segments[0]);
 
   let context: WorkspaceContext = null;
 
-  if (channelName) {
-    context = { kind: 'channel', name: channelName };
+  if (channelId && channelName) {
+    context = { kind: 'channel', id: channelId, name: channelName };
+  } else if (peer) {
+    const member = members.data?.find(item => item.userId === peer.id);
+
+    context = {
+      kind: 'conversation',
+      name: `${peer.firstName} ${peer.lastName}`.trim(),
+      initials:
+        `${peer.firstName.charAt(0)}${peer.lastName.charAt(0)}`.toUpperCase(),
+      status: member?.status ?? peer.status,
+    };
   } else if (section) {
     context = { kind: 'section', section };
   }
 
-  // ==================== HANDLERS ====================
-
-  const retryWorkspaces = () => {
-    void workspaces.refetch();
-  };
-
   return {
     workspaces,
     context,
-    retryWorkspaces,
   };
 }

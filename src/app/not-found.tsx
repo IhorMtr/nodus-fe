@@ -10,8 +10,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: `${t('code')} — Nodus` };
 }
 
-// Renders for every unmatched URL. It sits outside the [locale] layout, so
-// the locale and messages are provided here.
 export default async function NotFound() {
   const locale = await getLocale();
   const messages = await getMessages({ locale });

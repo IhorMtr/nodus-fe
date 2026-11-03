@@ -7,6 +7,8 @@ import { useState } from 'react';
 
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 
+import { useModalLocaleSwitch } from './PersonalSettingsSlot';
+
 // ==================== TYPES ====================
 
 type SettingsCategory = 'account' | 'appearance';
@@ -23,6 +25,7 @@ export function usePersonalSettings() {
   const colorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   });
+  const switchModalLocale = useModalLocaleSwitch();
 
   // ==================== LOCAL NAVIGATION ====================
 
@@ -32,6 +35,11 @@ export function usePersonalSettings() {
 
   function switchLocale(nextLocale: 'uk' | 'en') {
     if (locale === nextLocale) {
+      return;
+    }
+
+    if (switchModalLocale) {
+      switchModalLocale(nextLocale);
       return;
     }
 

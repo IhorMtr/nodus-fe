@@ -1,0 +1,86 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
+@use '@/shared/styles/mixins' as mixins;
+@use '../../landing' as landing;
+
+// ==================== LAYOUT ====================
+
+.root {
+  @include landing.section-spacing;
+
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-surface);
+}
+
+.inner {
+  @include landing.container;
+  @include effects.rise-on-scroll;
+
+  display: grid;
+  gap: var(--space-10);
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-16);
+  }
+}
+
+// ==================== STATEMENT ====================
+
+.statement h2 {
+  @include landing.section-title;
+
+  max-width: 17ch;
+  margin-top: var(--space-4);
+}
+
+.eyebrow {
+  @include landing.eyebrow;
+}
+
+// ==================== PRODUCT PILLARS ====================
+
+.details {
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    padding-top: var(--space-10);
+  }
+}
+
+.description {
+  @include landing.lead;
+}
+
+.points {
+  display: grid;
+  margin: var(--space-10) 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: var(--space-10) minmax(0, 1fr);
+    gap: var(--space-2);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-divider);
+  }
+
+  h3 {
+    margin: 0 0 var(--space-1);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.015em;
+    line-height: var(--line-height-snug);
+  }
+
+  p {
+    @include landing.body;
+  }
+}
+
+.number {
+  padding-top: 3px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}

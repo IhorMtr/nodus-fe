@@ -76,7 +76,6 @@ export function installHttpAuthentication(client: AxiosInstance) {
         previous.accessToken
       );
     } catch (recoveryError) {
-      // Keep the terminal 401 so query retries cannot start another refresh cycle.
       error.cause =
         recoveryError instanceof Error
           ? recoveryError

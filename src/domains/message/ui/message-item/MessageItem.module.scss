@@ -1,12 +1,18 @@
+// ==================== MESSAGE ====================
+
 .item {
+  --message-line: calc(var(--font-size-md) * var(--line-height-normal));
+
   position: relative;
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
+  grid-template-columns: var(--avatar-size-md) minmax(0, 1fr);
   column-gap: var(--space-3);
-  margin-inline: calc(-1 * var(--space-3));
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--message-inset, var(--space-6));
   transition: background-color var(--transition-fast);
+
+  &[data-grouped] {
+    padding-block: 1px;
+  }
 
   &:hover,
   &:focus-within,
@@ -15,37 +21,55 @@
   }
 }
 
-.avatar {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  margin-top: 2px;
-  place-items: center;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-active);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+// ==================== GUTTER ====================
+
+.gutter {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+
+  .item[data-grouped] & {
+    padding-top: 0;
+  }
 }
+
+.hoverTime {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-2xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--message-line);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+
+  .item:hover &,
+  .item:focus-within & {
+    opacity: 1;
+  }
+}
+
+// ==================== BODY ====================
 
 .body {
   min-width: 0;
+  max-width: var(--content-width-message);
 }
 
 .meta {
   display: flex;
+  min-width: 0;
   min-height: 22px;
   align-items: baseline;
   gap: var(--space-2);
-  padding-right: var(--space-8);
 }
 
 .author {
   min-width: 0;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -55,37 +79,74 @@
   flex-shrink: 0;
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+.content {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.trailingMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: var(--space-2);
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+// ==================== READ RECEIPTS ====================
 
 .receipt,
 .receiptButton {
   display: inline-flex;
   flex-shrink: 0;
+  align-self: center;
   align-items: center;
   color: var(--color-text-muted);
+
+  &[data-read] {
+    color: var(--color-info-text);
+  }
 }
 
 .receiptButton {
   padding: 0;
   border: 0;
+  border-radius: var(--radius-xs);
   background: transparent;
   cursor: pointer;
-}
 
-.receiptButton:focus-visible {
-  outline: 2px solid var(--color-text-secondary);
-  outline-offset: 2px;
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: 2px;
+  }
 }
 
 .receiptPopover {
   max-width: 240px;
   color: var(--color-text-primary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
+
+  strong {
+    font-weight: var(--font-weight-semibold);
+  }
 
   ul {
-    margin: var(--space-1) 0 0;
+    margin: var(--space-2) 0 0;
     padding: 0;
+    color: var(--color-text-secondary);
     list-style: none;
   }
 
@@ -94,30 +155,42 @@
   }
 }
 
-.content {
-  margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-md);
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
+// ==================== HOVER ACTIONS ====================
 
 .actions {
   position: absolute;
-  top: var(--space-2);
-  right: var(--space-3);
+  z-index: 1;
+  top: -14px;
+  right: var(--message-inset, var(--space-6));
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-overlay);
+  box-shadow: var(--shadow-sm);
   opacity: 0;
+  pointer-events: none;
   transition: opacity var(--transition-fast);
 
   .item:hover &,
-  .item:focus-within &,
-  &:has([aria-expanded='true']) {
+  .item:focus-within & {
     opacity: 1;
+    pointer-events: auto;
   }
 
   @media (hover: none) {
+    top: var(--space-1);
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
     opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (hover: none) {
+  .item:has(.actions) .body {
+    padding-right: 68px;
   }
 }

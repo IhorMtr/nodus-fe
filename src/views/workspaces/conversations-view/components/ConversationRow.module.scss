@@ -1,0 +1,119 @@
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== ROW ====================
+
+.row {
+  @include mixins.focus-ring(-2px);
+
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 68px;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transition-fast);
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+
+  &:active,
+  &[aria-current='page'] {
+    background: var(--color-surface-selected);
+  }
+}
+
+.avatar {
+  --avatar-ring: var(--color-background);
+}
+
+// ==================== SUMMARY ====================
+
+.body {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.top,
+.bottom {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.preview {
+  min-width: 0;
+  max-width: var(--content-width-message);
+  flex: 1;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.previewAuthor {
+  color: var(--color-text-muted);
+}
+
+// ==================== UNREAD ====================
+
+.row[data-unread] {
+  .name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .preview {
+    color: var(--color-text-primary);
+  }
+
+  .time {
+    color: var(--color-text-secondary);
+  }
+}
+
+.unread {
+  min-width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-unread);
+  color: var(--color-on-unread);
+  font-size: var(--font-size-2xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: 20px;
+  text-align: center;
+}

@@ -1,82 +1,140 @@
 {
   "name": "Nodus",
-  "tagline": "Communication that stays organized.",
-  "description": "Workspaces, channels and real-time conversations in one focused place for your team.",
-  "category": "Communication for teams",
-  "concepts": {
-    "workspaces": "Workspaces",
-    "channels": "Channels",
-    "conversations": "Conversations"
+  "description": "One focused workspace for channels, direct messages, announcements and your team.",
+  "copyright": "© {year} Nodus",
+  "metadata": {
+    "title": "Nodus — one workspace for team communication",
+    "description": "Channels, direct messages, announcements and your whole team in one focused workspace."
   },
   "actions": {
     "getStarted": "Get started",
-    "getStartedPreview": "Explore the product preview",
-    "previewAvailability": "Explore the preview. Workspace access is coming later.",
-    "newChannel": "New channel"
+    "createWorkspace": "Create your workspace"
   },
-  "preview": {
-    "eyebrow": "Inside Nodus",
-    "title": "A clear place for every conversation.",
-    "description": "Team overview, announcements and conversations in one workspace.",
-    "workspaceName": "Nodus team",
-    "channelDescription": "General team discussion",
-    "messages": {
-      "contract": "Updated the API contract. The channel endpoints are ready for review.",
-      "review": "Looks good to me. I’ll check the frontend integration.",
-      "nextStep": "Thanks. Let’s keep the implementation notes in #frontend."
-    },
-    "messagePlaceholder": "Message #general…",
-    "members": "{count, plural, one {# member} other {# members}}",
-    "today": "Today",
-    "people": {
-      "ihor": "Ihor",
-      "anna": "Anna",
-      "oleh": "Oleh"
-    }
+  "hero": {
+    "eyebrow": "Team communication, organized",
+    "title": "A clearer way to work together.",
+    "description": "Bring channels, direct messages, announcements and your team into one focused workspace.",
+    "visualAlt": "The #general channel in Nodus: a team discussion next to the channel list with unread counters and the list of online members."
   },
-  "capabilities": {
-    "eyebrow": "What you can do",
-    "title": "Built around the conversation.",
-    "organization": {
-      "title": "Organize conversations",
-      "description": "Create workspaces and channels so every discussion has a clear place."
-    },
-    "realtime": {
-      "title": "Talk in real time",
-      "description": "Messages, presence and live updates keep everyone in sync.",
-      "media": {
-        "message": "The channel is ready for review.",
-        "reply": "I’ll take a look now.",
-        "typing": "Anna is typing…"
-      }
-    },
-    "visibility": {
-      "title": "Keep important information visible",
-      "description": "Scheduled announcements, notifications and search help important updates avoid getting buried.",
-      "media": {
-        "search": "Search this workspace",
-        "announcement": "Weekly team update",
-        "scheduled": "Scheduled · Monday, 09:00",
-        "pinned": "Pinned in announcements",
-        "message": "This week’s priorities, in one place."
+  "introduction": {
+    "eyebrow": "What is Nodus",
+    "title": "One shared workspace for the way your team talks.",
+    "description": "Instead of scattered chats, every team gets a workspace with a clear place for discussion, private conversations and official updates.",
+    "points": {
+      "workspaces": {
+        "title": "Workspaces and channels",
+        "description": "Give each team its own space and each topic its own channel."
+      },
+      "conversations": {
+        "title": "Direct messages",
+        "description": "Talk one-to-one in real time, with presence and read receipts."
+      },
+      "announcements": {
+        "title": "Announcements",
+        "description": "Publish important updates right away or schedule them for later."
       }
     }
   },
-  "structure": {
-    "title": "One place for the whole conversation.",
-    "description": "A workspace keeps people, channels and conversations connected without turning communication into a pile of unrelated chats.",
-    "eyebrow": "A simple structure",
-    "workspace": "Workspace"
+  "overview": {
+    "eyebrow": "Workspace overview",
+    "title": "Everything in one workspace.",
+    "description": "The overview shows the whole workspace at a glance: who is on the team, where new messages are waiting and what was announced recently.",
+    "points": {
+      "metrics": "Totals for members, channels, messages and announcements",
+      "channels": "Every channel with its unread count",
+      "announcements": "The latest announcements, one click away",
+      "presence": "Who is online right now"
+    },
+    "visualAlt": "The Nodus workspace overview with member, channel and message totals, the channel list with unread counts and recent announcements."
+  },
+  "conversations": {
+    "eyebrow": "Direct messages",
+    "title": "Conversations that stay focused.",
+    "description": "Take a discussion one-to-one without leaving the workspace.",
+    "details": {
+      "realtime": {
+        "term": "Real time",
+        "description": "Messages appear the moment they are sent."
+      },
+      "receipts": {
+        "term": "Read receipts",
+        "description": "Check marks show when your message has been read."
+      },
+      "presence": {
+        "term": "Presence",
+        "description": "See whether a teammate is online before you write."
+      },
+      "history": {
+        "term": "History",
+        "description": "Every conversation keeps its full message history."
+      }
+    },
+    "visualAlt": "A direct conversation between Alex Morgan and Maya Chen with read receipts and an online status."
+  },
+  "channels": {
+    "eyebrow": "Channels",
+    "title": "Organize work around what matters.",
+    "description": "Topic-based channels keep group discussions apart, so product, engineering and design each have a place of their own.",
+    "points": {
+      "topics": {
+        "title": "A channel for every topic",
+        "description": "Create channels for projects, teams or any subject that needs its own thread."
+      },
+      "navigation": {
+        "title": "Clear navigation",
+        "description": "Unread counters show exactly where new messages are waiting."
+      },
+      "appearance": {
+        "title": "Light and dark",
+        "description": "Switch between the light and dark theme whenever you like."
+      }
+    },
+    "visualAlt": "The #general channel in the light theme with the channel sidebar and the members panel."
+  },
+  "team": {
+    "eyebrow": "Members",
+    "title": "Know who’s on your team.",
+    "description": "See every member of the workspace, their role and whether they are online. Invite new people and manage access as the team grows.",
+    "facts": {
+      "roles": {
+        "title": "Roles",
+        "description": "Owner, admin and member roles define who manages the workspace."
+      },
+      "invitations": {
+        "title": "Invitations",
+        "description": "Create invitation links and see when they were used or expire."
+      },
+      "presence": {
+        "title": "Presence",
+        "description": "Online and offline status for every member, updated live."
+      },
+      "access": {
+        "title": "Access",
+        "description": "Change a member’s role or remove them when needed."
+      }
+    },
+    "visualAlt": "The Nodus members page with a table of members, their status and roles, and a list of invitations."
+  },
+  "updates": {
+    "eyebrow": "Updates",
+    "title": "Nothing important gets lost.",
+    "announcements": {
+      "title": "Important updates deserve their own space.",
+      "description": "Announcements keep official news apart from everyday chat. Publish an update right away or schedule it for the right moment.",
+      "visualAlt": "The Nodus announcements page with published announcements and a tab for scheduled ones."
+    },
+    "notifications": {
+      "title": "Stay in the loop, without the noise.",
+      "description": "In-app notifications collect new direct messages, announcements and role changes in one panel, with unread states that update in real time.",
+      "visualAlt": "The Nodus notifications panel with unread notifications about a new announcement and new direct messages."
+    }
   },
   "invitation": {
-    "title": "Ready to start a workspace?",
-    "description": "Bring your conversations into one organized place."
+    "title": "Bring your team together.",
+    "description": "Create your workspace and start collaborating with Nodus."
   },
-  "copyright": "© {year} Nodus",
-  "navigation": {
-    "overview": "Overview",
-    "conversations": "Conversations",
-    "announcements": "Announcements",
-    "search": "Search"
+  "footer": {
+    "product": "Product",
+    "account": "Account"
   }
 }

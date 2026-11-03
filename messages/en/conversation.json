@@ -16,5 +16,8 @@
   "selectConversation": "Select a conversation to view messages.",
   "unavailable": "This conversation is unavailable in this workspace.",
   "backToList": "Back to conversations",
-  "messageMember": "Send message"
+  "messageMember": "Send message",
+  "summary": "{count, plural, one {# conversation} other {# conversations}}",
+  "unreadSummary": "{count} unread",
+  "you": "You"
 }

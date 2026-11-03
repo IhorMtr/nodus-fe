@@ -1,0 +1,96 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== TOGGLE ====================
+
+.root {
+  display: contents;
+
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    display: none;
+  }
+}
+
+// ==================== PANEL ====================
+
+.panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: grid;
+  gap: var(--space-4);
+  max-height: calc(100dvh - var(--landing-header-height));
+  overflow-y: auto;
+  padding: var(--space-3) var(--page-padding-sm) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-background);
+  box-shadow: var(--shadow-lg);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    padding-inline: var(--page-padding-md);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: open-panel 180ms ease-out both;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+@keyframes open-panel {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.links {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    @include mixins.focus-ring(-2px);
+
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding-inline: var(--space-2);
+    border-bottom: 1px solid var(--color-divider);
+    border-radius: var(--radius-control);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+
+    &:hover {
+      background: var(--color-surface-hover);
+    }
+  }
+}
+
+.preferences {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    display: none;
+  }
+}
+
+.account {
+  @include mixins.up(breakpoints.$breakpoint-sm) {
+    display: none;
+  }
+}

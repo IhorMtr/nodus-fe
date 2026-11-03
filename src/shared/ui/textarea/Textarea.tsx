@@ -22,6 +22,7 @@ export type TextareaProps = Omit<ComponentPropsWithRef<'textarea'>, 'color'> &
     | 'maxRows'
   > & {
     size?: 'sm' | 'md' | 'lg';
+    variant?: 'default' | 'plain';
     fullWidth?: boolean;
   };
 
@@ -29,6 +30,7 @@ export type TextareaProps = Omit<ComponentPropsWithRef<'textarea'>, 'color'> &
 
 export function Textarea({
   size = 'md',
+  variant = 'default',
   fullWidth = true,
   autosize = false,
   ...props
@@ -37,6 +39,7 @@ export function Textarea({
     <MantineTextarea
       {...props}
       size={size}
+      variant={variant}
       autosize={autosize}
       resize={autosize ? 'none' : 'vertical'}
       wrapperProps={{

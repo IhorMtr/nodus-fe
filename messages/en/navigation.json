@@ -3,5 +3,9 @@
   "features": "Features",
   "primaryLabel": "Main navigation",
   "footerLabel": "Footer navigation",
-  "skipToContent": "Skip to content"
+  "skipToContent": "Skip to content",
+  "team": "Team",
+  "updates": "Updates",
+  "openMenu": "Open menu",
+  "closeMenu": "Close menu"
 }

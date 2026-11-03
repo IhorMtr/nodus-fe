@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 import {
@@ -33,6 +33,7 @@ export function useNewWorkspaceView() {
   const schema = useMemo(() => createWorkspaceSchema(validation), [validation]);
   const {
     register,
+    control,
     handleSubmit,
     setError,
     clearErrors,
@@ -41,6 +42,7 @@ export function useNewWorkspaceView() {
     resolver: yupResolver(schema),
     defaultValues: { name: '' },
   });
+  const previewName = useWatch({ control, name: 'name' }).trim();
 
   // ==================== SUBMISSION ====================
 
@@ -112,6 +114,7 @@ export function useNewWorkspaceView() {
 
   return {
     form,
+    previewName,
     isLoading:
       currentUser.isPending ||
       !currentUser.isFetchedAfterMount ||

@@ -1,46 +1,50 @@
 @use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
+
+// ==================== INTRODUCTION ====================
 
 .introduction {
   margin-bottom: var(--space-8);
 
   h1 {
-    margin: 0 0 var(--space-2);
-    font-size: clamp(var(--font-size-2xl), 2.4vw, var(--font-size-3xl));
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    letter-spacing: -0.025em;
-    overflow-wrap: anywhere;
+    @include page.title;
   }
 
   p {
-    margin: 0;
+    margin: var(--space-2) 0 0;
     color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-md);
     line-height: var(--line-height-relaxed);
   }
 }
+
+// ==================== ALTERNATIVE ACTION ====================
 
 .alternative {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-1) var(--space-2);
-  margin: var(--space-6) 0 0;
+  margin: var(--space-8) 0 0;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-divider);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   text-align: center;
 
   a {
     @include mixins.focus-ring;
 
     border-radius: var(--radius-xs);
-    color: var(--color-primary-text);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color var(--transition-fast);
 
     &:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
+      text-decoration-color: currentColor;
     }
   }
 }

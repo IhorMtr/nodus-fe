@@ -1,7 +1,7 @@
 'use client';
 
 import { Modal } from '@mantine/core';
-import { Building2 } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { getWorkspaceManagementErrorKey } from '@/domains/workspace/model/workspace';
@@ -10,8 +10,10 @@ import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
-import styles from './SettingsView.module.scss';
 import { useSettingsView } from './hooks/use-settings-view';
+import styles from './SettingsView.module.scss';
+
+// ==================== PAGE VIEW ====================
 
 export function SettingsView({ workspaceId }: { workspaceId: string }) {
   // ==================== VIEW STATE ====================
@@ -77,88 +79,89 @@ export function SettingsView({ workspaceId }: { workspaceId: string }) {
     );
   }
 
+  // ==================== DERIVED STATE ====================
+
+  const monogram = workspace.data.name.trim().charAt(0).toUpperCase();
+
   // ==================== RENDER ====================
 
   return (
     <div className={styles.page}>
       {/* ==================== PAGE HEADER ==================== */}
 
-      <header className={styles.intro}>
-        <h1>{management('settingsTitle')}</h1>
-        <p>{management('settingsDescription')}</p>
-      </header>
-
-      {/* ==================== WORKSPACE IDENTITY ==================== */}
-
-      <div className={styles.identity}>
-        <span className={styles.identityIcon} aria-hidden="true">
-          <Building2 size={20} />
+      <header className={styles.header}>
+        <span className={styles.monogram} aria-hidden="true">
+          {monogram}
         </span>
-        <div className={styles.identityText}>
-          <span>{management('workspaceLabel')}</span>
-          <strong>{workspace.data.name}</strong>
+        <div className={styles.headerText}>
+          <span className={styles.workspaceName}>{workspace.data.name}</span>
+          <h1>{management('settingsTitle')}</h1>
+          <p>{management('settingsDescription')}</p>
         </div>
-        <span className={styles.identityRole}>
-          {roles(workspace.data.role)}
-        </span>
-      </div>
+        <span className={styles.role}>{roles(workspace.data.role)}</span>
+      </header>
 
       {/* ==================== GENERAL SETTINGS ==================== */}
 
       <section
-        className={styles.group}
+        className={styles.panel}
         aria-labelledby="general-settings-heading"
       >
-        <h2 id="general-settings-heading" className={styles.groupHeading}>
+        <h2 id="general-settings-heading" className={styles.panelHeading}>
           {management('generalTitle')}
         </h2>
-        <div className={styles.setting}>
-          <div className={styles.settingText}>
-            <h3>{management('nameTitle')}</h3>
-            <p>{management('nameDescription')}</p>
-          </div>
-          <form
-            className={styles.form}
-            onSubmit={event => void saveName(event)}
-            noValidate
-          >
-            <Input
-              {...register('name')}
-              label={t('fields.name')}
-              error={errors.name?.message}
-              maxLength={100}
-              readOnly={rename.isPending}
-              required
-            />
-            {rename.isError && (
-              <InlineStatus tone="danger" role="alert">
-                {management(
-                  `errors.${getWorkspaceManagementErrorKey(rename.error)}`
-                )}
-              </InlineStatus>
-            )}
-            <div className={styles.formActions}>
-              <Button type="submit" loading={rename.isPending}>
-                {management('save')}
-              </Button>
-              {rename.isSuccess && (
-                <InlineStatus tone="success" variant="plain" role="status">
-                  {management('saved')}
+
+        <form onSubmit={event => void saveName(event)} noValidate>
+          <div className={styles.setting}>
+            <div className={styles.settingText}>
+              <h3>{management('nameTitle')}</h3>
+              <p>{management('nameDescription')}</p>
+            </div>
+            <div className={styles.field}>
+              <Input
+                {...register('name')}
+                label={t('fields.name')}
+                error={errors.name?.message}
+                maxLength={100}
+                readOnly={rename.isPending}
+                required
+              />
+              {rename.isError && (
+                <InlineStatus tone="danger" role="alert">
+                  {management(
+                    `errors.${getWorkspaceManagementErrorKey(rename.error)}`
+                  )}
                 </InlineStatus>
               )}
             </div>
-          </form>
-        </div>
+          </div>
+
+          <div className={styles.panelFooter}>
+            {rename.isSuccess && (
+              <InlineStatus tone="success" variant="plain" role="status">
+                {management('saved')}
+              </InlineStatus>
+            )}
+            <Button
+              type="submit"
+              loading={rename.isPending}
+              className={styles.footerAction}
+            >
+              {management('save')}
+            </Button>
+          </div>
+        </form>
       </section>
 
-      {/* ==================== DELETE WORKSPACE ==================== */}
+      {/* ==================== DANGER ZONE ==================== */}
 
       {isOwner && (
         <section
-          className={`${styles.group} ${styles.dangerSection}`}
+          className={`${styles.panel} ${styles.dangerPanel}`}
           aria-labelledby="delete-workspace-heading"
         >
-          <h2 id="delete-workspace-heading" className={styles.groupHeading}>
+          <h2 id="delete-workspace-heading" className={styles.panelHeading}>
+            <TriangleAlert size={16} aria-hidden="true" />
             {management('dangerZone')}
           </h2>
           <div className={styles.setting}>

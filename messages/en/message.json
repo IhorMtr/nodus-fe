@@ -4,7 +4,8 @@
   },
   "composer": {
     "label": "Message",
-    "placeholder": "Write a message…"
+    "placeholder": "Write a message…",
+    "hint": "Enter to send · Shift + Enter for a new line"
   },
   "actions": {
     "send": "Send message",

@@ -6,8 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { selectablePresenceStatuses } from '@/domains/presence/model/presence-status';
 import { PresenceIndicator } from '@/domains/presence/ui/presence-indicator';
-import { Link } from '@/shared/i18n/navigation';
 import type { User } from '@/domains/user/model/current-user';
+import { Link } from '@/shared/i18n/navigation';
+import { Avatar } from '@/shared/ui/avatar';
 
 import { useUserPresence } from './use-user-presence';
 import { useUserProfile } from './use-user-profile';
@@ -60,12 +61,19 @@ export function UserProfile({
             data-settings-return-focus
             aria-label={triggerLabel}
           >
-            <span className={styles.avatar} aria-hidden="true">
-              {initials}
-            </span>
+            <Avatar
+              initials={initials}
+              size="md"
+              className={styles.avatar}
+              status={
+                status && (
+                  <PresenceIndicator status={status} withLabel={false} />
+                )
+              }
+            />
             <span className={styles.identity}>
               <strong title={name}>{name}</strong>
-              {status && <PresenceIndicator status={status} />}
+              <span>{status ? presence(`status.${status}`) : user.email}</span>
             </span>
             <ChevronUp
               className={styles.chevron}
@@ -77,9 +85,7 @@ export function UserProfile({
 
         <Menu.Dropdown className={styles.dropdown}>
           <div className={styles.menuIdentity}>
-            <span className={styles.menuAvatar} aria-hidden="true">
-              {initials}
-            </span>
+            <Avatar initials={initials} size="lg" />
             <span className={styles.menuIdentityText}>
               <strong title={name}>{name}</strong>
               <span title={user.email}>{user.email}</span>

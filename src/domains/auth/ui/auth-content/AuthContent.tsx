@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import styles from './AuthContent.module.scss';
 
+// ==================== TYPES ====================
+
 type AuthContentProps = {
   headingId: string;
   title: string;
@@ -9,6 +11,8 @@ type AuthContentProps = {
   children: ReactNode;
   footer: ReactNode;
 };
+
+// ==================== RENDER ====================
 
 export function AuthContent({
   headingId,

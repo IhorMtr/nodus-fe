@@ -1,0 +1,81 @@
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== TRIGGER ====================
+
+.trigger {
+  @include mixins.focus-ring(-2px);
+
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+
+  &:hover,
+  &[aria-expanded='true'] {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+  }
+}
+
+.monogram {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.identity {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 1px;
+
+  strong,
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-snug);
+  }
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+// ==================== DROPDOWN ====================
+
+.dropdown {
+  min-width: 220px;
+  max-height: min(420px, calc(100dvh - 120px));
+  overflow-y: auto;
+}
+
+.itemName {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

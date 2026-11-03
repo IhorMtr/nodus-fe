@@ -1,0 +1,57 @@
+// ==================== AVATAR ====================
+
+.avatar {
+  --avatar-size: var(--avatar-size-md);
+  --avatar-font-size: var(--font-size-sm);
+
+  position: relative;
+  display: inline-grid;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  flex: none;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-selected);
+  color: var(--color-text-secondary);
+  font-size: var(--avatar-font-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  user-select: none;
+
+  &[data-size='xs'] {
+    --avatar-size: var(--avatar-size-xs);
+    --avatar-font-size: 9px;
+  }
+
+  &[data-size='sm'] {
+    --avatar-size: var(--avatar-size-sm);
+    --avatar-font-size: var(--font-size-2xs);
+  }
+
+  &[data-size='lg'] {
+    --avatar-size: var(--avatar-size-lg);
+    --avatar-font-size: var(--font-size-base);
+  }
+
+  &[data-shape='square'] {
+    border-radius: var(--radius-sm);
+  }
+}
+
+.initials {
+  letter-spacing: 0.02em;
+}
+
+// ==================== STATUS ====================
+
+.status {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  padding: 2px;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--avatar-ring, var(--color-background));
+  line-height: 0;
+}

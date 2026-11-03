@@ -1,7 +1,7 @@
 'use client';
 
 import { Modal } from '@mantine/core';
-import { Copy, Plus } from 'lucide-react';
+import { Copy, Link2, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { getInviteErrorKey } from '@/domains/invite/model/invitations';
@@ -11,7 +11,7 @@ import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
 import type { useInvitationManagement } from '../hooks/use-invitation-management';
-import styles from '../MembersView.module.scss';
+import styles from './InvitationsSection.module.scss';
 
 // ==================== INVITATIONS AND SHARING ====================
 
@@ -44,23 +44,20 @@ export function InvitationsSection({
   return (
     <>
       {canManage && (
-        <section className={styles.section} aria-labelledby="invites-heading">
+        <section className={styles.panel} aria-labelledby="invites-heading">
           {/* ==================== SECTION HEADER ==================== */}
 
-          <div className={styles.sectionHeader}>
-            <div>
-              <div className={styles.sectionHeading}>
-                <h2 id="invites-heading">{t('management.title')}</h2>
-                {invites.isSuccess && (
-                  <span className={styles.count}>{invites.data.length}</span>
-                )}
-              </div>
-              <p>{t('management.description')}</p>
+          <div className={styles.header}>
+            <div className={styles.heading}>
+              <h2 id="invites-heading">{t('management.title')}</h2>
+              {invites.isSuccess && (
+                <span className={styles.count}>{invites.data.length}</span>
+              )}
             </div>
+            <p>{t('management.description')}</p>
             <Button
               variant="secondary"
-              size="sm"
-              leftIcon={<Plus size={15} />}
+              leftIcon={<Plus />}
               onClick={() => void createInvite()}
               loading={create.isPending}
               disabled={create.isPending}
@@ -82,10 +79,10 @@ export function InvitationsSection({
             </InlineStatus>
           )}
 
-          {/* ==================== INVITATION LIST ==================== */}
+          {/* ==================== LIST STATES ==================== */}
 
           {invites.isPending && (
-            <div className={styles.inlineState}>
+            <div className={styles.state}>
               <Spinner size="sm" label={t('management.loading')} />
             </div>
           )}
@@ -104,16 +101,26 @@ export function InvitationsSection({
             </InlineStatus>
           )}
           {invites.isSuccess && invites.data.length === 0 && (
-            <p className={styles.empty}>{t('management.empty')}</p>
+            <p className={styles.state}>{t('management.empty')}</p>
           )}
+
+          {/* ==================== INVITATION LIST ==================== */}
+
           {invites.isSuccess && invites.data.length > 0 && (
-            <ul className={`${styles.list} ${styles.inviteList}`}>
+            <ul className={styles.list}>
               {invites.data.map(invite => (
-                <li key={invite.id} className={styles.inviteRow}>
-                  <span className={styles.status} data-status={invite.status}>
-                    {t(`status.${invite.status}`)}
+                <li
+                  key={invite.id}
+                  className={styles.row}
+                  data-status={invite.status}
+                >
+                  <span className={styles.icon} aria-hidden="true">
+                    <Link2 size={16} />
                   </span>
-                  <div className={styles.inviteDates}>
+                  <div className={styles.details}>
+                    <span className={styles.status}>
+                      {t(`status.${invite.status}`)}
+                    </span>
                     <span>
                       {t('management.created', {
                         date: formatDate(invite.createdAt),
@@ -125,18 +132,16 @@ export function InvitationsSection({
                       })}
                     </span>
                   </div>
-                  <div className={styles.rowActions}>
-                    {invite.status === 'active' && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => revokeInvite(invite.id)}
-                        disabled={revoke.isPending}
-                      >
-                        {t('actions.revoke')}
-                      </Button>
-                    )}
-                  </div>
+                  {invite.status === 'active' && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => revokeInvite(invite.id)}
+                      disabled={revoke.isPending}
+                    >
+                      {t('actions.revoke')}
+                    </Button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -157,15 +162,11 @@ export function InvitationsSection({
           <div className={styles.shareRow}>
             <Input
               readOnly
-              fullWidth
               value={inviteLink ?? ''}
               onFocus={event => event.currentTarget.select()}
               aria-label={t('management.linkLabel')}
             />
-            <Button
-              leftIcon={<Copy size={15} />}
-              onClick={() => void copyInvite()}
-            >
+            <Button leftIcon={<Copy />} onClick={() => void copyInvite()}>
               {t('actions.copy')}
             </Button>
           </div>

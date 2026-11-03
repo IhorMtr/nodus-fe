@@ -1,35 +1,32 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
 
 // ==================== PANEL LAYOUT ====================
 
 .root {
-  display: flex;
+  display: grid;
   min-height: 100dvh;
-}
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--color-background);
 
-.formPanel,
-.previewPanel {
-  flex: 1 1 50%;
-  min-width: 0;
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    grid-template-columns: minmax(480px, 5fr) minmax(0, 6fr);
+  }
 }
 
 .formPanel {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  padding: var(--space-6);
-  background: var(--color-background);
+  padding: var(--space-6) var(--page-padding-lg);
 
-  @include mixins.up(breakpoints.$breakpoint-lg) {
-    padding: var(--space-8);
-  }
-
-  @include mixins.down(breakpoints.$breakpoint-xs) {
-    padding-inline: var(--space-5);
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-5) var(--page-padding-sm);
   }
 }
 
-// ==================== FORM PANEL ====================
+// ==================== HEADER ====================
 
 .header {
   display: flex;
@@ -40,63 +37,76 @@
 }
 
 .brand {
-  @include mixins.focus-ring;
+  @include page.brand;
+}
 
-  border-radius: var(--radius-control);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.04em;
-  text-decoration: none;
+.brandMark {
+  @include page.brand-mark;
 }
 
 .backLink {
   @include mixins.focus-ring;
 
   display: inline-flex;
+  min-height: var(--control-height-sm);
   align-items: center;
   gap: var(--space-2);
-  min-height: var(--control-height-sm);
+  padding-inline: var(--space-2);
   border-radius: var(--radius-control);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
-  text-underline-offset: var(--space-1);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
 
   svg {
     flex-shrink: 0;
   }
 
   &:hover {
+    background: var(--color-surface-hover);
     color: var(--color-text-primary);
-    text-decoration: underline;
   }
 }
+
+// ==================== FORM AREA ====================
 
 .formArea {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding-block: var(--space-12);
+  padding-block: var(--space-10);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    align-items: flex-start;
+    padding-block: var(--space-8);
+  }
 }
 
 .formContent {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   min-width: 0;
+}
+
+.footer {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 // ==================== PRODUCT PREVIEW ====================
 
 .previewPanel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(var(--space-8), 4vw, var(--space-16));
+  display: none;
+  min-width: 0;
+  overflow: clip;
   border-left: 1px solid var(--color-divider);
-  background: var(--color-chrome);
+  background: var(--color-canvas);
 
-  @include mixins.down(breakpoints.$breakpoint-lg) {
-    display: none;
+  @include mixins.up(breakpoints.$breakpoint-lg) {
+    display: flex;
   }
 }

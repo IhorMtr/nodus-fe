@@ -38,22 +38,24 @@ export function RegisterForm({
       noValidate
       aria-busy={isSubmitting}
     >
-      <Input
-        {...fields.firstName}
-        id="register-first-name"
-        label={user('fields.firstName')}
-        autoComplete="given-name"
-        readOnly={isSubmitting}
-        required
-      />
-      <Input
-        {...fields.lastName}
-        id="register-last-name"
-        label={user('fields.lastName')}
-        autoComplete="family-name"
-        readOnly={isSubmitting}
-        required
-      />
+      <div className={styles.nameRow}>
+        <Input
+          {...fields.firstName}
+          id="register-first-name"
+          label={user('fields.firstName')}
+          autoComplete="given-name"
+          readOnly={isSubmitting}
+          required
+        />
+        <Input
+          {...fields.lastName}
+          id="register-last-name"
+          label={user('fields.lastName')}
+          autoComplete="family-name"
+          readOnly={isSubmitting}
+          required
+        />
+      </div>
       <Input
         {...fields.email}
         id="register-email"

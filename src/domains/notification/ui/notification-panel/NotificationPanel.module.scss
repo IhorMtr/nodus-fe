@@ -129,7 +129,7 @@
 }
 
 .unread {
-  background: var(--color-accent-subtle);
+  background: var(--color-info-subtle);
 }
 
 .itemContent {
@@ -176,7 +176,7 @@
   height: 7px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--color-unread);
 }
 
 .itemTitle {

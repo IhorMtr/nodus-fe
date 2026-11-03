@@ -3,5 +3,9 @@
   "features": "Можливості",
   "primaryLabel": "Основна навігація",
   "footerLabel": "Навігація внизу сторінки",
-  "skipToContent": "Перейти до вмісту"
+  "skipToContent": "Перейти до вмісту",
+  "team": "Команда",
+  "updates": "Оновлення",
+  "openMenu": "Відкрити меню",
+  "closeMenu": "Закрити меню"
 }

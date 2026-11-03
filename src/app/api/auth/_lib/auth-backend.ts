@@ -114,7 +114,6 @@ export async function forwardAuthRequest(
 
     return { body, status: upstream.status };
   } catch {
-    // HTML error pages and malformed upstream JSON are transport failures.
     return { response: authErrorResponse('InternalError', 502) };
   }
 }

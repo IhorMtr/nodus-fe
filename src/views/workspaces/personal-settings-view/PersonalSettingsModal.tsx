@@ -28,8 +28,6 @@ export function PersonalSettingsModal({
 
   // ==================== FOCUS RESTORATION ====================
 
-  // The dialog disappears on Back or when its route unmounts. Restore focus
-  // to the visible shell trigger, including when the mobile sidebar is closed.
   useEffect(() => {
     if (!isSettingsRoute) {
       return;
@@ -64,8 +62,6 @@ export function PersonalSettingsModal({
 
   // ==================== RENDER ====================
 
-  // Parallel routes retain their active slot during soft navigation. Hide the
-  // intercepted page when the URL leaves settings, including Back and Forward.
   if (!isSettingsRoute) {
     return null;
   }

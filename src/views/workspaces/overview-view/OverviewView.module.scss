@@ -1,97 +1,157 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
 
 // ==================== PAGE ====================
 
 .page {
-  container-type: inline-size;
-  width: min(100%, 1220px);
-  margin-inline: auto;
-  padding: var(--space-8) clamp(var(--space-4), 3vw, var(--space-10))
-    var(--space-12);
+  @include page.container;
 }
 
-.intro {
-  padding-bottom: var(--space-8);
-  border-bottom: 1px solid var(--color-divider);
+// ==================== WORKSPACE HEADER ====================
+
+.header {
+  @include page.header;
+
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.monogram {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.02em;
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    width: 44px;
+    height: 44px;
+    font-size: var(--font-size-lg);
+  }
+}
+
+.headerText {
+  min-width: 0;
+  flex: 1;
 
   h1 {
-    margin: var(--space-2) 0 var(--space-2);
-    color: var(--color-text-primary);
-    font-size: clamp(var(--font-size-2xl), 2.3vw, var(--font-size-3xl));
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: -0.035em;
-    overflow-wrap: anywhere;
+    @include page.title;
   }
 
   p {
-    margin: 0;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
-  }
-}
+    @include page.description;
 
-.eyebrow {
-  @include mixins.eyebrow;
-}
-
-// ==================== CONTENT GRID ====================
-
-.contentGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  gap: var(--space-8) var(--space-10);
-  padding-block: var(--space-8);
-
-  @container (max-width: 760px) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.channels,
-.announcements,
-.team,
-.quick,
-.metrics {
-  min-width: 0;
-}
-
-.sectionHeading {
-  display: flex;
-  min-height: 42px;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-
-  h2 {
-    @include mixins.section-title;
     margin-top: var(--space-1);
   }
 }
 
-.sectionAction {
-  @include mixins.focus-ring;
-  display: inline-flex;
-  flex: none;
+.headerMeta {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  text-decoration: none;
+  font-size: var(--font-size-base);
 
-  &:hover {
-    color: var(--color-text-primary);
+  @container (max-width: 640px) {
+    flex-basis: 100%;
+  }
+}
+
+.onlineMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  > span {
+    display: inline-flex;
+  }
+}
+
+// ==================== LAYOUT ====================
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  align-items: start;
+  gap: var(--space-10);
+
+  @container (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+.main,
+.aside {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-10);
+}
+
+.aside {
+  gap: var(--space-6);
+}
+
+.metricsFeedback {
+  margin-bottom: var(--space-10);
+}
+
+// ==================== SECTION HEADERS ====================
+
+.section {
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+
+  h2 {
+    @include page.section-title;
   }
 }
 
 .count {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  font-variant-numeric: tabular-nums;
+  @include page.count;
 }
 
-// ==================== CHANNELS AND ANNOUNCEMENTS ====================
+.sectionAction {
+  @include mixins.focus-ring;
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+// ==================== CHANNELS ====================
 
 .channelList,
 .announcementList,
@@ -101,61 +161,132 @@
   list-style: none;
 }
 
-.channelList li,
-.announcementList li,
-.memberList li {
-  border-top: 1px solid var(--color-divider);
-}
+.channelList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1) var(--space-3);
 
-.channelLink {
-  @include mixins.focus-ring;
-  display: flex;
-  min-height: 48px;
-  align-items: center;
-  gap: var(--space-3);
-  padding-inline: var(--space-2);
-  color: var(--color-text-secondary);
-  text-decoration: none;
-
-  &:hover {
-    background: var(--color-surface-hover);
+  @container (max-width: 620px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-.channelName {
+.channelLink {
+  @include mixins.focus-ring(-2px);
+
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-divider);
+    background: var(--color-surface);
+
+    .rowArrow {
+      opacity: 1;
+    }
+  }
+}
+
+.channelIcon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+
+  .channelLink[data-unread] & {
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+  }
+}
+
+.channelText {
+  display: grid;
   min-width: 0;
   flex: 1;
+  gap: 1px;
+}
+
+.channelName {
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  .channelLink[data-unread] & {
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+.channelMeta {
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .unread {
-  display: grid;
-  min-width: 24px;
-  height: 22px;
-  place-items: center;
-  padding-inline: var(--space-1);
-  border-radius: var(--radius-control);
-  background: var(--color-text-primary);
-  color: var(--color-background);
-  font-size: var(--font-size-xs);
+  min-width: 22px;
+  height: 20px;
+  flex: none;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-unread);
+  color: var(--color-on-unread);
+  font-size: var(--font-size-2xs);
   font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: 20px;
+  text-align: center;
 }
 
 .rowArrow {
+  flex: none;
   color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+
+  @media (hover: none) {
+    display: none;
+  }
+}
+
+// ==================== ANNOUNCEMENTS ====================
+
+.announcementList {
+  border-top: 1px solid var(--color-divider);
+
+  li {
+    border-bottom: 1px solid var(--color-divider);
+  }
 }
 
 .announcementLink {
-  @include mixins.focus-ring;
+  @include mixins.focus-ring(-2px);
+
   display: grid;
   gap: var(--space-1);
-  padding: var(--space-3) var(--space-2);
+  padding: var(--space-4) var(--space-3);
   text-decoration: none;
+  transition: background-color var(--transition-fast);
 
   &:hover {
     background: var(--color-surface-hover);
@@ -164,16 +295,20 @@
 
 .announcementTitle {
   color: var(--color-text-primary);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
   overflow-wrap: anywhere;
 }
 
 .preview {
   display: -webkit-box;
+  max-width: var(--content-width-message);
   overflow: hidden;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -181,237 +316,117 @@
 .meta {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+  margin-top: var(--space-2);
   color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-}
-
-// ==================== TEAM AND ACTIONS ====================
-
-.teamSummary {
-  margin: 0 0 var(--space-3);
-  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
-.memberList li {
-  display: flex;
-  min-height: 40px;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  padding-inline: var(--space-2);
+// ==================== TEAM ====================
+
+.team {
+  @include page.panel;
+
+  padding: var(--space-5) var(--space-5) 0;
+
+  .sectionHeader h2 {
+    font-size: var(--font-size-md);
+  }
+}
+
+.memberList {
+  display: grid;
+  gap: 2px;
+  margin-inline: calc(-1 * var(--space-2));
+
+  li {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-control);
+  }
+}
+
+.memberAvatar {
+  --avatar-ring: var(--color-background);
+}
+
+.memberText {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+  line-height: var(--line-height-snug);
+
+  [data-offline] & {
+    opacity: 0.6;
+  }
 }
 
 .memberName {
-  min-width: 0;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.quickLinks {
-  display: grid;
-
-  a {
-    @include mixins.focus-ring;
-    display: flex;
-    min-height: 44px;
-    align-items: center;
-    gap: var(--space-3);
-    padding-inline: var(--space-2);
-    border-top: 1px solid var(--color-divider);
-    color: var(--color-text-primary);
-    font-size: var(--font-size-sm);
-    text-decoration: none;
-
-    svg:first-child {
-      color: var(--color-text-muted);
-    }
-    svg:last-child {
-      margin-left: auto;
-      color: var(--color-text-muted);
-    }
-    &:hover {
-      background: var(--color-surface-hover);
-    }
-  }
-}
-
-// ==================== METRICS ====================
-
-.metrics {
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--color-divider);
-}
-
-.metricTotals {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  margin-top: var(--space-4);
-  border-block: 1px solid var(--color-divider);
-
-  > div {
-    display: grid;
-    align-content: center;
-    gap: var(--space-1);
-    min-height: 86px;
-    padding: var(--space-3);
-
-    + div {
-      border-left: 1px solid var(--color-divider);
-    }
-  }
-
-  strong {
-    color: var(--color-text-primary);
-    font-size: var(--font-size-xl);
-    font-variant-numeric: tabular-nums;
-    font-weight: var(--font-weight-semibold);
-  }
-
-  span {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
-  }
-
-  @container (max-width: 850px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    > div:nth-child(4) {
-      border-left: 0;
-    }
-    > div:nth-child(n + 4) {
-      border-top: 1px solid var(--color-divider);
-    }
-  }
-
-  @container (max-width: 430px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    > div:nth-child(odd) {
-      border-left: 0;
-    }
-    > div:nth-child(even) {
-      border-left: 1px solid var(--color-divider);
-    }
-    > div:nth-child(n + 3) {
-      border-top: 1px solid var(--color-divider);
-    }
-  }
-}
-
-.activityHeading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
-
-  h3 {
-    @include mixins.section-title;
-  }
-  p {
-    margin: var(--space-1) 0 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
-  }
-}
-
-.period {
-  display: flex;
-  padding: 2px;
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-control);
-  background: var(--color-surface);
-
-  button {
-    @include mixins.focus-ring;
-    padding: var(--space-1) var(--space-3);
-    border: 0;
-    border-radius: var(--radius-control);
-    background: transparent;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    font: inherit;
-    font-size: var(--font-size-xs);
-
-    &[aria-pressed='true'] {
-      background: var(--color-surface-active);
-      color: var(--color-text-primary);
-    }
-  }
-}
-
-.activityGrid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-
-  > div {
-    display: flex;
-    min-width: 0;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-2);
-    padding: var(--space-3);
-    border: 1px solid var(--color-divider);
-    border-radius: var(--radius-control);
-  }
-
-  span {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-  }
-  strong {
-    color: var(--color-text-primary);
-    font-size: var(--font-size-lg);
-    font-variant-numeric: tabular-nums;
-  }
-
-  @container (max-width: 700px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  @container (max-width: 350px) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.metricNote {
-  margin: var(--space-3) 0 0;
+.memberRole {
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
 }
 
-// ==================== FEEDBACK AND RESPONSIVE ====================
+.teamFooter {
+  @include mixins.focus-ring(-2px);
+
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-4) calc(-1 * var(--space-5)) 0;
+  padding: 0 var(--space-5);
+  border-top: 1px solid var(--color-divider);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  span {
+    flex: 1;
+  }
+
+  &:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+// ==================== SECTION FEEDBACK ====================
 
 .empty,
 .feedback {
   margin: 0;
-  padding: var(--space-5) var(--space-2);
+  padding: var(--space-5) 0;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
 }
+
 .feedback {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
 }
-.feedback button {
-  @include mixins.focus-ring;
-  border: 0;
-  background: transparent;
-  color: var(--color-text-primary);
-  cursor: pointer;
-  font: inherit;
-  text-decoration: underline;
-}
+
 .skeleton {
-  height: 84px;
-  border-radius: var(--radius-control);
+  height: 96px;
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   animation: pulse 1.4s ease-in-out infinite alternate;
 }
@@ -425,18 +440,5 @@
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
-  }
-}
-
-@include mixins.down(breakpoints.$breakpoint-sm) {
-  .page {
-    padding: var(--space-6) var(--space-4) var(--space-10);
-  }
-  .intro {
-    padding-bottom: var(--space-5);
-  }
-  .contentGrid {
-    gap: var(--space-6);
-    padding-block: var(--space-5);
   }
 }

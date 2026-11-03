@@ -1,5 +1,6 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
 
 // ==================== ROUTE DIALOG ====================
 
@@ -38,13 +39,13 @@
 
 .standaloneHeader {
   border-bottom: 1px solid var(--color-divider);
-  background: var(--color-chrome);
+  background: var(--color-canvas);
 }
 
 .headerInner {
   display: flex;
   width: min(100%, 1200px);
-  min-height: 64px;
+  min-height: var(--shell-header-height);
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
@@ -58,18 +59,11 @@
 }
 
 .brand {
-  @include mixins.focus-ring;
+  @include page.brand;
+}
 
-  border-radius: var(--radius-control);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.02em;
-  text-decoration: none;
-
-  &:hover {
-    color: var(--color-text-secondary);
-  }
+.brandMark {
+  @include page.brand-mark;
 }
 
 .returnLink {
@@ -448,20 +442,75 @@
   padding: 5px 2px 1px;
 }
 
-.languageSelect {
-  @include mixins.focus-ring;
+.languageOptions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
 
-  min-width: 150px;
-  min-height: 36px;
-  padding: 0 var(--space-3);
+.languageOption {
+  position: relative;
+  display: flex;
+  width: 132px;
+  min-height: 40px;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-control);
   background: var(--color-surface);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   cursor: pointer;
   font-size: var(--font-size-sm);
+
+  input {
+    @include mixins.visually-hidden;
+  }
+
+  svg {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
 
   &:hover {
     background: var(--color-surface-hover);
   }
+
+  &:has(input:checked) {
+    border-color: var(--color-text-secondary);
+    color: var(--color-text-primary);
+  }
+
+  &:has(input:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
+.languageCode {
+  display: grid;
+  min-width: 26px;
+  height: 20px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+
+  .languageOption:has(input:checked) & {
+    border-color: var(--color-border-strong);
+    color: var(--color-text-primary);
+  }
+}
+
+.languageName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

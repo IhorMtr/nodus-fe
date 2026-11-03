@@ -4,7 +4,9 @@
   // ---------- Surfaces ----------
 
   --color-chrome: var(--mist-2);
+  --color-canvas: var(--mist-3);
   --color-background: var(--mist-0);
+  --color-header: var(--mist-1);
   --color-surface: var(--mist-1);
   --color-surface-elevated: var(--mist-2);
   --color-surface-overlay: var(--mist-0);
@@ -76,17 +78,31 @@
 
   // ---------- Info ----------
 
-  --color-info: var(--neutral-6);
-  --color-info-hover: var(--neutral-7);
-  --color-info-subtle: rgb(0 0 0 / 6%);
-  --color-info-border: rgb(0 0 0 / 24%);
-  --color-info-text: var(--neutral-7);
+  --color-info: var(--blue-dark);
+  --color-info-hover: var(--blue-base);
+  --color-info-subtle: rgb(63 106 163 / 8%);
+  --color-info-border: rgb(63 106 163 / 28%);
+  --color-info-text: var(--blue-dark);
+
+  // ---------- Unread ----------
+
+  --color-unread: var(--blue-dark);
+  --color-on-unread: var(--mist-0);
 
   // ---------- Presence ----------
 
-  --color-presence-online: var(--green-base);
-  --color-presence-busy: var(--amber-base);
+  --color-presence-online: var(--green-dark);
+  --color-presence-busy: var(--amber-dark);
   --color-presence-dnd: var(--red-base);
+  --color-presence-offline: var(--slate-dark);
+
+  // ---------- Channel identity ----------
+
+  --color-channel-1: var(--blue-dark);
+  --color-channel-2: var(--teal-dark);
+  --color-channel-3: var(--green-dark);
+  --color-channel-4: var(--rose-dark);
+  --color-channel-5: var(--violet-dark);
 
   --color-selection: rgb(80 80 80 / 20%);
 }
@@ -97,7 +113,9 @@
   // ---------- Surfaces ----------
 
   --color-chrome: var(--graphite-1);
+  --color-canvas: var(--graphite-0);
   --color-background: var(--graphite-2);
+  --color-header: var(--graphite-2);
   --color-surface: var(--graphite-3);
   --color-surface-elevated: var(--graphite-4);
   --color-surface-overlay: var(--graphite-4);
@@ -169,17 +187,31 @@
 
   // ---------- Info ----------
 
-  --color-info: var(--neutral-5);
-  --color-info-hover: var(--neutral-4);
-  --color-info-subtle: rgb(255 255 255 / 8%);
-  --color-info-border: rgb(255 255 255 / 28%);
-  --color-info-text: var(--neutral-3);
+  --color-info: var(--blue-light);
+  --color-info-hover: var(--blue-base);
+  --color-info-subtle: rgb(143 176 220 / 12%);
+  --color-info-border: rgb(143 176 220 / 36%);
+  --color-info-text: var(--blue-light);
+
+  // ---------- Unread ----------
+
+  --color-unread: var(--blue-light);
+  --color-on-unread: var(--graphite-1);
 
   // ---------- Presence ----------
 
   --color-presence-online: var(--green-base);
   --color-presence-busy: var(--amber-base);
   --color-presence-dnd: var(--red-base);
+  --color-presence-offline: var(--slate-light);
+
+  // ---------- Channel identity ----------
+
+  --color-channel-1: var(--blue-light);
+  --color-channel-2: var(--teal-light);
+  --color-channel-3: var(--green-light);
+  --color-channel-4: var(--rose-light);
+  --color-channel-5: var(--violet-light);
 
   --color-selection: rgb(210 210 210 / 28%);
 }
@@ -189,5 +221,4 @@
 :root {
   --color-presence-idle: var(--color-presence-busy);
   --color-presence-away: var(--color-presence-busy);
-  --color-presence-offline: var(--color-text-muted);
 }

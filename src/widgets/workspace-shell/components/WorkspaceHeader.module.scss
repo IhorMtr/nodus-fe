@@ -8,38 +8,16 @@
   height: var(--shell-header-height);
   min-height: var(--shell-header-height);
   min-width: 0;
-  align-items: center;
-  border-bottom: 1px solid var(--color-divider);
-  background: var(--color-surface);
-  padding-right: var(--space-3);
-
-  @include mixins.down(breakpoints.$breakpoint-md) {
-    padding-right: var(--space-2);
-  }
-}
-
-// ==================== WORKSPACE IDENTITY ====================
-
-.identity {
-  display: flex;
-  width: var(--shell-sidebar-width);
-  height: 100%;
-  min-width: 0;
-  flex: none;
+  flex-shrink: 0;
   align-items: center;
   gap: var(--space-2);
-  padding-inline: var(--space-4) var(--space-2);
-  border-right: 1px solid var(--color-divider);
-  background: var(--color-chrome);
+  padding-inline: var(--space-5) var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-header);
 
   @include mixins.down(breakpoints.$breakpoint-md) {
-    width: auto;
-    max-width: 50%;
-    flex: 0 1 auto;
     gap: var(--space-1);
-    padding-inline: var(--space-2) 0;
-    border-right: 0;
-    background: transparent;
+    padding-inline: var(--space-2);
   }
 }
 
@@ -51,75 +29,6 @@
   }
 }
 
-.brand {
-  flex-shrink: 0;
-  color: var(--color-text-primary);
-  border-radius: var(--radius-xs);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.04em;
-  text-decoration: none;
-
-  @include mixins.focus-ring;
-
-  @include mixins.down(breakpoints.$breakpoint-md) {
-    display: none;
-  }
-}
-
-.divider {
-  width: 1px;
-  height: 18px;
-  flex-shrink: 0;
-  background: var(--color-border);
-
-  @include mixins.down(breakpoints.$breakpoint-md) {
-    display: none;
-  }
-}
-
-.switcher {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: var(--space-2);
-  height: 36px;
-  padding: 0 var(--space-2);
-  border: 0;
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: var(--color-text-primary);
-  cursor: pointer;
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
-  text-align: left;
-  transition: background-color var(--transition-fast);
-
-  @include mixins.focus-ring;
-
-  &:hover,
-  &[aria-expanded='true'] {
-    background: var(--color-surface-hover);
-  }
-
-  span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  svg {
-    flex-shrink: 0;
-    color: var(--color-text-muted);
-  }
-}
-
-.workspaceItem {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 // ==================== CURRENT CONTEXT ====================
 
 .context {
@@ -129,16 +38,10 @@
   align-items: center;
   align-self: stretch;
   gap: var(--space-2);
-  padding-inline: var(--space-5) var(--space-3);
 
-  svg {
+  > svg {
     flex-shrink: 0;
     color: var(--color-text-muted);
-  }
-
-  @include mixins.down(breakpoints.$breakpoint-md) {
-    gap: var(--space-1);
-    padding-inline: var(--space-2);
   }
 }
 
@@ -146,8 +49,71 @@
   min-width: 0;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+// ==================== CONVERSATION BREADCRUMB ====================
+
+.crumb {
+  @include mixins.focus-ring;
+
+  display: inline-flex;
+  min-height: 32px;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: calc(-1 * var(--space-2));
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  &:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+.crumbBack {
+  display: none;
+}
+
+.crumbSeparator {
+  flex-shrink: 0;
+  color: var(--color-text-disabled);
+}
+
+.presence {
+  flex-shrink: 0;
+  margin-left: var(--space-1);
+}
+
+@include mixins.down(breakpoints.$breakpoint-sm) {
+  .crumb {
+    margin-left: 0;
+  }
+
+  .crumbBack {
+    display: block;
+  }
+
+  .crumbIcon,
+  .crumbLabel,
+  .crumbSeparator {
+    display: none;
+  }
 }

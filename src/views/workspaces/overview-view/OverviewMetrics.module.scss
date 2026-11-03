@@ -1,0 +1,186 @@
+@use '@/shared/styles/mixins' as mixins;
+@use '@/shared/styles/page' as page;
+
+// ==================== TOTALS STRIP ====================
+
+.totals {
+  margin-bottom: var(--space-10);
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--color-divider);
+}
+
+.totalsList {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin: 0;
+
+  @container (max-width: 900px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-6);
+  }
+
+  @container (max-width: 460px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.total {
+  display: flex;
+  min-width: 0;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  padding-inline: var(--space-5);
+  border-left: 1px solid var(--color-divider);
+
+  &:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  @container (max-width: 900px) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  dt {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-3xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.03em;
+    line-height: var(--line-height-tight);
+  }
+}
+
+.visuallyHidden {
+  @include mixins.visually-hidden;
+}
+
+// ==================== ACTIVITY PANEL ====================
+
+.activity {
+  @include page.tinted-panel;
+
+  padding: var(--space-5);
+}
+
+.activityHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  h2 {
+    @include page.section-title;
+
+    font-size: var(--font-size-md);
+  }
+
+  p {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+}
+
+.period {
+  @include page.segmented;
+}
+
+// ==================== ACTIVE MEMBERS ====================
+
+.activeMembers {
+  margin-top: var(--space-6);
+}
+
+.activeLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.activeValue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: var(--space-1) 0 var(--space-3);
+
+  strong {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-3xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.03em;
+    line-height: var(--line-height-tight);
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+  }
+}
+
+.meter {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-selected);
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-primary);
+    transition: width var(--transition-normal);
+  }
+}
+
+.note {
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+// ==================== COUNTERS ====================
+
+.counters {
+  display: grid;
+  margin: var(--space-5) 0 0;
+  border-top: 1px solid var(--color-divider);
+}
+
+.counter {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  dt {
+    min-width: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--font-weight-semibold);
+  }
+}

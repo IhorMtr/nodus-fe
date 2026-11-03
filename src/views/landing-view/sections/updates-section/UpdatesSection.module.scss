@@ -1,0 +1,77 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/effects' as effects;
+@use '@/shared/styles/mixins' as mixins;
+@use '../../landing' as landing;
+
+// ==================== LAYOUT ====================
+
+.root {
+  @include landing.section-spacing;
+}
+
+.inner {
+  @include landing.container;
+}
+
+.heading {
+  @include effects.rise-on-scroll;
+
+  max-width: 640px;
+
+  h2 {
+    @include landing.section-title;
+
+    margin-top: var(--space-4);
+  }
+}
+
+.eyebrow {
+  @include landing.eyebrow;
+}
+
+// ==================== FEATURE PAIR ====================
+
+.features {
+  display: grid;
+  gap: var(--space-16);
+  margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
+    gap: clamp(var(--space-8), 4vw, var(--space-16));
+  }
+}
+
+.feature {
+  @include effects.rise-on-scroll;
+
+  min-width: 0;
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    &:nth-child(2) {
+      margin-top: clamp(var(--space-12), 7vw, 112px);
+    }
+  }
+}
+
+.notifications {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 100% 50%;
+}
+
+.copy {
+  max-width: 480px;
+  margin-top: var(--space-6);
+
+  h3 {
+    @include landing.feature-title;
+
+    margin-bottom: var(--space-3);
+  }
+
+  p {
+    @include landing.body;
+  }
+}

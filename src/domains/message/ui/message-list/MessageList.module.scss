@@ -4,6 +4,8 @@
 // ==================== SCROLLABLE HISTORY ====================
 
 .viewport {
+  --message-inset: var(--page-padding-md);
+
   position: relative;
   display: flex;
   min-height: 0;
@@ -14,11 +16,15 @@
     position: absolute;
     z-index: 1;
     top: 0;
-    left: var(--space-8);
+    left: var(--message-inset);
     width: 40px;
     border-top: 2px solid var(--color-focus);
     content: '';
     pointer-events: none;
+  }
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    --message-inset: var(--page-padding-sm);
   }
 }
 
@@ -29,7 +35,7 @@
   overflow-y: auto;
   overflow-anchor: none;
   overscroll-behavior: contain;
-  padding-block: var(--space-5);
+  padding-block: var(--space-4) var(--space-3);
   background: var(--color-background);
 
   &:focus-visible {
@@ -42,45 +48,85 @@
   width: 100%;
   min-height: 100%;
   flex-direction: column;
-  margin-inline: 0;
-  padding-inline: var(--space-8);
-
-  @include mixins.down(breakpoints.$breakpoint-sm) {
-    padding-inline: var(--space-4);
-  }
 }
 
 .list {
   display: flex;
-  margin: 0;
+  margin: auto 0 0;
   padding: 0;
   flex-direction: column;
-  gap: 2px;
   list-style: none;
 }
 
-// ==================== EMPTY CHANNEL ====================
+// ==================== MESSAGE ROWS ====================
+
+.messageRow {
+  transition: background-color var(--transition-normal);
+
+  &[data-group-start] {
+    margin-top: var(--space-3);
+  }
+
+  &:first-child,
+  .dayDivider + & {
+    margin-top: 0;
+  }
+
+  &[data-highlighted] {
+    background: var(--color-surface-active);
+  }
+}
+
+// ==================== DAY DIVIDER ====================
+
+.dayDivider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-5) 0 var(--space-2);
+  padding-inline: var(--message-inset);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+
+  &:first-child {
+    margin-top: var(--space-2);
+  }
+
+  &::before,
+  &::after {
+    height: 1px;
+    flex: 1;
+    background: var(--color-divider);
+    content: '';
+  }
+}
+
+// ==================== EMPTY HISTORY ====================
 
 .empty {
   display: flex;
+  max-width: calc(var(--content-width-narrow) + 2 * var(--message-inset));
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
   margin-top: auto;
-  padding: var(--space-12) 0 var(--space-6);
+  padding: var(--space-12) var(--message-inset) var(--space-6);
   color: var(--color-text-secondary);
   text-align: left;
 
   strong {
     color: var(--color-text-primary);
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.02em;
     line-height: var(--line-height-tight);
     overflow-wrap: anywhere;
   }
 
   p {
-    max-width: 460px;
+    max-width: 52ch;
     margin: 0;
     font-size: var(--font-size-md);
     line-height: var(--line-height-relaxed);
@@ -93,6 +139,7 @@
   height: 48px;
   margin-bottom: var(--space-3);
   place-items: center;
+  border: 1px solid var(--color-divider);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   color: var(--color-text-secondary);
@@ -128,9 +175,4 @@
 .newerStatus {
   top: auto;
   bottom: var(--space-3);
-}
-
-.messageRow[data-highlighted] {
-  border-radius: var(--radius-md);
-  background: var(--color-surface-active);
 }

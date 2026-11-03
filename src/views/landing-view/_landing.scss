@@ -1,0 +1,86 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== LAYOUT ====================
+
+$content-width: 1200px;
+$wide-width: 1360px;
+
+@mixin container($width: $content-width) {
+  width: 100%;
+  max-width: calc(#{$width} + 2 * var(--page-padding-lg));
+  margin-inline: auto;
+  padding-inline: var(--page-padding-sm);
+
+  @include mixins.up(breakpoints.$breakpoint-md) {
+    padding-inline: var(--page-padding-md);
+  }
+
+  @include mixins.up(breakpoints.$breakpoint-xl) {
+    padding-inline: var(--page-padding-lg);
+  }
+}
+
+@mixin section-spacing {
+  padding-block: clamp(72px, 9vw, 136px);
+}
+
+// ==================== TYPOGRAPHY ====================
+
+@mixin eyebrow {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.1em;
+  line-height: var(--line-height-normal);
+  text-transform: uppercase;
+}
+
+@mixin display-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: clamp(2.5rem, 1.5rem + 4.4vw, 5rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+@mixin section-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+@mixin feature-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+@mixin lead {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: var(--line-height-relaxed);
+  text-wrap: pretty;
+}
+
+@mixin body {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+  text-wrap: pretty;
+}

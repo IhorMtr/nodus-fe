@@ -29,10 +29,10 @@
   height: 18px;
   padding: 0 4px;
   place-items: center;
-  border: 2px solid var(--color-surface);
+  border: 2px solid var(--color-header);
   border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-unread);
+  color: var(--color-on-unread);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-semibold);
   line-height: 1;
