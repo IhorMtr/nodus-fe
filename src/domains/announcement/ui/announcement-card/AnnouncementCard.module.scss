@@ -121,9 +121,9 @@
   line-height: 18px;
 
   .card[data-scheduled] & {
-    border-color: var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
+    border-color: var(--color-warning-border);
+    background: var(--color-warning-subtle);
+    color: var(--color-warning-text);
   }
 }
 

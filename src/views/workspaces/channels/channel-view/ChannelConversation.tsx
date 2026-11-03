@@ -1,8 +1,9 @@
 'use client';
 
-import { WifiOff } from 'lucide-react';
+import { Hash, WifiOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { getChannelColor } from '@/domains/channel/ui/channel-identity';
 import { DeleteMessageModal } from '@/domains/message/ui/delete-message-modal';
 import { MessageComposer } from '@/domains/message/ui/message-composer';
 import { MessageList } from '@/domains/message/ui/message-list';
@@ -146,6 +147,9 @@ export function ChannelConversation({
             : 'latest'
         }
         channelName={channelName}
+        emptyIcon={
+          <Hash size={22} style={{ color: getChannelColor(channelId) }} />
+        }
         messages={messages}
         canEdit={history.canEdit}
         canDelete={history.canDelete}

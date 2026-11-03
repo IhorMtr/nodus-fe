@@ -23,7 +23,7 @@ const workspaceSections = [
 type WorkspaceSectionRoute = (typeof workspaceSections)[number];
 
 export type WorkspaceContext =
-  | { kind: 'channel'; name: string }
+  | { kind: 'channel'; id: string; name: string }
   | {
       kind: 'conversation';
       name: string;
@@ -72,8 +72,8 @@ export function useWorkspaceHeader(workspaceId: string) {
 
   let context: WorkspaceContext = null;
 
-  if (channelName) {
-    context = { kind: 'channel', name: channelName };
+  if (channelId && channelName) {
+    context = { kind: 'channel', id: channelId, name: channelName };
   } else if (peer) {
     // Member presence is refreshed in realtime; the conversation copy may lag.
     const member = members.data?.find(item => item.userId === peer.id);

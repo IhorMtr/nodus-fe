@@ -13,7 +13,7 @@
   gap: var(--space-2);
   padding-inline: var(--space-5) var(--space-3);
   border-bottom: 1px solid var(--color-divider);
-  background: var(--color-background);
+  background: var(--color-header);
 
   @include mixins.down(breakpoints.$breakpoint-md) {
     gap: var(--space-1);

@@ -15,6 +15,7 @@ import {
 import { useTranslations } from 'next-intl';
 import type { RefObject } from 'react';
 
+import { getChannelColor } from '@/domains/channel/ui/channel-identity';
 import { PresenceIndicator } from '@/domains/presence/ui/presence-indicator';
 import { Link } from '@/shared/i18n/navigation';
 import { Avatar } from '@/shared/ui/avatar';
@@ -134,7 +135,12 @@ function ContextTitle({
   if (context.kind === 'channel') {
     return (
       <>
-        <Hash size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden="true" />
+        <Hash
+          size={ICON_SIZE}
+          strokeWidth={ICON_STROKE}
+          style={{ color: getChannelColor(context.id) }}
+          aria-hidden="true"
+        />
         <span className={styles.contextTitle} title={context.name}>
           {context.name}
         </span>

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { getChannelColor } from '@/domains/channel/ui/channel-identity';
 import styles from './WorkspacePreview.module.scss';
 
 // ==================== CONTENT ====================
@@ -86,7 +87,7 @@ export function WorkspacePreview() {
               data-active={channel.name === 'general' || undefined}
               data-unread={channel.unread > 0 || undefined}
             >
-              <Hash />
+              <Hash style={{ color: getChannelColor(channel.name) }} />
               <span>{channel.name}</span>
               {channel.unread > 0 && (
                 <span className={styles.badge}>{channel.unread}</span>
@@ -111,7 +112,7 @@ export function WorkspacePreview() {
 
       <div className={styles.frame}>
         <div className={styles.header}>
-          <Hash className={styles.muted} />
+          <Hash style={{ color: getChannelColor('general') }} />
           <strong>general</strong>
           <span className={styles.headerActions}>
             <Search />

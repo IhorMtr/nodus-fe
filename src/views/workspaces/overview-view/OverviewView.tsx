@@ -3,6 +3,7 @@
 import { ArrowRight, Hash, MessageCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 
+import { getChannelColor } from '@/domains/channel/ui/channel-identity';
 import { PresenceIndicator } from '@/domains/presence/ui/presence-indicator';
 import {
   getWorkspaceMemberInitials,
@@ -169,7 +170,10 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
                       data-unread={channel.unreadCount > 0 || undefined}
                     >
                       <span className={styles.channelIcon} aria-hidden="true">
-                        <Hash size={16} />
+                        <Hash
+                          size={16}
+                          style={{ color: getChannelColor(channel.id) }}
+                        />
                       </span>
                       <span className={styles.channelText}>
                         <span className={styles.channelName}>

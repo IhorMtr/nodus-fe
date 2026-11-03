@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { getChannelColor } from '@/domains/channel/ui/channel-identity';
 import type { User } from '@/domains/user/model/current-user';
 import type { Workspace } from '@/domains/workspace/model/workspace';
 import { Link } from '@/shared/i18n/navigation';
@@ -214,6 +215,7 @@ export function WorkspaceSidebar({
                     <Hash
                       size={ICON_SIZE}
                       strokeWidth={ICON_STROKE}
+                      style={{ color: getChannelColor(item.id) }}
                       aria-hidden="true"
                     />
                     <span>{item.name}</span>
