@@ -43,8 +43,10 @@ export function WorkspaceAccessListener({ children }: { children: ReactNode }) {
 
       const scoped = (query: { queryKey: readonly unknown[] }) => {
         const key = query.queryKey;
-        const isMessageOrChannel =
-          key[0] === 'messages' || key[0] === 'channels';
+        const isMessagingOrChannel =
+          key[0] === 'messages' ||
+          key[0] === 'channels' ||
+          key[0] === 'conversations';
         const isWorkspaceDetail =
           key[0] === 'workspaces' && key[1] === 'detail';
         const isWorkspaceMembers =
@@ -52,7 +54,7 @@ export function WorkspaceAccessListener({ children }: { children: ReactNode }) {
         const isWorkspaceInvites = key[0] === 'invites';
 
         return (
-          (isMessageOrChannel && revoked(key[1])) ||
+          (isMessagingOrChannel && revoked(key[1])) ||
           ((isWorkspaceDetail || isWorkspaceMembers) && revoked(key[2])) ||
           (isWorkspaceInvites && revoked(key[1]))
         );

@@ -35,7 +35,6 @@ export function useMessagesInfiniteQuery(
         signal
       );
     },
-    // The cursor is opaque and is passed back to the API unchanged.
     initialPageParam: undefined as string | undefined,
     getNextPageParam: page => page.nextCursor ?? undefined,
     select: flattenMessageHistory,

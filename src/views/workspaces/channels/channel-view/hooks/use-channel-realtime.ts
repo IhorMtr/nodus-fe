@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from 'react';
 import { authSessionEvents } from '@/domains/auth/model/session';
 import {
   applyMessageRealtimeEvent,
+  applyChannelRead,
   messageHistoryKey,
   type MessageRealtimeEvent,
   type Message,
+  type MessageAuthor,
 } from '@/domains/message/model/message-history';
 import { useAppSocket } from '@/shared/realtime/socket-context';
 import { logRealtime } from '@/shared/realtime/realtime-debug';
@@ -33,13 +35,35 @@ type JoinAck =
       errors: null;
     };
 
+type ChannelReadEvent = {
+  workspaceId: string;
+  channelId: string;
+  reader: MessageAuthor;
+  lastReadMessageId: string;
+  lastReadCreatedAt: string;
+};
+
 // ==================== CONSTANTS ====================
 
 const JOIN_TIMEOUT_MS = 5000;
 
-// Tracks active channel views on a shared transport. A late ACK from a previous
-// mount must never leave a room already claimed by its replacement.
 const subscriptions = new WeakMap<object, Map<string, number>>();
+
+// ==================== READ ORDERING ====================
+
+function isStaleReadEvent(
+  previous: ChannelReadEvent,
+  incoming: ChannelReadEvent
+) {
+  const previousTime = Date.parse(previous.lastReadCreatedAt);
+  const incomingTime = Date.parse(incoming.lastReadCreatedAt);
+
+  return (
+    previousTime > incomingTime ||
+    (previousTime === incomingTime &&
+      previous.lastReadMessageId.localeCompare(incoming.lastReadMessageId) >= 0)
+  );
+}
 
 export function useChannelRealtime(workspaceId: string, channelId: string) {
   // ==================== STATE ====================
@@ -52,6 +76,7 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
   const [joinError, setJoinError] = useState<string | null>(null);
 
   const pendingEvents = useRef<MessageRealtimeEvent[]>([]);
+  const pendingReads = useRef<ChannelReadEvent[]>([]);
   const historyReleased = useRef(false);
 
   // ==================== SUBSCRIPTION LIFECYCLE ====================
@@ -62,6 +87,7 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
     let attempt = 0;
     let joining = false;
     let timeout: ReturnType<typeof setTimeout> | undefined;
+    const latestReads = new Map<string, ChannelReadEvent>();
 
     const version = authSessionEvents.getVersion();
     const subscription = { workspaceId, channelId };
@@ -109,6 +135,19 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
       }
 
       applyMessageRealtimeEvent(queryClient, workspaceId, channelId, event);
+
+      if (event.kind !== 'deleted') {
+        for (const read of latestReads.values()) {
+          applyChannelRead(
+            queryClient,
+            workspaceId,
+            channelId,
+            read.reader,
+            read.lastReadCreatedAt,
+            read.lastReadMessageId
+          );
+        }
+      }
 
       logRealtime(`[REALTIME] MESSAGE ${event.kind.toUpperCase()}`, {
         socketId: socket?.id,
@@ -265,9 +304,45 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
       messageId: string;
     }) => handleEvent({ kind: 'deleted', ...payload });
 
+    const onRead = (event: ChannelReadEvent) => {
+      if (
+        !valid() ||
+        event.workspaceId.toLowerCase() !== workspaceId.toLowerCase() ||
+        event.channelId.toLowerCase() !== channelId.toLowerCase()
+      ) {
+        return;
+      }
+
+      const previous = latestReads.get(event.reader.id);
+
+      if (previous && isStaleReadEvent(previous, event)) {
+        return;
+      }
+
+      latestReads.set(event.reader.id, event);
+
+      const query = queryClient.getQueryState(
+        messageHistoryKey(workspaceId, channelId)
+      );
+
+      if (!query?.data || query.fetchStatus === 'fetching') {
+        pendingReads.current.push(event);
+      }
+
+      applyChannelRead(
+        queryClient,
+        workspaceId,
+        channelId,
+        event.reader,
+        event.lastReadCreatedAt,
+        event.lastReadMessageId
+      );
+    };
+
     socket?.on('message:created', created);
     socket?.on('message:updated', updated);
     socket?.on('message:deleted', deleted);
+    socket?.on('message:read', onRead);
 
     join();
 
@@ -306,6 +381,7 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
       socket?.off('message:created', created);
       socket?.off('message:updated', updated);
       socket?.off('message:deleted', deleted);
+      socket?.off('message:read', onRead);
     };
   }, [socket, workspaceId, channelId, queryClient]);
 
@@ -314,5 +390,6 @@ export function useChannelRealtime(workspaceId: string, channelId: string) {
     joinEpoch,
     joinError,
     pendingEvents,
+    pendingReads,
   };
 }

@@ -1,11 +1,5 @@
-// Global look of Mantine's floating layers (modals, drawers, menus, popovers,
-// tooltips, notifications) so they share the Nodus surfaces, borders and focus
-// ring wherever they are used. Component modules may still refine them.
-
 // ==================== FOCUS ====================
 
-// Mantine draws its own focus outline in the primary color; align it with the
-// shared focus ring used by every other control.
 .mantine-focus-auto:focus-visible,
 .mantine-focus-always:focus {
   outline: var(--focus-ring-width) solid var(--color-focus);
@@ -135,7 +129,6 @@
   background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
 
-  // The colored edge carries the status; keep it slim.
   &::before {
     width: 3px;
   }

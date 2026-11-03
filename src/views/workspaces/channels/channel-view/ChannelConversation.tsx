@@ -15,8 +15,6 @@ import { useChannelReadState } from './hooks/use-channel-read-state';
 import { useMessageActions } from './hooks/use-message-actions';
 import styles from './ChannelConversation.module.scss';
 
-// Mounted per channel (see the key in ChannelView), so scroll position,
-// drafts and edit state never leak between channels.
 export function ChannelConversation({
   workspaceId,
   channelId,
@@ -97,6 +95,16 @@ export function ChannelConversation({
         messages={history.messages}
         canEdit={history.canEdit}
         canDelete={history.canDelete}
+        getReceipt={message =>
+          message.author.id === history.currentUserId
+            ? {
+                read: message.receipt?.read ?? false,
+                readers: message.receipt?.readers.filter(
+                  reader => reader.id !== history.currentUserId
+                ),
+              }
+            : undefined
+        }
         hasOlder={history.hasOlder}
         isLoadingOlder={history.isLoadingOlder}
         hasOlderError={history.hasOlderError}

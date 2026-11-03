@@ -7,7 +7,6 @@ import type { AuthAccessToken } from './session-types';
 type AuthSessionStatus =
   'initializing' | 'authenticated' | 'anonymous' | 'unavailable';
 
-// Purge tokens left by the former localStorage session. New sessions use HttpOnly cookies.
 const LEGACY_REFRESH_TOKEN_KEY = 'nodus.refreshToken';
 
 const serverSnapshot: { status: AuthSessionStatus } = {
@@ -87,9 +86,12 @@ export const authSession = {
       return;
     }
 
-    publish(
-      access ? 'authenticated' : unavailable ? 'unavailable' : 'anonymous'
-    );
+    if (access) {
+      publish('authenticated');
+      return;
+    }
+
+    publish(unavailable ? 'unavailable' : 'anonymous');
   },
 
   getSnapshot() {

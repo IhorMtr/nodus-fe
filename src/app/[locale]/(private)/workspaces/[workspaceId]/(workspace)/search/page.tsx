@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 
-// Legacy links return to the workspace, which resolves its available channel.
 export default async function SearchPage({
   params,
 }: {

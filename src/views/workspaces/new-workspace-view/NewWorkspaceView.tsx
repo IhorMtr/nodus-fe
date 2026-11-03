@@ -13,7 +13,9 @@ export function NewWorkspaceView() {
   const t = useTranslations('workspace');
   const product = useTranslations('product');
 
-  if (isLoading) return <PageSpinner label={t('states.loading')} />;
+  if (isLoading) {
+    return <PageSpinner label={t('states.loading')} />;
+  }
 
   if (loadError) {
     return (

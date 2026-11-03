@@ -19,7 +19,6 @@ function tokenResponse(
   tokens: BackendTokens | null,
   status: number
 ) {
-  // Only the fields needed for cookie handling and the public response cross this boundary.
   if (
     !tokens ||
     typeof tokens.accessToken !== 'string' ||
@@ -64,7 +63,9 @@ async function authenticate(
 
   const result = await forwardAuthRequest(endpoint, payload);
 
-  if (result.response) return result.response;
+  if (result.response) {
+    return result.response;
+  }
 
   return tokenResponse(request, result.body.data, result.status);
 }
@@ -96,7 +97,9 @@ export const authProxy = {
     const result = await forwardAuthRequest('/auth/refresh', { refreshToken });
 
     if (result.response) {
-      if (result.invalidSession) authCookie.clear(result.response, request);
+      if (result.invalidSession) {
+        authCookie.clear(result.response, request);
+      }
       return result.response;
     }
 
@@ -126,7 +129,6 @@ export const authProxy = {
       );
     }
 
-    // Local logout completes even when upstream session revocation fails.
     authCookie.clear(response, request);
 
     return response;

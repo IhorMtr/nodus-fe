@@ -24,15 +24,12 @@ export function useCreateMessageMutation() {
       const version = authSessionEvents.getVersion();
       const message = await messageApi.create(workspaceId, channelId, content);
 
-      // A completed request from an earlier account must not repopulate its cache.
       if (version !== authSessionEvents.getVersion()) {
         throw new AuthError('SessionChanged');
       }
 
       return message;
     },
-    // The target comes from the variables, so a late response updates the
-    // channel it was sent to, even if another channel is open by then.
     onSuccess: (message, { workspaceId, channelId }) =>
       addMessage(queryClient, workspaceId, channelId, message),
     networkMode: 'always',

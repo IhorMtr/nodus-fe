@@ -9,7 +9,6 @@ import type {
 // ==================== TRANSPORT ====================
 
 export const presenceApi = {
-  // Returns the effective status: offline while the user has no active socket.
   async updateStatus(
     status: SelectablePresenceStatus
   ): Promise<PresenceUpdate> {

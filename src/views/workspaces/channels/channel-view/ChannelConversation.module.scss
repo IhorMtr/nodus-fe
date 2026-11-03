@@ -12,8 +12,6 @@
 
 // ==================== REALTIME STATUS ====================
 
-// Sits in the flow above the history, aligned with the message column, so it
-// never covers messages or the composer.
 .realtime {
   flex-shrink: 0;
   max-width: calc(960px + 2 * var(--space-8));

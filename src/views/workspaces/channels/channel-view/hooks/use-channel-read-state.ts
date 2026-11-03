@@ -13,16 +13,13 @@ import type { Message } from '@/domains/message/model/message-history';
 interface ChannelReadStateOptions {
   workspaceId: string;
   channelId: string;
-  // Chronological order: the latest displayed message is the last one.
   messages: Message[];
   isHistoryReady: boolean;
-  // Unread flag of the channel as loaded when the conversation opened.
   hasUnread: boolean;
 }
 
 // ==================== HELPERS ====================
 
-// Mirrors the backend history order (createdAt, then id).
 function isNewerMessage(message: Message, boundary: Message) {
   const difference =
     Date.parse(message.createdAt) - Date.parse(boundary.createdAt);
@@ -32,8 +29,6 @@ function isNewerMessage(message: Message, boundary: Message) {
 
 // ==================== READ STATE ====================
 
-// Marks messages read only while the reader can actually see the latest one:
-// the tab is visible and the history is scrolled to the bottom.
 export function useChannelReadState({
   workspaceId,
   channelId,
@@ -52,7 +47,6 @@ export function useChannelReadState({
 
   const [isAtBottom, setIsAtBottom] = useState(true);
 
-  // The newest message already sent (or being sent) as the read boundary.
   const boundaryRef = useRef<Message | null>(null);
   const initializedRef = useRef(false);
   const failedIdRef = useRef<string | null>(null);
@@ -72,15 +66,12 @@ export function useChannelReadState({
       return;
     }
 
-    // An already read channel starts with its latest message as the boundary,
-    // so opening it sends nothing.
     if (!initializedRef.current) {
       initializedRef.current = true;
       boundaryRef.current = hasUnread ? null : (latest ?? null);
       reportedIdRef.current = latest?.id ?? null;
     }
 
-    // Empty channels have no state to store; one request runs at a time.
     if (!latest || isPending) {
       return;
     }
@@ -95,7 +86,6 @@ export function useChannelReadState({
       return;
     }
 
-    // The reader sees the latest message: advance the boundary to it.
     if (isVisible && isAtBottom) {
       boundaryRef.current = latest;
 
@@ -103,7 +93,6 @@ export function useChannelReadState({
         { channelId, lastReadMessageId: latest.id },
         {
           onError: () => {
-            // Retried only for a newer message, never in a loop.
             boundaryRef.current = boundary;
             failedIdRef.current = latest.id;
           },
@@ -112,7 +101,6 @@ export function useChannelReadState({
       return;
     }
 
-    // A new message stays unread: reload the counters shown in the sidebar.
     if (reportedIdRef.current !== latest.id) {
       reportedIdRef.current = latest.id;
 
@@ -134,8 +122,6 @@ export function useChannelReadState({
   ]);
 
   useEffect(() => {
-    // Deleted messages no longer count as unread, so the counters may change.
-    // Loading older history only grows the list and is ignored.
     if (isHistoryReady && messageCount < messageCountRef.current) {
       void queryClient.invalidateQueries({
         queryKey: channelQueryKeys.list(workspaceId),

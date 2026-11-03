@@ -31,7 +31,6 @@ export function useCreateChannelMutation(workspaceId: string) {
     mutationFn: (name: string) =>
       withCurrentSession(() => channelApi.create(workspaceId, name)),
     onSuccess: channel => {
-      // A new channel has no messages, so nothing is unread yet.
       const created: ChannelWithUnread = {
         ...channel,
         unreadCount: 0,
@@ -62,7 +61,6 @@ export function useRenameChannelMutation(workspaceId: string) {
     mutationFn: ({ channelId, name }: { channelId: string; name: string }) =>
       withCurrentSession(() => channelApi.rename(workspaceId, channelId, name)),
     onSuccess: channel => {
-      // Renaming keeps the cached unread state of the channel.
       queryClient.setQueryData<ChannelWithUnread[]>(
         channelQueryKeys.list(workspaceId),
         current =>

@@ -9,10 +9,10 @@ export function FaviconSync() {
     getInitialValueInEffect: false,
   });
 
-  // Local storage is unavailable on the server; use the ICO until hydration.
-  if (!mounted) return null;
+  if (!mounted) {
+    return null;
+  }
 
-  // React hoists this link to the head and updates the same node on theme changes.
   return (
     <link
       rel="icon"

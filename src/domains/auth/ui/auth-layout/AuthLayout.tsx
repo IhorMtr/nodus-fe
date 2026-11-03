@@ -8,7 +8,6 @@ import styles from './AuthLayout.module.scss';
 
 type AuthLayoutProps = {
   children: ReactNode;
-  // Product visual shown beside the form on wide screens.
   preview: ReactNode;
 };
 

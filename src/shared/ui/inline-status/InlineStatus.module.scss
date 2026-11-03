@@ -43,7 +43,6 @@
     background: var(--status-surface);
   }
 
-  // Plain statuses keep the tone in the text too, since there is no surface.
   &[data-variant='plain'] {
     color: var(--status-color);
     font-weight: var(--font-weight-medium);
@@ -56,7 +55,6 @@
   display: inline-flex;
   flex: none;
   align-self: flex-start;
-  // Centers a 16px icon on the first line of text.
   margin-top: calc((1lh - 16px) / 2);
   color: var(--status-color);
 

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { getInviteErrorKey } from '@/domains/invite/model/invitations';
 import { MemberManagementDialogs } from '@/domains/workspace/ui/member-management';
 import { Button } from '@/shared/ui/button';
+import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { InvitationsSection } from './components/InvitationsSection';
@@ -16,6 +17,7 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
   // ==================== VIEW STATE ====================
 
   const t = useTranslations('invite');
+  const conversation = useTranslations('conversation');
   const {
     workspace,
     members,
@@ -25,6 +27,8 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
     refreshMembers,
     memberManagement,
     invitationManagement,
+    direct,
+    messageMember,
   } = useMembersView(workspaceId);
 
   // ==================== LOADING STATE ====================
@@ -67,6 +71,9 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
 
       <MembersList
         members={members.data}
+        currentUserId={user.data.id}
+        onMessage={member => void messageMember(member.userId)}
+        messagePending={direct.isPending}
         isFetching={members.isFetching}
         onRefresh={refreshMembers}
         canChangeRole={memberManagement.canChangeRole}
@@ -74,6 +81,11 @@ export function MembersView({ workspaceId }: { workspaceId: string }) {
         onChangeRole={memberManagement.openRole}
         onRemove={memberManagement.openRemove}
       />
+      {direct.isError && (
+        <InlineStatus tone="danger" role="alert">
+          {conversation('openError')}
+        </InlineStatus>
+      )}
 
       {/* ==================== INVITATIONS ==================== */}
 

@@ -1,0 +1,213 @@
+// ==================== PAGE COMPOSITION ====================
+.page {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.listPane {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--color-background);
+}
+.chatPane {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.listHeading,
+.chatHeading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-divider);
+}
+.listHeading {
+  justify-content: space-between;
+}
+.listHeading h1 {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+.chatHeading strong {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.chatHeading > :last-child {
+  margin-left: auto;
+}
+.newButton,
+.back {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.newButton:hover,
+.back:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+.back {
+  display: grid;
+}
+.page[data-selected] .listPane,
+.page:not([data-selected]) .chatPane {
+  display: none;
+}
+
+// ==================== CONVERSATION LIST ====================
+.rows {
+  width: min(100%, 760px);
+  min-height: 0;
+  flex: 1;
+  margin: 0 auto;
+  padding: var(--space-2);
+  list-style: none;
+  overflow: auto;
+}
+.row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+.row:hover {
+  background: var(--color-surface-hover);
+}
+.row[data-active] {
+  background: var(--color-surface-selected);
+}
+.avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-surface-elevated);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+}
+.presence {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  border: 2px solid var(--color-chrome);
+}
+.rowBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+}
+.rowTop,
+.rowBottom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.rowTop strong,
+.rowBottom > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rowTop strong {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+.rowTop time {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+.rowBottom {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+.rowBottom > span:first-child {
+  flex: 1;
+}
+.row[data-unread] .rowTop strong {
+  font-weight: var(--font-weight-semibold);
+}
+.unread {
+  min-width: 19px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  text-align: center;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+}
+.listFeedback {
+  padding: var(--space-2) var(--space-4);
+}
+.listEmpty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+.listEmpty p {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+// ==================== MESSAGE AREA ====================
+.conversation {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+.realtime {
+  padding: var(--space-3) var(--space-8) 0;
+}
+.state {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.state p {
+  margin: 0;
+}

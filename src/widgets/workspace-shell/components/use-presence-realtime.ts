@@ -14,7 +14,6 @@ import { useAppSocket } from '@/shared/realtime/socket-context';
 
 // ==================== PRESENCE SYNCHRONIZATION ====================
 
-// Mounted once by the workspace shell, so each socket gets a single listener.
 export function usePresenceRealtime() {
   // ==================== CONTEXT ====================
 
@@ -47,7 +46,6 @@ export function usePresenceRealtime() {
       });
     };
 
-    // Presence events missed while disconnected are never replayed.
     const onConnect = () => {
       if (!valid()) {
         return;

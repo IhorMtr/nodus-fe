@@ -10,8 +10,6 @@ type InlineStatusTone = 'info' | 'success' | 'warning' | 'danger';
 type InlineStatusProps = {
   tone: InlineStatusTone;
   children: ReactNode;
-  // `banner` sits in its own tinted strip; `plain` is icon and text only, for
-  // short confirmations next to the control that caused them.
   variant?: 'banner' | 'plain';
   icon?: ReactNode;
   action?: ReactNode;
@@ -22,7 +20,6 @@ type InlineStatusProps = {
 
 // ==================== CONSTANTS ====================
 
-// Every tone has its own icon, so the meaning never relies on color alone.
 const TONE_ICONS = {
   info: Info,
   success: CircleCheck,

@@ -13,7 +13,6 @@
 
 // ==================== ACCESSIBLE TITLE ====================
 
-// Visually hidden: the shell header already shows the channel name.
 .title {
   @include mixins.visually-hidden;
 }

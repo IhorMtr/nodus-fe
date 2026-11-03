@@ -10,7 +10,6 @@
   flex: 1;
   flex-direction: column;
 
-  // Mark keyboard focus without outlining the entire reading area.
   &:has(.scroller:focus-visible)::after {
     position: absolute;
     z-index: 1;
@@ -28,13 +27,11 @@
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
-  // Scroll position is compensated manually when history is prepended.
   overflow-anchor: none;
   overscroll-behavior: contain;
   padding-block: var(--space-5);
   background: var(--color-background);
 
-  // The viewport provides a compact focus indicator for this large region.
   &:focus-visible {
     outline: none;
   }
@@ -45,8 +42,6 @@
   width: 100%;
   min-height: 100%;
   flex-direction: column;
-  // Left-anchored column, aligned with the channel header and composer.
-  max-width: calc(960px + 2 * var(--space-8));
   margin-inline: 0;
   padding-inline: var(--space-8);
 
@@ -105,8 +100,6 @@
 
 // ==================== HISTORY FEEDBACK ====================
 
-// Floating pill over the top of the history while older messages load or
-// fail to load; overlaid so it never shifts the messages underneath.
 .status {
   position: absolute;
   z-index: var(--z-sticky);
@@ -125,7 +118,6 @@
   box-shadow: var(--shadow-md);
   transform: translateX(-50%);
 
-  // The loading pill holds only a spinner and stays symmetric.
   &:not(:has(button)) {
     padding: var(--space-2);
   }

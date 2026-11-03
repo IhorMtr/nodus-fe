@@ -9,13 +9,15 @@ import { IconButton } from '@/shared/ui/icon-button';
 import type { Message } from '../../model/message-history';
 
 import { MessageEditForm } from './MessageEditForm';
+import { MessageReceipt, type ReceiptDisplay } from './MessageReceipt';
 import styles from './MessageItem.module.scss';
 
 // ==================== TYPES ====================
 
 type MessageItemProps = {
-  message: Message;
+  message: Omit<Message, 'channelId'>;
   formatTime: (isoDate: string) => string;
+  receipt?: ReceiptDisplay;
   canEdit: boolean;
   canDelete: boolean;
   isEditing: boolean;
@@ -24,7 +26,7 @@ type MessageItemProps = {
   onEdit: (messageId: string) => void;
   onSave: (content: string) => Promise<void>;
   onCancelEdit: () => void;
-  onDelete: (message: Message) => void;
+  onDelete: (message: Omit<Message, 'channelId'>) => void;
 };
 
 // ==================== HELPERS ====================
@@ -34,7 +36,7 @@ function getInitials({ firstName, lastName }: Message['author']) {
 }
 
 // The API has no edited flag, so a later updatedAt is the only signal.
-function isEdited({ createdAt, updatedAt }: Message) {
+function isEdited({ createdAt, updatedAt }: Omit<Message, 'channelId'>) {
   return Date.parse(updatedAt) - Date.parse(createdAt) > 1000;
 }
 
@@ -43,6 +45,7 @@ function isEdited({ createdAt, updatedAt }: Message) {
 export function MessageItem({
   message,
   formatTime,
+  receipt,
   canEdit,
   canDelete,
   isEditing,
@@ -71,6 +74,7 @@ export function MessageItem({
           <time className={styles.time} dateTime={message.createdAt}>
             {formatTime(message.createdAt)}
           </time>
+          {receipt && <MessageReceipt receipt={receipt} />}
           {isEdited(message) && (
             <span
               className={styles.edited}

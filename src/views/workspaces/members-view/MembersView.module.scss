@@ -31,7 +31,6 @@
 
 // ==================== SECTIONS ====================
 
-// Groups use a shared visual rhythm; individual entries remain simple rows.
 .section {
   padding-top: var(--space-8);
 }
@@ -141,8 +140,6 @@
 
 // ==================== MEMBER ROW ====================
 
-// Identity on the left, status and role in fixed columns, actions at the end,
-// so the same facts line up from row to row.
 .row {
   display: grid;
   grid-template-columns: 36px minmax(0, 1fr) auto 32px;
@@ -235,7 +232,6 @@
   }
 }
 
-// Plain text, with weight for elevated roles, instead of a pill on every row.
 .role {
   min-width: 112px;
   color: var(--color-text-secondary);
@@ -311,7 +307,6 @@
   }
 }
 
-// Status remains readable without relying on color alone.
 .status {
   display: inline-flex;
   align-items: center;

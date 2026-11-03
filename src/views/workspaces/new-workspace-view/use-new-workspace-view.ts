@@ -46,7 +46,10 @@ export function useNewWorkspaceView() {
 
   const onSubmit: CreateWorkspaceFormProps['onSubmit'] = async event => {
     event.preventDefault();
-    if (submissionLock.current || !currentUser.data) return;
+    if (submissionLock.current || !currentUser.data) {
+      return;
+    }
+
     submissionLock.current = true;
     const userId = currentUser.data.id;
     let created = false;
@@ -77,8 +80,9 @@ export function useNewWorkspaceView() {
         }
       })(event);
     } finally {
-      // Keep the successful submission locked until navigation unmounts the form.
-      if (!created) submissionLock.current = false;
+      if (!created) {
+        submissionLock.current = false;
+      }
     }
   };
 
@@ -87,13 +91,17 @@ export function useNewWorkspaceView() {
   const status = isAxiosError(currentUser.error)
     ? currentUser.error.response?.status
     : undefined;
-  const loadError = currentUser.isError
-    ? status === 401
-      ? authMessages('sessionExpired')
-      : status === 403
-        ? messages('accessDenied')
-        : t('states.currentUserFailed')
-    : undefined;
+  let loadError: string | undefined;
+
+  if (currentUser.isError) {
+    if (status === 401) {
+      loadError = authMessages('sessionExpired');
+    } else if (status === 403) {
+      loadError = messages('accessDenied');
+    } else {
+      loadError = t('states.currentUserFailed');
+    }
+  }
 
   const form: CreateWorkspaceFormProps = {
     nameField: { ...register('name'), error: errors.name?.message },

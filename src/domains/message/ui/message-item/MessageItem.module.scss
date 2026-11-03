@@ -37,7 +37,6 @@
   min-height: 22px;
   align-items: baseline;
   gap: var(--space-2);
-  // Keeps long names clear of the action button.
   padding-right: var(--space-8);
 }
 
@@ -57,6 +56,42 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
   white-space: nowrap;
+}
+
+.receipt,
+.receiptButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--color-text-muted);
+}
+
+.receiptButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.receiptButton:focus-visible {
+  outline: 2px solid var(--color-text-secondary);
+  outline-offset: 2px;
+}
+
+.receiptPopover {
+  max-width: 240px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+
+  ul {
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li + li {
+    margin-top: var(--space-1);
+  }
 }
 
 .content {
@@ -82,7 +117,6 @@
     opacity: 1;
   }
 
-  // Touch devices have no hover, so the action stays reachable.
   @media (hover: none) {
     opacity: 1;
   }

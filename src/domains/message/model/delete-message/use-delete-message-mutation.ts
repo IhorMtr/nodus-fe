@@ -32,7 +32,6 @@ export function useDeleteMessageMutation() {
     onSuccess: (_result, { workspaceId, channelId, messageId }) =>
       removeMessage(queryClient, workspaceId, channelId, messageId),
     onError: (error, { workspaceId, channelId, messageId }) => {
-      // Already deleted elsewhere; the message must not stay in the list.
       if (isMessageNotFound(error)) {
         removeMessage(queryClient, workspaceId, channelId, messageId);
       }

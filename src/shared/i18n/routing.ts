@@ -17,6 +17,8 @@ export const routing = defineRouting({
     '/workspaces/[workspaceId]/overview': '/workspaces/[workspaceId]/overview',
     '/workspaces/[workspaceId]/conversations':
       '/workspaces/[workspaceId]/conversations',
+    '/workspaces/[workspaceId]/conversations/[conversationId]':
+      '/workspaces/[workspaceId]/conversations/[conversationId]',
     '/workspaces/[workspaceId]/announcements':
       '/workspaces/[workspaceId]/announcements',
     '/workspaces/[workspaceId]/search': '/workspaces/[workspaceId]/search',

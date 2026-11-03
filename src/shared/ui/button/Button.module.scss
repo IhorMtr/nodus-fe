@@ -47,8 +47,6 @@
     --button-border: transparent;
   }
 
-  // Destructive actions are outlined in muted red rather than filled, so they
-  // read as serious without becoming the loudest element on the page.
   &[data-variant='danger'] {
     --button-background: transparent;
     --button-background-hover: var(--color-danger-subtle);

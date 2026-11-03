@@ -152,7 +152,6 @@ export const authLifecycle = {
     initialization = authApi
       .hasRefreshCookie()
       .then(hasRefreshCookie => {
-        // A presence check must not revive a newer login/logout transition.
         if (
           version !== authSession.getVersion() ||
           authSession.getSnapshot().status === 'authenticated' ||
@@ -184,7 +183,6 @@ export const authLifecycle = {
     authSession.clear();
     initialization = Promise.resolve();
 
-    // Await older refresh responses before deleting their rotated cookie.
     return enqueue(() => authApi.logout());
   },
 };

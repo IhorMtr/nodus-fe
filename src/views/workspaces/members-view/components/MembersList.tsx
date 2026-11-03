@@ -18,6 +18,9 @@ import styles from '../MembersView.module.scss';
 
 export function MembersList({
   members,
+  currentUserId,
+  onMessage,
+  messagePending,
   isFetching,
   onRefresh,
   canChangeRole,
@@ -26,6 +29,9 @@ export function MembersList({
   onRemove,
 }: {
   members: WorkspaceMember[];
+  currentUserId: string;
+  onMessage: (member: WorkspaceMember) => void;
+  messagePending: boolean;
   isFetching: boolean;
   onRefresh: () => void;
   canChangeRole: (member: WorkspaceMember) => boolean;
@@ -100,7 +106,9 @@ export function MembersList({
                   </span>
                 </div>
                 <div className={styles.rowActions}>
-                  {(canChangeRole(member) || canRemove(member)) && (
+                  {(member.userId !== currentUserId ||
+                    canChangeRole(member) ||
+                    canRemove(member)) && (
                     <Menu position="bottom-end" withinPortal>
                       <Menu.Target>
                         <button
@@ -120,6 +128,9 @@ export function MembersList({
                           canRemove={canRemove(member)}
                           onChangeRole={onChangeRole}
                           onRemove={onRemove}
+                          canMessage={member.userId !== currentUserId}
+                          onMessage={onMessage}
+                          messagePending={messagePending}
                         />
                       </Menu.Dropdown>
                     </Menu>

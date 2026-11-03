@@ -35,17 +35,19 @@ export function ChannelView({
     state.isInvalidLink ||
     state.status === 403
   ) {
+    let description = workspace('states.unavailableDescription');
+
+    if (state.isInvalidLink) {
+      description = workspace('states.invalidLink');
+    } else if (state.status === 403) {
+      description = workspace('states.accessDenied');
+    }
+
     return (
       <PageFeedback
         contained
         title={workspace('states.unavailable')}
-        description={
-          state.isInvalidLink
-            ? workspace('states.invalidLink')
-            : state.status === 403
-              ? workspace('states.accessDenied')
-              : workspace('states.unavailableDescription')
-        }
+        description={description}
         actionLabel={workspace('actions.openAvailable')}
         onAction={state.openApp}
       />
@@ -90,8 +92,6 @@ export function ChannelView({
 
   // ==================== CHANNEL CONTENT ====================
 
-  // The visible channel title lives in the shell header; the page keeps an
-  // accessible heading for screen reader navigation.
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>{state.channel.name}</h1>

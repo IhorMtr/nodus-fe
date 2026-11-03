@@ -1,14 +1,3 @@
-﻿// Semantic color tokens. Components read only these, so both themes stay
-// consistent and a palette change never touches component styles.
-//
-// Surface ladder, from back to front:
-//   chrome      shell header and side columns
-//   background  page canvas and main content area
-//   surface     quiet grouped blocks, secondary controls
-//   elevated    raised blocks such as cards
-//   overlay     menus, popovers, modals and drawers
-// Hover, active and selected layers are translucent so they work on any rung.
-
 // ==================== LIGHT THEME ====================
 
 [data-mantine-color-scheme='light'] {
@@ -126,7 +115,6 @@
 
   // ---------- Text ----------
 
-  // Soft off-white instead of pure white keeps long reading comfortable.
   --color-text-primary: var(--ink-light-1);
   --color-text-secondary: var(--ink-light-2);
   --color-text-muted: var(--ink-light-3);

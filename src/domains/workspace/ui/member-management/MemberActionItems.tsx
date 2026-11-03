@@ -1,7 +1,7 @@
 'use client';
 
 import { Menu } from '@mantine/core';
-import { Pencil, Trash2 } from 'lucide-react';
+import { MessageSquare, Pencil, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import type { WorkspaceMember } from '../../model/members';
@@ -14,22 +14,37 @@ interface MemberActionItemsProps {
   canRemove: boolean;
   onChangeRole: (member: WorkspaceMember) => void;
   onRemove: (member: WorkspaceMember) => void;
+  canMessage?: boolean;
+  onMessage?: (member: WorkspaceMember) => void;
+  messagePending?: boolean;
 }
 
 // ==================== RENDER ====================
 
-// Menu items shared by every member menu: the "more" button and the context menu.
 export function MemberActionItems({
   member,
   canChangeRole,
   canRemove,
   onChangeRole,
   onRemove,
+  canMessage,
+  onMessage,
+  messagePending,
 }: MemberActionItemsProps) {
   const management = useTranslations('workspace.management');
+  const conversation = useTranslations('conversation');
 
   return (
     <>
+      {canMessage && onMessage && (
+        <Menu.Item
+          leftSection={<MessageSquare size={15} />}
+          disabled={messagePending}
+          onClick={() => onMessage(member)}
+        >
+          {conversation('messageMember')}
+        </Menu.Item>
+      )}
       {canChangeRole && (
         <Menu.Item
           leftSection={<Pencil size={15} />}

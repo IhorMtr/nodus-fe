@@ -76,7 +76,6 @@
   gap: var(--space-3);
 }
 
-// Link buttons mirror the shared Button variants.
 .primaryLink,
 .secondaryLink {
   @include mixins.focus-ring;

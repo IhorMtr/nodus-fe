@@ -77,8 +77,6 @@
 
   // ---------- Focus ----------
 
-  // One indicator for mouse and keyboard focus alike: typing into a field is
-  // the same interaction either way, so there is no separate outline.
   &:focus,
   &:focus-visible,
   &:focus-within {

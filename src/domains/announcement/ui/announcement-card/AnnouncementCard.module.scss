@@ -2,8 +2,6 @@
 
 // ==================== CARD ====================
 
-// A flat list entry: rows are separated by hairlines from the parent list
-// instead of each sitting in its own box.
 .card {
   display: flex;
   justify-content: space-between;
@@ -68,7 +66,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-// Published is a completed, positive state; scheduled is informational.
 .published,
 .scheduled {
   padding: 1px var(--space-2);

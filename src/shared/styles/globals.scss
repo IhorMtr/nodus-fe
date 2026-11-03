@@ -71,8 +71,6 @@ a {
   color: inherit;
 }
 
-// Native focus is replaced by the shared ring wherever a component opts in;
-// anything that does not still gets a calm, palette-matched outline.
 :focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
@@ -94,7 +92,6 @@ a {
     --duration-normal: 0.01ms;
   }
 
-  // Keep end events available to components while removing decorative motion.
   *,
   *::before,
   *::after {

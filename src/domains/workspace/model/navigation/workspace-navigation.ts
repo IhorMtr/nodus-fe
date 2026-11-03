@@ -1,6 +1,5 @@
 // ==================== STORAGE HELPERS ====================
 
-// Only navigation identifiers are persisted; access is checked against API data.
 function read(key: string): string | null {
   try {
     return typeof window === 'undefined'
@@ -16,9 +15,7 @@ function write(key: string, value: string): void {
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(key, value);
     }
-  } catch {
-    // Navigation still works when browser storage is unavailable.
-  }
+  } catch {}
 }
 
 function remove(key: string): void {
@@ -26,9 +23,7 @@ function remove(key: string): void {
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(key);
     }
-  } catch {
-    // Navigation still works when browser storage is unavailable.
-  }
+  } catch {}
 }
 
 // ==================== PUBLIC API ====================

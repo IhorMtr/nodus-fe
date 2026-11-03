@@ -1,0 +1,20 @@
+{
+  "new": "New conversation",
+  "chooseMember": "Write to a member",
+  "loadingMembers": "Loading members",
+  "noMembers": "No other members",
+  "noMessages": "No messages yet",
+  "unread": "{count} unread messages",
+  "loading": "Loading conversations",
+  "listError": "Unable to load conversations",
+  "openError": "Unable to open this conversation. Try again.",
+  "joinError": "Unable to connect to this conversation. Reconnect and try again.",
+  "emptyList": "No conversations yet",
+  "emptyListDescription": "Choose a workspace member to start a conversation.",
+  "emptyHistory": "Conversation with {name}",
+  "emptyHistoryDescription": "Write the first message to get started.",
+  "selectConversation": "Select a conversation to view messages.",
+  "unavailable": "This conversation is unavailable in this workspace.",
+  "backToList": "Back to conversations",
+  "messageMember": "Send message"
+}

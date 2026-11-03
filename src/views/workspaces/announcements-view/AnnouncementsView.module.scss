@@ -84,7 +84,6 @@
   gap: 1px;
   margin-top: var(--space-1);
 
-  // Hairlines between entries, inset to the entry padding.
   > * + * {
     position: relative;
 
@@ -171,7 +170,6 @@
   }
 }
 
-// Same tones as the list badges: published is success, scheduled is info.
 .status {
   display: inline-block;
   padding: 1px var(--space-2);

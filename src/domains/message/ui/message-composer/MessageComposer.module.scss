@@ -30,7 +30,6 @@
     min-width: 0;
   }
 
-  // Keep the shared field focus treatment while giving the draft its own surface.
   &.row textarea {
     min-height: 56px;
     padding: 16px var(--space-4);

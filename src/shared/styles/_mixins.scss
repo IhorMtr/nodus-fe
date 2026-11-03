@@ -6,7 +6,6 @@
   }
 }
 
-// Exclusive upper bound complements up() without fractional-pixel gaps.
 @mixin down($breakpoint) {
   @media (width < $breakpoint) {
     @content;
@@ -15,8 +14,6 @@
 
 // ==================== FOCUS ====================
 
-// The one keyboard focus indicator for buttons, links and other compact
-// controls: a neutral outline with a small gap, shown only for keyboard focus.
 @mixin focus-ring($offset: var(--focus-ring-offset)) {
   &:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus);
@@ -24,8 +21,6 @@
   }
 }
 
-// Text fields mark focus in place, with a tinted border and a soft halo,
-// instead of an outline floating around the field.
 @mixin field-focus {
   border-color: var(--color-focus);
   outline: none;
@@ -34,7 +29,6 @@
 
 // ==================== TYPOGRAPHY ====================
 
-// Page-level heading used by workspace pages (Members, Settings, ...).
 @mixin page-title {
   margin: 0;
   color: var(--color-text-primary);
@@ -44,7 +38,6 @@
   letter-spacing: -0.02em;
 }
 
-// Heading of a group inside a page.
 @mixin section-title {
   margin: 0;
   color: var(--color-text-primary);
@@ -53,7 +46,6 @@
   line-height: var(--line-height-tight);
 }
 
-// Small uppercase label above navigation groups and lists.
 @mixin eyebrow {
   color: var(--color-text-muted);
   font-size: var(--font-size-2xs);

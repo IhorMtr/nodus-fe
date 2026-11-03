@@ -3,7 +3,7 @@
 // ==================== PANEL ====================
 
 .panel {
-  width: min(400px, calc(100vw - 24px));
+  width: min(344px, calc(100vw - 24px));
   max-height: min(600px, calc(100dvh - 80px));
   overflow-y: auto;
   border: 1px solid var(--color-border);
@@ -17,22 +17,16 @@
 
 .header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-divider);
 
   h2 {
     margin: 0;
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-semibold);
-  }
-
-  p {
-    margin: 2px 0 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
   }
 }
 
@@ -65,10 +59,15 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  min-height: 28px;
   flex-shrink: 0;
-  height: 28px;
-  padding: 0 var(--space-2);
+  padding: 2px var(--space-1);
   font-size: var(--font-size-sm);
+  white-space: nowrap;
+
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 // ==================== STATES ====================
@@ -121,7 +120,7 @@
   position: relative;
   display: flex;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-4);
   border-bottom: 1px solid var(--color-divider);
 
   &:last-child {
@@ -129,7 +128,6 @@
   }
 }
 
-// Unread items get a faint surface tint plus the dot, not tint alone.
 .unread {
   background: var(--color-accent-subtle);
 }
@@ -139,7 +137,7 @@
   flex: 1;
 
   p {
-    margin: var(--space-1) 0 var(--space-2);
+    margin: 2px 0 var(--space-1);
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     line-height: 1.45;
@@ -149,24 +147,34 @@
   time {
     color: var(--color-text-muted);
     font-size: var(--font-size-xs);
+    white-space: nowrap;
   }
 }
 
 .itemTop {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
   margin-bottom: var(--space-1);
+
+  time {
+    margin-left: auto;
+  }
 }
 
 .type {
+  min-width: 0;
+  overflow: hidden;
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dot {
   width: 7px;
   height: 7px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--color-accent);
 }

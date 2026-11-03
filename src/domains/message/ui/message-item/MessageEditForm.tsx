@@ -26,7 +26,6 @@ import styles from './MessageEditForm.module.scss';
 
 type MessageEditFormProps = {
   initialContent: string;
-  // Rejects when saving fails, which keeps the edited text in the field.
   onSave: (content: string) => Promise<void>;
   onCancel: () => void;
   isSaving: boolean;
@@ -63,15 +62,20 @@ export function MessageEditForm({
   // ==================== HANDLERS ====================
 
   async function save({ content }: MessageContentForm) {
-    if (submissionLock.current) return;
-    // Nothing changed, so there is nothing to send.
-    if (content === initialContent.trim()) return onCancel();
+    if (submissionLock.current) {
+      return;
+    }
+
+    if (content === initialContent.trim()) {
+      onCancel();
+      return;
+    }
+
     submissionLock.current = true;
 
     try {
       await onSave(content);
     } catch {
-      // The failure is reported through the error prop and the text is kept.
     } finally {
       submissionLock.current = false;
     }
@@ -84,11 +88,20 @@ export function MessageEditForm({
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Escape') {
       event.preventDefault();
-      if (!isSaving) onCancel();
+      if (!isSaving) {
+        onCancel();
+      }
+
       return;
     }
-    if (event.key !== 'Enter' || event.shiftKey) return;
-    if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+
+    if (event.key !== 'Enter' || event.shiftKey) {
+      return;
+    }
+
+    if (event.nativeEvent.isComposing || event.keyCode === 229) {
+      return;
+    }
 
     event.preventDefault();
     event.currentTarget.form?.requestSubmit();

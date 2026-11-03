@@ -44,7 +44,9 @@ export function useWorkspaceView(workspaceId: string) {
     channels.isFetchedAfterMount;
 
   useEffect(() => {
-    if (!isReady || isFetching) return;
+    if (!isReady || isFetching) {
+      return;
+    }
 
     const savedId = workspaceNavigation.getLastChannelId(
       user.data.id,
@@ -72,9 +74,13 @@ export function useWorkspaceView(workspaceId: string) {
   // ==================== RECOVERY ====================
 
   const retry = () => {
-    if (user.isError) void user.refetch();
-    else if (workspace.isError) void workspace.refetch();
-    else void channels.refetch();
+    if (user.isError) {
+      void user.refetch();
+    } else if (workspace.isError) {
+      void workspace.refetch();
+    } else {
+      void channels.refetch();
+    }
   };
 
   return {
@@ -85,7 +91,6 @@ export function useWorkspaceView(workspaceId: string) {
     isInvalidLink: !user.isError && resourceStatus === 400,
     isEmpty: isReady && !isFetching && channels.data.length === 0,
     retry,
-    // /app revalidates the available list before choosing another workspace.
     openApp: () => router.replace('/app'),
   };
 }

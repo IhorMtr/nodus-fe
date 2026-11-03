@@ -45,10 +45,11 @@ export function getCreateWorkspaceErrorFeedback(
         ([field]) => field.toLowerCase() === 'name'
       )?.[1];
 
-      if (nameErrors?.length) fieldErrors.name = translate('invalidName');
+      if (nameErrors?.length) {
+        fieldErrors.name = translate('invalidName');
+      }
     }
   }
 
-  // Field and request-level server messages are translated, never shown verbatim.
   return { formError: translate(messageKey), fieldErrors };
 }

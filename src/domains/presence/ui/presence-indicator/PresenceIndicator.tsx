@@ -23,7 +23,6 @@ export function PresenceIndicator({
   const t = useTranslations('presence.status');
   const label = t(status);
 
-  // Without a visible label the dot itself carries the accessible description.
   if (!withLabel) {
     return (
       <span

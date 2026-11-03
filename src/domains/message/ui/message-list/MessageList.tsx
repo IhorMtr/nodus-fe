@@ -3,30 +3,40 @@
 import { isToday } from 'date-fns';
 import { Hash } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+} from 'react';
 
 import { Button } from '@/shared/ui/button';
 import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
 import type { Message } from '../../model/message-history';
-import { MessageItem } from '../message-item';
+import { MessageItem, type ReceiptDisplay } from '../message-item';
 
 import styles from './MessageList.module.scss';
 
 // ==================== TYPES ====================
 
-type MessageListProps = {
+type DisplayMessage = Omit<Message, 'channelId'>;
+
+type MessageListProps<T extends DisplayMessage> = {
   channelName: string;
-  // Chronological order: the oldest message first.
-  messages: Message[];
-  canEdit: (message: Message) => boolean;
-  canDelete: (message: Message) => boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  emptyIcon?: ReactNode;
+  messages: T[];
+  canEdit: (message: T) => boolean;
+  canDelete: (message: T) => boolean;
+  getReceipt: (message: T) => ReceiptDisplay | undefined;
   hasOlder: boolean;
   isLoadingOlder: boolean;
   hasOlderError: boolean;
   onLoadOlder: () => void;
-  // Scrolls to the end once this message is rendered, e.g. after sending it.
   scrollToMessageId?: string;
   editingId: string | null;
   isSavingEdit: boolean;
@@ -34,8 +44,7 @@ type MessageListProps = {
   onEdit: (messageId: string) => void;
   onSaveEdit: (content: string) => Promise<void>;
   onCancelEdit: () => void;
-  onDelete: (message: Message) => void;
-  // Reports whether the reader can see the latest messages; called on change only.
+  onDelete: (message: T) => void;
   onBottomChange?: (isAtBottom: boolean) => void;
 };
 
@@ -56,7 +65,7 @@ const BOTTOM_THRESHOLD = 80;
 
 function captureScroll(
   element: HTMLElement,
-  messages: Message[]
+  messages: DisplayMessage[]
 ): ScrollSnapshot {
   return {
     firstId: messages[0]?.id,
@@ -71,11 +80,15 @@ function captureScroll(
 
 // ==================== COMPONENT ====================
 
-export function MessageList({
+export function MessageList<T extends DisplayMessage>({
   channelName,
+  emptyTitle,
+  emptyDescription,
+  emptyIcon,
   messages,
   canEdit,
   canDelete,
+  getReceipt,
   hasOlder,
   isLoadingOlder,
   hasOlderError,
@@ -89,7 +102,7 @@ export function MessageList({
   onCancelEdit,
   onDelete,
   onBottomChange,
-}: MessageListProps) {
+}: MessageListProps<T>) {
   // ==================== CONTEXT AND REFS ====================
 
   const t = useTranslations('message');
@@ -121,8 +134,6 @@ export function MessageList({
 
   // ==================== SCROLL POSITION ====================
 
-  // Runs only when the list content changes and compares it with the layout
-  // captured after the previous render.
   useLayoutEffect(() => {
     const scroller = scrollerRef.current;
 
@@ -142,17 +153,14 @@ export function MessageList({
       handledScrollTargetRef.current = scrollToMessageId;
       scroller.scrollTop = scroller.scrollHeight;
     } else if (!previous) {
-      // First render of a channel starts at the latest messages.
       scroller.scrollTop = scroller.scrollHeight;
     } else if (
       firstId !== previous.firstId &&
       messages.some(message => message.id === previous.firstId)
     ) {
-      // Older history was prepended: keep the same messages in view.
       scroller.scrollTop =
         previous.top + (scroller.scrollHeight - previous.height);
     } else if (lastId !== previous.lastId && previous.isAtBottom) {
-      // Readers at the bottom keep following new messages; others stay put.
       scroller.scrollTop = scroller.scrollHeight;
     }
   }, [messages, scrollToMessageId]);
@@ -168,8 +176,6 @@ export function MessageList({
     onBottomChange(snapshot.isAtBottom);
   }
 
-  // Runs after every render so edits and other height changes never leave a
-  // stale snapshot behind.
   useLayoutEffect(() => {
     if (scrollerRef.current) {
       snapshotRef.current = captureScroll(scrollerRef.current, messages);
@@ -186,7 +192,6 @@ export function MessageList({
     }
   }
 
-  // Also covers history that is too short to scroll at all.
   useEffect(() => {
     loadOlderIfNeeded();
   });
@@ -216,10 +221,12 @@ export function MessageList({
           {messages.length === 0 && !hasOlder ? (
             <div className={styles.empty}>
               <span className={styles.emptyIcon} aria-hidden="true">
-                <Hash size={24} />
+                {emptyIcon ?? <Hash size={24} />}
               </span>
-              <strong>{t('states.empty', { channel: channelName })}</strong>
-              <p>{t('states.emptyDescription')}</p>
+              <strong>
+                {emptyTitle ?? t('states.empty', { channel: channelName })}
+              </strong>
+              <p>{emptyDescription ?? t('states.emptyDescription')}</p>
             </div>
           ) : (
             <ul className={styles.list}>
@@ -231,6 +238,7 @@ export function MessageList({
                     <MessageItem
                       message={message}
                       formatTime={formatTime}
+                      receipt={getReceipt(message)}
                       canEdit={canEdit(message)}
                       canDelete={canDelete(message)}
                       isEditing={isEditing}
@@ -239,7 +247,7 @@ export function MessageList({
                       onEdit={onEdit}
                       onSave={onSaveEdit}
                       onCancelEdit={onCancelEdit}
-                      onDelete={onDelete}
+                      onDelete={() => onDelete(message)}
                     />
                   </li>
                 );
@@ -248,7 +256,6 @@ export function MessageList({
           )}
         </div>
       </div>
-      {/* Overlaid so showing it never shifts the messages underneath. */}
       {isLoadingOlder && (
         <div className={styles.status}>
           <Spinner size="sm" label={t('states.loadingOlder')} />

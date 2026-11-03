@@ -14,9 +14,6 @@ export type MemberManagement = ReturnType<typeof useMemberManagement>;
 
 // ==================== MEMBER MANAGEMENT ====================
 
-// Shared by the members page and the shell's members panel, so permissions
-// and dialog state follow one set of rules.
-
 export function useMemberManagement(
   workspaceId: string,
   currentUserId: string | undefined,
@@ -72,9 +69,7 @@ export function useMemberManagement(
         role: selectedRole,
       });
       setRoleTarget(null);
-    } catch {
-      // The mutation error stays visible in the dialog.
-    }
+    } catch {}
   };
 
   // ==================== REMOVAL HANDLERS ====================
@@ -98,9 +93,7 @@ export function useMemberManagement(
     try {
       await removeMember.mutateAsync(removeTarget.userId);
       setRemoveTarget(null);
-    } catch {
-      // The mutation error stays visible in the dialog.
-    }
+    } catch {}
   };
 
   return {

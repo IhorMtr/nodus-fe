@@ -12,16 +12,12 @@ export const inviteStorage = {
   set(token: string): void {
     try {
       sessionStorage.setItem(KEY, token);
-    } catch {
-      // The invite page remains usable when tab storage is unavailable.
-    }
+    } catch {}
   },
 
   clear(): void {
     try {
       sessionStorage.removeItem(KEY);
-    } catch {
-      // The invite page remains usable when tab storage is unavailable.
-    }
+    } catch {}
   },
 };

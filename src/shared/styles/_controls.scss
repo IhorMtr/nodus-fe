@@ -1,4 +1,3 @@
-// Shared size scale for buttons, fields and toggles, driven by `data-size`.
 @mixin sizes {
   --control-height: var(--control-height-md);
   --control-icon-size: var(--icon-size-md);

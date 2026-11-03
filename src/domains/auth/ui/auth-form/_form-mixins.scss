@@ -1,6 +1,4 @@
 @mixin form-styles {
-  // Auth forms are the whole page, so their fields are one step taller than
-  // the compact controls used inside the workspace.
   .form {
     --control-height-md: 40px;
 

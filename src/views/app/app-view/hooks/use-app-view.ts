@@ -17,15 +17,15 @@ export function useAppView() {
   const isFetching = user.isFetching || workspaces.isFetching;
 
   useEffect(() => {
-    // Wait for current server results, including revalidation of cached lists.
     if (
       !user.isSuccess ||
       !user.isFetchedAfterMount ||
       !workspaces.isSuccess ||
       !workspaces.isFetchedAfterMount ||
       isFetching
-    )
+    ) {
       return;
+    }
 
     const savedId = workspaceNavigation.getLastWorkspaceId(user.data.id);
     const workspace =
@@ -53,8 +53,11 @@ export function useAppView() {
   ]);
 
   const retry = () => {
-    if (user.isError) void user.refetch();
-    else void workspaces.refetch();
+    if (user.isError) {
+      void user.refetch();
+    } else {
+      void workspaces.refetch();
+    }
   };
 
   return { error, isFetching, retry };

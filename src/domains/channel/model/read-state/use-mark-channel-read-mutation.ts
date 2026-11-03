@@ -24,7 +24,6 @@ export function useMarkChannelReadMutation(workspaceId: string) {
         channelApi.markRead(workspaceId, channelId, lastReadMessageId)
       ),
     onSuccess: (_readState, { channelId }) => {
-      // The response has no counters, so unread data is reloaded from REST.
       void queryClient.invalidateQueries({
         queryKey: channelQueryKeys.list(workspaceId),
       });

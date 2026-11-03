@@ -2,6 +2,7 @@
 
 import { ArrowRight, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
 import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
@@ -84,6 +85,65 @@ export function InviteView() {
     );
   }
 
+  // ==================== SESSION ACTIONS ====================
+
+  let sessionActions: ReactNode;
+
+  if (status === 'authenticated') {
+    sessionActions = (
+      <>
+        {!cannotRetryAcceptance && (
+          <Button
+            rightIcon={<ArrowRight size={16} />}
+            onClick={() => void acceptInvite()}
+            loading={accept.isPending}
+            disabled={accept.isPending}
+          >
+            {t('actions.accept')}
+          </Button>
+        )}
+        {acceptErrorKey && (
+          <InlineStatus tone="danger" role="alert">
+            {t(`errors.${acceptErrorKey}`)}
+          </InlineStatus>
+        )}
+        {acceptErrorKey === 'AlreadyWorkspaceMember' && (
+          <Link
+            href={{
+              pathname: '/workspaces/[workspaceId]',
+              params: { workspaceId: resolved.data.id },
+            }}
+          >
+            {t('actions.openWorkspace')}
+          </Link>
+        )}
+      </>
+    );
+  } else if (status === 'initializing') {
+    sessionActions = <Spinner label={t('page.checkingSession')} />;
+  } else if (status === 'unavailable') {
+    sessionActions = (
+      <div className={styles.actions}>
+        <p>{t('page.sessionUnavailable')}</p>
+        <Button variant="secondary" onClick={retrySession}>
+          {t('actions.retry')}
+        </Button>
+      </div>
+    );
+  } else {
+    sessionActions = (
+      <div className={styles.actions}>
+        <p>{t('page.signInPrompt')}</p>
+        <Link href="/auth/login" className={styles.primaryLink}>
+          {t('actions.login')}
+        </Link>
+        <Link href="/auth/register" className={styles.secondaryLink}>
+          {t('actions.register')}
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <main className={styles.page}>
       <div className={styles.card}>
@@ -97,54 +157,7 @@ export function InviteView() {
           {t('page.expires', { date: formatDate(resolved.data.expiresAt) })}
         </p>
 
-        {status === 'authenticated' ? (
-          <>
-            {!cannotRetryAcceptance && (
-              <Button
-                rightIcon={<ArrowRight size={16} />}
-                onClick={() => void acceptInvite()}
-                loading={accept.isPending}
-                disabled={accept.isPending}
-              >
-                {t('actions.accept')}
-              </Button>
-            )}
-            {acceptErrorKey && (
-              <InlineStatus tone="danger" role="alert">
-                {t(`errors.${acceptErrorKey}`)}
-              </InlineStatus>
-            )}
-            {acceptErrorKey === 'AlreadyWorkspaceMember' && (
-              <Link
-                href={{
-                  pathname: '/workspaces/[workspaceId]',
-                  params: { workspaceId: resolved.data.id },
-                }}
-              >
-                {t('actions.openWorkspace')}
-              </Link>
-            )}
-          </>
-        ) : status === 'initializing' ? (
-          <Spinner label={t('page.checkingSession')} />
-        ) : status === 'unavailable' ? (
-          <div className={styles.actions}>
-            <p>{t('page.sessionUnavailable')}</p>
-            <Button variant="secondary" onClick={retrySession}>
-              {t('actions.retry')}
-            </Button>
-          </div>
-        ) : (
-          <div className={styles.actions}>
-            <p>{t('page.signInPrompt')}</p>
-            <Link href="/auth/login" className={styles.primaryLink}>
-              {t('actions.login')}
-            </Link>
-            <Link href="/auth/register" className={styles.secondaryLink}>
-              {t('actions.register')}
-            </Link>
-          </div>
-        )}
+        {sessionActions}
 
         <button className={styles.decline} type="button" onClick={decline}>
           {t('actions.leave')}

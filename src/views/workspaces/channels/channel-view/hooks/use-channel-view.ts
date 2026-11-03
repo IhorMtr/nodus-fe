@@ -23,9 +23,6 @@ export function useChannelView(workspaceId: string, channelId: string) {
     ? channel.error.response
     : undefined;
 
-  // Once the channel has loaded, a failed background refetch (for example a
-  // network blip on window focus) must not replace the open conversation.
-  // Only responses that mean access was lost are treated as terminal.
   const isTerminalError =
     rawStatus !== undefined && [400, 401, 403, 404].includes(rawStatus);
   const isReady =
@@ -45,8 +42,6 @@ export function useChannelView(workspaceId: string, channelId: string) {
       return;
     }
 
-    // The scoped endpoint verifies membership and the channel's workspace.
-    // An explicitly opened URL always wins over any saved channel choice.
     workspaceNavigation.setLastWorkspaceId(user.data.id, workspaceId);
     workspaceNavigation.setLastChannelId(
       user.data.id,

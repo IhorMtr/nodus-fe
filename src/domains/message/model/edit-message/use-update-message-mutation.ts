@@ -44,7 +44,6 @@ export function useUpdateMessageMutation() {
     onSuccess: (message, { workspaceId, channelId }) =>
       replaceMessage(queryClient, workspaceId, channelId, message),
     onError: (error, { workspaceId, channelId, messageId }) => {
-      // The message was deleted elsewhere; stop showing it.
       if (isMessageNotFound(error)) {
         removeMessage(queryClient, workspaceId, channelId, messageId);
       }

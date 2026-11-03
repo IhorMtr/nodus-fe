@@ -93,7 +93,6 @@ export function useMessageActions(workspaceId: string, channelId: string) {
 
       setDeleteTarget(null);
     } catch (error) {
-      // The message is already gone, so there is nothing left to confirm.
       if (isMessageNotFound(error)) {
         setDeleteTarget(null);
       }

@@ -98,9 +98,10 @@ export function useWorkspaceSidebar(
     }
 
     const trimmedName = name.trim();
+    const normalizedName = trimmedName.toLowerCase();
     const duplicate = channels.data?.some(
       item =>
-        item.name.trim().toLowerCase() === trimmedName.toLowerCase() &&
+        item.name.trim().toLowerCase() === normalizedName &&
         item.id !== selected?.id
     );
     if (duplicate) {
@@ -166,17 +167,18 @@ export function useWorkspaceSidebar(
 
       if (channelId === deletedId) {
         onNavigate?.();
-        router.replace(
-          next
-            ? {
-                pathname: '/workspaces/[workspaceId]/channels/[channelId]',
-                params: { workspaceId, channelId: next.id },
-              }
-            : {
-                pathname: '/workspaces/[workspaceId]',
-                params: { workspaceId },
-              }
-        );
+
+        if (next) {
+          router.replace({
+            pathname: '/workspaces/[workspaceId]/channels/[channelId]',
+            params: { workspaceId, channelId: next.id },
+          });
+        } else {
+          router.replace({
+            pathname: '/workspaces/[workspaceId]',
+            params: { workspaceId },
+          });
+        }
       }
     } catch (error) {
       setDeleteError(channel(`errors.${getChannelErrorKey(error)}`));

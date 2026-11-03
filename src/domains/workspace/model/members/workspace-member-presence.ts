@@ -6,7 +6,6 @@ import type { WorkspaceMember } from './workspace-member-types';
 
 // ==================== CONSTANTS ====================
 
-// Prefix of every cached member list, one per workspace the user has opened.
 const workspaceMembersRootKey = ['workspaces', 'members'] as const;
 
 // ==================== REALTIME UPDATES ====================
@@ -17,8 +16,6 @@ export function applyWorkspaceMemberPresence(
 ) {
   const userId = update.userId.toLowerCase();
 
-  // Only lists already cached are patched, so presence never leaks into
-  // workspaces the user cannot open.
   queryClient.setQueriesData<WorkspaceMember[]>(
     { queryKey: workspaceMembersRootKey },
     members => {
@@ -40,8 +37,6 @@ export function applyWorkspaceMemberPresence(
     }
   );
 
-  // A request already in flight may have read the state before this update.
-  // Restart it so the stale response cannot overwrite the event.
   void queryClient.invalidateQueries({
     queryKey: workspaceMembersRootKey,
     predicate: query => query.state.fetchStatus === 'fetching',
@@ -51,6 +46,5 @@ export function applyWorkspaceMemberPresence(
 // ==================== RECONNECT RECOVERY ====================
 
 export function refreshWorkspaceMembersPresence(queryClient: QueryClient) {
-  // Events are not replayed, so the REST list is the source of truth after a reconnect.
   void queryClient.invalidateQueries({ queryKey: workspaceMembersRootKey });
 }

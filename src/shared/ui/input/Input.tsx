@@ -24,7 +24,6 @@ type InputProps = InputBaseProps &
     | {
         type: 'password';
         showPasswordToggle?: boolean;
-        // Mantine replaces the visibility button when rightSection is supplied.
         rightIcon?: never;
       }
     | {

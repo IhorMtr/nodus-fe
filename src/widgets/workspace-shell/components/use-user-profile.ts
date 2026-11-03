@@ -19,7 +19,6 @@ export function useUserProfile() {
     try {
       await authLifecycle.logout();
     } catch {
-      // The local session is cleared even if upstream revocation fails.
     } finally {
       router.replace('/auth/login');
     }

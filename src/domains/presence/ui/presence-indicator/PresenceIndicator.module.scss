@@ -28,7 +28,6 @@
     background: var(--color-presence-dnd);
   }
 
-  // Offline stays a hollow ring so it does not read as an active state.
   &[data-status='offline'] {
     border: 1.5px solid var(--color-presence-offline);
     background: transparent;

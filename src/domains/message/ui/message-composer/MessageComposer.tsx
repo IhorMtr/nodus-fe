@@ -18,7 +18,6 @@ import styles from './MessageComposer.module.scss';
 // ==================== TYPES ====================
 
 type MessageComposerProps = {
-  // Rejects when sending fails, which keeps the draft in the field.
   onSubmit: (content: string) => Promise<void>;
   isSubmitting: boolean;
   error?: string;
@@ -66,7 +65,6 @@ export function MessageComposer({
       reset();
       setFocus('content');
     } catch {
-      // The failure is reported through the error prop and the draft is kept.
     } finally {
       submissionLock.current = false;
     }
@@ -81,13 +79,11 @@ export function MessageComposer({
       return;
     }
 
-    // Enter confirms an IME candidate and must not send the message.
     if (event.nativeEvent.isComposing || event.keyCode === 229) {
       return;
     }
 
     event.preventDefault();
-    // Blank drafts are ignored silently instead of showing a validation error.
     if (event.currentTarget.value.trim() === '' || isSubmitting) {
       return;
     }

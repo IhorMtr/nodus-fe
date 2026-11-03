@@ -16,7 +16,10 @@
     "retry": "Try again"
   },
   "meta": {
-    "edited": "(edited)"
+    "edited": "(edited)",
+    "sent": "Sent",
+    "read": "Read",
+    "readBy": "Read by {count}"
   },
   "deletion": {
     "title": "Delete this message?",

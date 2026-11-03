@@ -1,9 +1,6 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-// Values deliberately match the real workspace shell. The host may scale the
-// whole preview down through --app-preview-zoom.
-
 // ==================== SHELL ====================
 
 .root {

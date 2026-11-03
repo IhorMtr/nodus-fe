@@ -31,9 +31,6 @@ const messages = [
 
 // ==================== COMPONENT ====================
 
-// Static, non-interactive replica of the workspace shell with a channel open.
-// It mirrors the real layout, so keep it in sync with WorkspaceShell,
-// WorkspaceSidebar and the channel view.
 export function AppPreview() {
   const product = useTranslations('product');
   const user = useTranslations('user');

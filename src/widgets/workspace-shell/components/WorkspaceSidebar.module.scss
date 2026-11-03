@@ -69,7 +69,6 @@
     }
   }
 
-  // A quiet inset marker identifies the current destination.
   &[aria-current='page'] {
     background: var(--color-surface-selected);
     color: var(--color-text-primary);
@@ -81,7 +80,6 @@
     }
   }
 
-  // Unread channels stand out by weight only; the active state keeps its surface.
   &[data-unread] {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-semibold);
@@ -143,8 +141,6 @@
   }
 }
 
-// Sits over the end of the row and appears on hover or focus, so the channel
-// list stays quiet; touch screens always show it.
 .channelAction {
   position: absolute;
   right: var(--space-1);
@@ -160,12 +156,10 @@
   }
 }
 
-// Leaves room for the action button when it can appear over the row.
 .channelRow:has(.channelAction) .navLink {
   padding-right: 32px;
 }
 
-// The badge yields its place to the action button while that is visible.
 @media (hover: hover) {
   .channelRow:is(:hover, :focus-within):has(.channelAction) .unreadBadge {
     visibility: hidden;

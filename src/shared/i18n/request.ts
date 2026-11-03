@@ -7,7 +7,6 @@ import { routing } from './routing';
 
 export default getRequestConfig(
   async ({ locale: localeOverride, requestLocale }) => {
-    // The locale segment is below the stable document layout, so use the proxy locale.
     const requestedLocale = localeOverride ?? (await requestLocale);
     const locale = hasLocale(routing.locales, requestedLocale)
       ? requestedLocale
@@ -27,6 +26,7 @@ export default getRequestConfig(
       workspace,
       channel,
       message,
+      conversation,
       invite,
       notification,
       announcement,
@@ -42,6 +42,7 @@ export default getRequestConfig(
       import(`../../../messages/${locale}/workspace.json`),
       import(`../../../messages/${locale}/channel.json`),
       import(`../../../messages/${locale}/message.json`),
+      import(`../../../messages/${locale}/conversation.json`),
       import(`../../../messages/${locale}/invite.json`),
       import(`../../../messages/${locale}/notification.json`),
       import(`../../../messages/${locale}/announcement.json`),
@@ -61,6 +62,7 @@ export default getRequestConfig(
         workspace: workspace.default,
         channel: channel.default,
         message: message.default,
+        conversation: conversation.default,
         invite: invite.default,
         notification: notification.default,
         announcement: announcement.default,

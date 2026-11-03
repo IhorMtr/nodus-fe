@@ -1,11 +1,9 @@
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 
-import type { Message, MessageHistory } from './message-types';
+import type { Message, MessageAuthor, MessageHistory } from './message-types';
 
 // ==================== TYPES ====================
 
-// pages[0] is the newest page; every following page holds older messages.
-// Items inside each page are ordered from oldest to newest.
 type MessageHistoryData = InfiniteData<MessageHistory, string | undefined>;
 
 // ==================== QUERY KEY ====================
@@ -15,7 +13,6 @@ export const messageHistoryKey = (workspaceId: string, channelId: string) =>
 
 // ==================== DERIVED STATE ====================
 
-// Walks pages from the oldest to the newest, so no sorting is required.
 export function flattenMessageHistory(data: MessageHistoryData): Message[] {
   const seen = new Set<string>();
   const messages: Message[] = [];
@@ -43,13 +40,31 @@ function compareMessages(a: Message, b: Message) {
   );
 }
 
+function atOrBefore(message: Message, createdAt: string, id: string) {
+  const messageTime = Date.parse(message.createdAt);
+  const boundaryTime = Date.parse(createdAt);
+
+  if (messageTime !== boundaryTime) {
+    return messageTime < boundaryTime;
+  }
+
+  return message.id.localeCompare(id) <= 0;
+}
+
+function preserveReceipt(current: Message, incoming: Message): Message {
+  if (!current.receipt || incoming.receipt) {
+    return incoming;
+  }
+
+  return { ...incoming, receipt: current.receipt };
+}
+
 function updateHistory(
   queryClient: QueryClient,
   workspaceId: string,
   channelId: string,
   update: (data: MessageHistoryData) => MessageHistoryData
 ) {
-  // A channel that was never loaded has nothing to keep consistent.
   queryClient.setQueryData<MessageHistoryData>(
     messageHistoryKey(workspaceId, channelId),
     data => (data ? update(data) : data)
@@ -66,6 +81,46 @@ function mapPages(
   };
 }
 
+function replaceIfNewer(current: Message, incoming: Message): Message {
+  if (current.id !== incoming.id || current.updatedAt > incoming.updatedAt) {
+    return current;
+  }
+
+  return preserveReceipt(current, incoming);
+}
+
+function addReaderReceipt(
+  message: Message,
+  reader: MessageAuthor,
+  lastReadCreatedAt: string,
+  lastReadMessageId: string
+): Message {
+  if (message.author.id === reader.id) {
+    return message;
+  }
+
+  if (!atOrBefore(message, lastReadCreatedAt, lastReadMessageId)) {
+    return message;
+  }
+
+  const readers = message.receipt?.readers ?? [];
+
+  if (readers.some(person => person.id === reader.id)) {
+    return message;
+  }
+
+  const nextReaders = [...readers, reader];
+
+  return {
+    ...message,
+    receipt: {
+      read: true,
+      readerCount: nextReaders.length,
+      readers: nextReaders,
+    },
+  };
+}
+
 export function addMessage(
   queryClient: QueryClient,
   workspaceId: string,
@@ -79,11 +134,7 @@ export function addMessage(
 
     if (exists) {
       return mapPages(data, items =>
-        items.map(item =>
-          item.id === message.id && item.updatedAt <= message.updatedAt
-            ? message
-            : item
-        )
+        items.map(item => replaceIfNewer(item, message))
       );
     }
 
@@ -111,11 +162,22 @@ export function replaceMessage(
   message: Message
 ) {
   updateHistory(queryClient, workspaceId, channelId, data =>
+    mapPages(data, items => items.map(item => replaceIfNewer(item, message)))
+  );
+}
+
+export function applyChannelRead(
+  queryClient: QueryClient,
+  workspaceId: string,
+  channelId: string,
+  reader: MessageAuthor,
+  lastReadCreatedAt: string,
+  lastReadMessageId: string
+) {
+  updateHistory(queryClient, workspaceId, channelId, data =>
     mapPages(data, items =>
       items.map(item =>
-        item.id === message.id && item.updatedAt <= message.updatedAt
-          ? message
-          : item
+        addReaderReceipt(item, reader, lastReadCreatedAt, lastReadMessageId)
       )
     )
   );

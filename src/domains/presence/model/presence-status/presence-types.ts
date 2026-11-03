@@ -2,7 +2,6 @@
 
 export type PresenceStatus = 'online' | 'away' | 'dnd' | 'offline';
 
-// Offline is derived by the backend from Socket.IO connections and cannot be selected.
 export type SelectablePresenceStatus = Exclude<PresenceStatus, 'offline'>;
 
 export interface PresenceUpdate {

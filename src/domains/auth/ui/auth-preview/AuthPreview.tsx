@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 import styles from './AuthPreview.module.scss';
 
 type AuthPreviewProps = {
-  // The product visual shown above the caption.
   children: ReactNode;
 };
 

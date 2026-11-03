@@ -23,7 +23,6 @@ export function useUserPresence(workspaceId: string, userId: string) {
 
   // ==================== QUERIES AND MUTATIONS ====================
 
-  // The member list carries the effective status, including the current user's.
   const members = useWorkspaceMembersQuery(workspaceId);
   const updateStatus = useUpdatePresenceStatusMutation();
 
@@ -42,8 +41,6 @@ export function useUserPresence(workspaceId: string, userId: string) {
 
     updateStatus.mutate(next, {
       onSuccess: update => {
-        // Other tabs receive presence:updated; this tab also applies the response
-        // because no event is published while it is offline.
         applyWorkspaceMemberPresence(queryClient, update);
       },
       onError: () => {

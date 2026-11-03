@@ -14,16 +14,18 @@ export function AppView() {
   const status = isAxiosError(error) ? error.response?.status : undefined;
 
   if (error && !isFetching) {
+    let description = t('states.loadErrorDescription');
+
+    if (status === 401) {
+      description = auth('sessionExpired');
+    } else if (status === 403) {
+      description = t('states.accessDenied');
+    }
+
     return (
       <PageFeedback
         title={t('states.loadError')}
-        description={
-          status === 401
-            ? auth('sessionExpired')
-            : status === 403
-              ? t('states.accessDenied')
-              : t('states.loadErrorDescription')
-        }
+        description={description}
         actionLabel={t('actions.retry')}
         onAction={retry}
       />

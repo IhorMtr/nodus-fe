@@ -90,7 +90,6 @@
     background: var(--color-surface-hover);
   }
 
-  // Offline members recede without losing legibility.
   &[data-offline] .identity {
     opacity: 0.62;
   }
@@ -114,7 +113,6 @@
   }
 }
 
-// The status dot sits on the avatar edge with a ring in the panel colour.
 .presence.presence {
   position: absolute;
   right: -2px;
@@ -155,7 +153,6 @@
 
 // ==================== QUICK ACTIONS ====================
 
-// Revealed on hover or focus where a pointer can hover; always visible on touch.
 .more {
   flex: none;
 

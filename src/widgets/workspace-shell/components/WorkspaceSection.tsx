@@ -12,8 +12,6 @@ interface WorkspaceSectionProps {
 
 // ==================== RENDER ====================
 
-// Placeholder for sections that are not implemented yet. The shell header
-// already names the section, so the page shows only an empty state.
 export function WorkspaceSection({ section, icon }: WorkspaceSectionProps) {
   const t = useTranslations('workspace');
 

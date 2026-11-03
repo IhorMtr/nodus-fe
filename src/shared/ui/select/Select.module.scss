@@ -115,7 +115,6 @@
     opacity: 1;
   }
 
-  // Keyboard highlight: a tinted row rather than a solid fill.
   &[data-combobox-selected] {
     background: var(--color-surface-selected);
     color: var(--color-text-primary);

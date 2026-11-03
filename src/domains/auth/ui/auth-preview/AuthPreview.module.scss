@@ -22,7 +22,6 @@
     position: absolute;
     inset: 0;
 
-    // Keep the channel content legible while showing the workspace context.
     --app-preview-zoom: 0.85;
 
     @container (width < 600px) {

@@ -22,6 +22,9 @@ import type { MembersPanelGroup } from './use-members-panel';
 // ==================== TYPES ====================
 
 interface MemberActionsProps {
+  currentUserId: string;
+  onMessage: (member: WorkspaceMember) => void;
+  messagePending: boolean;
   canChangeRole: (member: WorkspaceMember) => boolean;
   canRemove: (member: WorkspaceMember) => boolean;
   onChangeRole: (member: WorkspaceMember) => void;
@@ -29,11 +32,11 @@ interface MemberActionsProps {
 }
 
 interface MembersPanelProps extends MemberActionsProps {
+  messageError: boolean;
   groups: MembersPanelGroup[];
   total: number;
   loading: boolean;
   error: boolean;
-  // The drawer already shows a title, so the inline heading can be hidden.
   withHeading?: boolean;
   onRetry: () => void;
 }
@@ -50,6 +53,9 @@ function MemberRow({
   canRemove,
   onChangeRole,
   onRemove,
+  currentUserId,
+  onMessage,
+  messagePending,
 }: MemberRowProps) {
   // ==================== CONTEXT ====================
 
@@ -61,7 +67,8 @@ function MemberRow({
   const name = getWorkspaceMemberName(member);
   const allowRole = canChangeRole(member);
   const allowRemove = canRemove(member);
-  const manageable = allowRole || allowRemove;
+  const canMessage = member.userId !== currentUserId;
+  const manageable = canMessage || allowRole || allowRemove;
   const actions = (
     <MemberActionItems
       member={member}
@@ -69,6 +76,9 @@ function MemberRow({
       canRemove={allowRemove}
       onChangeRole={onChangeRole}
       onRemove={onRemove}
+      canMessage={canMessage}
+      onMessage={onMessage}
+      messagePending={messagePending}
     />
   );
 
@@ -121,7 +131,6 @@ function MemberRow({
     return row;
   }
 
-  // Right click (or a long press on touch screens) opens the same actions.
   return (
     <Menu position="bottom-start" shadow="sm" withinPortal>
       <Menu.ContextMenu>{row}</Menu.ContextMenu>
@@ -139,6 +148,7 @@ export function MembersPanel({
   error,
   withHeading = true,
   onRetry,
+  messageError,
   ...actions
 }: MembersPanelProps) {
   // ==================== CONTEXT ====================
@@ -146,6 +156,7 @@ export function MembersPanel({
   const t = useTranslations('workspace.membersPanel');
   const workspace = useTranslations('workspace');
   const invite = useTranslations('invite.members');
+  const conversation = useTranslations('conversation');
   const headingId = useId();
 
   // ==================== RENDER ====================
@@ -180,6 +191,12 @@ export function MembersPanel({
             <Button variant="secondary" size="sm" onClick={onRetry}>
               {workspace('actions.retry')}
             </Button>
+          </div>
+        )}
+
+        {messageError && (
+          <div className={styles.state} role="alert">
+            <p>{conversation('openError')}</p>
           </div>
         )}
 

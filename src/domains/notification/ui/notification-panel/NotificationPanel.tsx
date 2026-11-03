@@ -34,7 +34,7 @@ export function NotificationPanel(props: NotificationPanelProps) {
   const t = useTranslations('notification');
   const locale = useLocale();
   const formatter = new Intl.DateTimeFormat(locale, {
-    dateStyle: 'medium',
+    dateStyle: 'short',
     timeStyle: 'short',
   });
 
@@ -43,19 +43,19 @@ export function NotificationPanel(props: NotificationPanelProps) {
       {/* ==================== PANEL HEADER ==================== */}
 
       <div className={styles.header}>
-        <div>
-          <h2>{t('title')}</h2>
-          <p>{t('subtitle')}</p>
-        </div>
-        <button
-          className={styles.markAll}
-          type="button"
-          onClick={props.onMarkAllRead}
-          disabled={props.markingAll || !props.canMarkAll}
-        >
-          <Check size={15} aria-hidden="true" />
-          {t('markAllRead')}
-        </button>
+        <h2>{t('title')}</h2>
+        {(props.canMarkAll || props.markingAll) && (
+          <button
+            className={styles.markAll}
+            type="button"
+            onClick={props.onMarkAllRead}
+            disabled={props.markingAll}
+            aria-label={t('markAllRead')}
+          >
+            <Check size={15} aria-hidden="true" />
+            {t('markAllReadShort')}
+          </button>
+        )}
       </div>
 
       {/* ==================== FEEDBACK STATES ==================== */}
@@ -103,6 +103,11 @@ export function NotificationPanel(props: NotificationPanelProps) {
                     {!item.readAt && (
                       <span className={styles.dot} aria-label={t('unread')} />
                     )}
+                    <time dateTime={item.createdAt}>
+                      {Number.isNaN(date.getTime())
+                        ? item.createdAt
+                        : formatter.format(date)}
+                    </time>
                   </div>
                   {canNavigate ? (
                     <button
@@ -116,11 +121,6 @@ export function NotificationPanel(props: NotificationPanelProps) {
                     <strong className={styles.itemTitle}>{item.title}</strong>
                   )}
                   <p>{item.message}</p>
-                  <time dateTime={item.createdAt}>
-                    {Number.isNaN(date.getTime())
-                      ? item.createdAt
-                      : formatter.format(date)}
-                  </time>
                 </div>
                 {!item.readAt && (
                   <button

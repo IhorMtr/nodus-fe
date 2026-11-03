@@ -20,7 +20,6 @@ interface WorkspaceToolbarProps {
   notifications: NotificationCenter;
   membersPanel?: {
     expanded: boolean;
-    // Present only while the inline desktop panel is the controlled element.
     controls?: string;
     onToggle: () => void;
   };

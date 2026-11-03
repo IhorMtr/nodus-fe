@@ -3,8 +3,6 @@
 
 // ==================== HEADER ====================
 
-// Geometry comes from the shell, so the header columns line up with the
-// sidebar border below it.
 .header {
   display: flex;
   height: var(--shell-header-height);
@@ -138,7 +136,6 @@
     color: var(--color-text-muted);
   }
 
-  // The context icon separates it from the workspace switcher on small screens.
   @include mixins.down(breakpoints.$breakpoint-md) {
     gap: var(--space-1);
     padding-inline: var(--space-2);

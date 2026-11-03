@@ -35,8 +35,6 @@ export function usePersonalSettings() {
       return;
     }
 
-    // A locale change crosses the provider layout. A full navigation ensures
-    // the selected messages are loaded even when this route was intercepted.
     const destination = new URL(window.location.href);
     destination.pathname = destination.pathname.replace(
       /^\/(?:uk|en)(?=\/|$)/,

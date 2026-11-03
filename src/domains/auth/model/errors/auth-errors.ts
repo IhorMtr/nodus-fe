@@ -66,19 +66,24 @@ export class AuthError extends Error {
   }
 
   static from(error: unknown): AuthError {
-    if (error instanceof AuthError) return error;
+    if (error instanceof AuthError) {
+      return error;
+    }
 
     if (isAxiosError<AuthErrorResponse>(error)) {
       const response = error.response;
-      if (!response)
+      if (!response) {
         return new AuthError('NetworkError', null, { cause: error });
+      }
+
       if (response.data?.success === false) {
         return new AuthError(response.data.messageType, response.data.errors, {
           cause: error,
         });
       }
-      if (response.status === 429)
+      if (response.status === 429) {
         return new AuthError('TooManyRequests', null, { cause: error });
+      }
     }
 
     return new AuthError('InternalError', null, { cause: error });
@@ -110,7 +115,6 @@ export function getAuthErrorFeedback(
     fieldErrors.email = translate('emailAlreadyExists');
   }
 
-  // Server messages, including _form, are never displayed as raw text.
   return {
     formError: translate(
       messageKeys.get(authError.messageType) ?? 'internalError'

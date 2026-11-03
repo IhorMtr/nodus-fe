@@ -14,8 +14,6 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface);
 
-  // Abstract rings and hairlines with one soft steel light in the corner,
-  // over the flat hero surface.
   &::before {
     content: '';
     position: absolute;

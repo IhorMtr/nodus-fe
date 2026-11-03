@@ -50,6 +50,27 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
     );
   }
 
+  const isScheduledEmpty = state.filter === 'scheduled' && state.canManage;
+  const emptyTitle = isScheduledEmpty
+    ? t('emptyScheduledTitle')
+    : t('emptyTitle');
+  let emptyDescription = t('emptyDescription');
+
+  if (isScheduledEmpty) {
+    emptyDescription = t('emptyScheduledDescription');
+  } else if (state.canManage) {
+    emptyDescription = t('emptyManageDescription');
+  }
+
+  const selectedDate =
+    selected?.publishedAt ?? selected?.publishAt ?? selected?.createdAt;
+  const selectedDateLabel = selectedDate
+    ? new Intl.DateTimeFormat(locale, {
+        dateStyle: 'long',
+        timeStyle: 'short',
+      }).format(new Date(selectedDate))
+    : '';
+
   // ==================== RENDER ====================
 
   return (
@@ -100,18 +121,8 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
           <span className={styles.emptyIcon}>
             <Megaphone size={24} aria-hidden="true" />
           </span>
-          <h2>
-            {state.filter === 'scheduled' && state.canManage
-              ? t('emptyScheduledTitle')
-              : t('emptyTitle')}
-          </h2>
-          <p>
-            {state.filter === 'scheduled' && state.canManage
-              ? t('emptyScheduledDescription')
-              : state.canManage
-                ? t('emptyManageDescription')
-                : t('emptyDescription')}
-          </p>
+          <h2>{emptyTitle}</h2>
+          <p>{emptyDescription}</p>
           {state.canManage && (
             <Button
               variant="secondary"
@@ -179,16 +190,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
                   t('unknownAuthor'),
               })}
               {' · '}
-              {new Intl.DateTimeFormat(locale, {
-                dateStyle: 'long',
-                timeStyle: 'short',
-              }).format(
-                new Date(
-                  selected.publishedAt ??
-                    selected.publishAt ??
-                    selected.createdAt
-                )
-              )}
+              {selectedDateLabel}
             </p>
             <p className={styles.content}>{selected.content}</p>
             {state.publish.isError && (

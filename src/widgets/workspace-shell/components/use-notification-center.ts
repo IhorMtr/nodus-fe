@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { authSession } from '@/domains/auth/model/session';
 import { announcementKeys } from '@/domains/announcement/model/announcements';
 import {
+  applyNotificationsRead,
   notificationKeys,
   useMarkAllNotificationsReadMutation,
   useMarkNotificationReadMutation,
@@ -19,6 +20,12 @@ import { useAppSocket } from '@/shared/realtime/socket-context';
 // ==================== TYPES ====================
 
 export type NotificationCenter = ReturnType<typeof useNotificationCenter>;
+
+type NotificationsReadEvent = {
+  userId: string;
+  notificationIds: string[];
+  unreadCount: number;
+};
 
 // ==================== NOTIFICATION CENTER STATE ====================
 
@@ -59,13 +66,21 @@ export function useNotificationCenter(
   }, [list.data]);
   const canMarkAll = (count.data ?? 0) > 0 || items.some(item => !item.readAt);
   const navigableIds = items
-    .filter(
-      item =>
-        availableWorkspaceIds.includes(item.workspaceId) &&
-        (item.type === 'WorkspaceRoleChanged' ||
-          (item.type === 'AnnouncementPublished' && Boolean(item.entityId)))
-    )
-    .map(item => item.id);
+    .filter(notification => {
+      if (!availableWorkspaceIds.includes(notification.workspaceId)) {
+        return false;
+      }
+
+      if (notification.type === 'WorkspaceRoleChanged') {
+        return true;
+      }
+
+      return (
+        notification.type === 'AnnouncementPublished' &&
+        Boolean(notification.entityId)
+      );
+    })
+    .map(notification => notification.id);
 
   // ==================== REALTIME SYNCHRONIZATION ====================
 
@@ -73,6 +88,10 @@ export function useNotificationCenter(
     if (!socket || !userId) {
       return;
     }
+
+    let active = true;
+    let readSequence = 0;
+    const pendingReadIds = new Set<string>();
 
     const refresh = () => {
       if (sessionVersion !== authSession.getVersion()) {
@@ -116,11 +135,63 @@ export function useNotificationCenter(
       }
     };
 
+    const onRead = (event: NotificationsReadEvent) => {
+      if (
+        event.userId !== userId ||
+        sessionVersion !== authSession.getVersion()
+      ) {
+        return;
+      }
+
+      const sequence = ++readSequence;
+
+      for (const notificationId of event.notificationIds) {
+        pendingReadIds.add(notificationId);
+      }
+
+      void (async () => {
+        await Promise.all([
+          queryClient.cancelQueries({
+            queryKey: notificationKeys.list(userId),
+          }),
+          queryClient.cancelQueries({
+            queryKey: notificationKeys.count(userId),
+          }),
+        ]);
+
+        if (
+          !active ||
+          sessionVersion !== authSession.getVersion() ||
+          sequence !== readSequence
+        ) {
+          return;
+        }
+
+        applyNotificationsRead(
+          queryClient,
+          userId,
+          [...pendingReadIds],
+          event.unreadCount
+        );
+        pendingReadIds.clear();
+
+        void queryClient.invalidateQueries({
+          queryKey: notificationKeys.list(userId),
+        });
+        void queryClient.invalidateQueries({
+          queryKey: notificationKeys.count(userId),
+        });
+      })();
+    };
+
     socket.on('notification:created', onCreated);
+    socket.on('notifications:read', onRead);
     socket.on('connect', refresh);
 
     return () => {
+      active = false;
       socket.off('notification:created', onCreated);
+      socket.off('notifications:read', onRead);
       socket.off('connect', refresh);
     };
   }, [socket, userId, workspaceId, sessionVersion, queryClient]);

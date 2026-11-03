@@ -7,6 +7,5 @@ export interface WorkspaceMember {
   email: string;
   role: 'Owner' | 'Admin' | 'Member';
   joinedAt: string;
-  // Effective presence: offline while the member has no active socket.
   status: PresenceStatus;
 }

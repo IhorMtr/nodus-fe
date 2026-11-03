@@ -8,6 +8,7 @@ import { useEffect, useRef } from 'react';
 import { getMessageErrorKey } from '@/domains/message/model/message-errors';
 import {
   applyMessageRealtimeEvent,
+  applyChannelRead,
   useMessagesInfiniteQuery,
   type Message,
 } from '@/domains/message/model/message-history';
@@ -38,7 +39,6 @@ export function useChannelMessages(workspaceId: string, channelId: string) {
 
   // ==================== DERIVED STATE ====================
 
-  // An unknown role never grants moderation; the backend stays authoritative.
   const canModerate =
     workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
   const hasHistory = history.data !== undefined;
@@ -63,10 +63,22 @@ export function useChannelMessages(workspaceId: string, channelId: string) {
     for (const event of events) {
       applyMessageRealtimeEvent(queryClient, workspaceId, channelId, event);
     }
+
+    for (const event of realtime.pendingReads.current.splice(0)) {
+      applyChannelRead(
+        queryClient,
+        workspaceId,
+        channelId,
+        event.reader,
+        event.lastReadCreatedAt,
+        event.lastReadMessageId
+      );
+    }
   }, [
     dataUpdatedAt,
     isFetching,
     realtime.pendingEvents,
+    realtime.pendingReads,
     queryClient,
     workspaceId,
     channelId,
@@ -90,8 +102,6 @@ export function useChannelMessages(workspaceId: string, channelId: string) {
 
   // ==================== HANDLERS ====================
 
-  // fetchNextPage cancels a request that is already running, so duplicate
-  // calls are filtered out here.
   const loadOlder = () => {
     if (history.hasNextPage && !history.isFetching) {
       void history.fetchNextPage();

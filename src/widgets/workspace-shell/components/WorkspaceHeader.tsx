@@ -68,8 +68,6 @@ function ContextIcon({ context }: { context: NonNullable<WorkspaceContext> }) {
 
 // ==================== RENDER ====================
 
-// The single header of the workspace shell. Routes never render their own
-// bar: the current channel or section is shown here beside the toolbar.
 export function WorkspaceHeader({
   workspaceId,
   workspaceName,
@@ -98,14 +96,16 @@ export function WorkspaceHeader({
 
   // ==================== DERIVED STATE ====================
 
-  const contextTitle =
-    context?.kind === 'channel'
-      ? context.name
-      : context
-        ? context.section === 'personal-settings'
-          ? user('settings.title')
-          : t(`navigation.${context.section}`)
-        : null;
+  let contextTitle: string | null = null;
+
+  if (context?.kind === 'channel') {
+    contextTitle = context.name;
+  } else if (context?.kind === 'section') {
+    contextTitle =
+      context.section === 'personal-settings'
+        ? user('settings.title')
+        : t(`navigation.${context.section}`);
+  }
 
   return (
     <header className={styles.header}>

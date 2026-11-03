@@ -31,7 +31,6 @@ export function useMembersPanel(
 
   // ==================== QUERIES AND SCENARIOS ====================
 
-  // Shares the cache with the profile menu; presence events patch it in place.
   const members = useWorkspaceMembersQuery(workspaceId);
   const management = useMemberManagement(workspaceId, userId, role);
 

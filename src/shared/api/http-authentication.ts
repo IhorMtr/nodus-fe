@@ -64,7 +64,9 @@ export function installHttpAuthentication(client: AxiosInstance) {
     const request = error.config as AuthenticatedRequest | undefined;
     const previous = request?._auth;
 
-    if (!request || !previous?.accessToken || previous.retried) throw error;
+    if (!request || !previous?.accessToken || previous.retried) {
+      throw error;
+    }
 
     let accessToken: string | null;
     try {

@@ -2,7 +2,6 @@ import type { WorkspaceMember } from './workspace-member-types';
 
 // ==================== DISPLAY NAME ====================
 
-// Profiles without a first and last name fall back to the email address.
 export function getWorkspaceMemberName(member: WorkspaceMember): string {
   return `${member.firstName} ${member.lastName}`.trim() || member.email;
 }

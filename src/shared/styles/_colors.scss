@@ -1,10 +1,6 @@
-// Raw palette. Components never read these directly: they go through the
-// semantic tokens in `_semantic.scss`, which pick values per theme.
-
 :root {
   // ==================== MIST (LIGHT NEUTRALS) ====================
 
-  // Neutral light surfaces, from page canvas to strong borders.
   --mist-0: #ffffff;
   --mist-1: #f6f6f6;
   --mist-2: #eeeeee;
@@ -18,7 +14,6 @@
 
   // ==================== GRAPHITE (DARK NEUTRALS) ====================
 
-  // Neutral graphite surfaces, from the canvas to strong borders.
   --graphite-0: #101010;
   --graphite-1: #191919;
   --graphite-2: #141414;
@@ -41,7 +36,6 @@
 
   // ==================== NEUTRAL (INTERACTION) ====================
 
-  // Neutral interaction scale shared with the component theme.
   --neutral-1: #f2f2f2;
   --neutral-2: #dedede;
   --neutral-3: #c8c8c8;
@@ -54,7 +48,6 @@
 
   // ==================== FUNCTIONAL HUES ====================
 
-  // Muted so they sit next to graphite without turning the UI into a dashboard.
   --green-light: #7fbf98;
   --green-base: #4f9a6e;
   --green-dark: #2f7550;

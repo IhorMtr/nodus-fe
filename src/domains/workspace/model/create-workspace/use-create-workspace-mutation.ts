@@ -26,7 +26,6 @@ export function useCreateWorkspaceMutation() {
       return workspace;
     },
     onSuccess: (workspace, _payload, version) => {
-      // A completed request from an earlier account must not repopulate its cache.
       if (version !== authSessionEvents.getVersion()) {
         throw new AuthError('SessionChanged');
       }

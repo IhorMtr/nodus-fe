@@ -65,7 +65,6 @@
     }
   }
 
-  // Pressed, or holding an open menu or popover.
   &:active:not(:disabled, [data-disabled], [data-loading]),
   &[data-expanded],
   &[aria-expanded='true'] {

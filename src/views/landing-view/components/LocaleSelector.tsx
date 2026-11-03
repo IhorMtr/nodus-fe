@@ -24,7 +24,9 @@ export function LocaleSelector() {
   // ==================== NAVIGATION ====================
 
   function changeLocale(value: string) {
-    if (!hasLocale(routing.locales, value) || value === locale) return;
+    if (!hasLocale(routing.locales, value) || value === locale) {
+      return;
+    }
 
     router.replace('/', { locale: value, scroll: false });
   }

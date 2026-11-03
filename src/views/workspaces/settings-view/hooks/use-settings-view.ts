@@ -78,9 +78,7 @@ export function useSettingsView(workspaceId: string) {
 
     try {
       await rename.mutateAsync(values.name.trim());
-    } catch {
-      // The mutation error is displayed below the field.
-    }
+    } catch {}
   });
 
   // ==================== DELETE HANDLERS ====================
@@ -109,7 +107,6 @@ export function useSettingsView(workspaceId: string) {
       await remove.mutateAsync();
       setRedirecting(true);
 
-      // Clear all data scoped to the deleted workspace before resolving /app.
       const matchesWorkspace = (value: unknown) =>
         typeof value === 'string' &&
         value.toLowerCase() === workspaceId.toLowerCase();
@@ -140,7 +137,6 @@ export function useSettingsView(workspaceId: string) {
       router.replace('/app');
     } catch {
       setRedirecting(false);
-      // The request error is displayed in the confirmation dialog.
     }
   };
 

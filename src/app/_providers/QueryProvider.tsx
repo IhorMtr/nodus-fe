@@ -13,9 +13,11 @@ export function QueryProvider({ children }: { children: ReactNode }) {
     let version = authSessionEvents.getVersion();
     return authSessionEvents.subscribe(() => {
       const currentVersion = authSessionEvents.getVersion();
-      if (currentVersion === version) return;
+      if (currentVersion === version) {
+        return;
+      }
+
       version = currentVersion;
-      // Cancellation starts synchronously; clear before another identity can use the cache.
       void queryClient.cancelQueries();
       queryClient.clear();
     });

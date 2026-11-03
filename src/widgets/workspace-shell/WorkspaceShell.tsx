@@ -20,6 +20,7 @@ import { useChannelUnreadRecovery } from './components/use-channel-unread-recove
 import { useMembersPanel } from './components/use-members-panel';
 import { useMembersPanelLayout } from './components/use-members-panel-layout';
 import { usePresenceRealtime } from './components/use-presence-realtime';
+import { useStartDirectConversation } from './components/use-start-direct-conversation';
 import { WorkspaceHeader } from './components/WorkspaceHeader';
 import { WorkspaceSidebar } from './components/WorkspaceSidebar';
 import styles from './WorkspaceShell.module.scss';
@@ -30,8 +31,6 @@ const MEMBERS_PANEL_ID = 'workspace-members-panel';
 
 // ==================== SHELL LAYOUT ====================
 
-// Rendered only once the user and workspace are known, so the members panel
-// hooks always receive a real user id and workspace role.
 function WorkspaceShellLayout({
   workspaceId,
   workspace,
@@ -56,7 +55,6 @@ function WorkspaceShellLayout({
   const [searchChannelId, setSearchChannelId] = useState<string>();
   const [previousChannelId, setPreviousChannelId] = useState(channelId);
 
-  // Reset the transient search when leaving or changing the channel.
   if (previousChannelId !== channelId) {
     setPreviousChannelId(channelId);
     setSearchChannelId(undefined);
@@ -68,6 +66,11 @@ function WorkspaceShellLayout({
   const searchOpen = Boolean(channelId && searchChannelId === channelId);
   const panelLayout = useMembersPanelLayout(user.id, isMembersPage);
   const panel = useMembersPanel(workspaceId, user.id, workspace.role);
+  const direct = useStartDirectConversation(
+    workspaceId,
+    user.id,
+    panel.groups.flatMap(group => group.members)
+  );
 
   // ==================== DERIVED STATE ====================
 
@@ -81,6 +84,10 @@ function WorkspaceShellLayout({
     canRemove: panel.management.canRemove,
     onChangeRole: panel.management.openRole,
     onRemove: panel.management.openRemove,
+    currentUserId: user.id,
+    onMessage: direct.start,
+    messagePending: direct.isPending,
+    messageError: direct.error,
   };
 
   // ==================== HANDLERS ====================
@@ -252,20 +259,22 @@ export function WorkspaceShell({
 
   if (error && !user.isFetching && !workspace.isFetching) {
     const unavailable = status === 400 || status === 403 || status === 404;
+    let description = t('states.loadErrorDescription');
+
+    if (status === 401) {
+      description = auth('sessionExpired');
+    } else if (status === 400) {
+      description = t('states.invalidLink');
+    } else if (status === 403) {
+      description = t('states.accessDenied');
+    } else if (unavailable) {
+      description = t('states.unavailableDescription');
+    }
+
     return (
       <PageFeedback
         title={unavailable ? t('states.unavailable') : t('states.loadError')}
-        description={
-          status === 401
-            ? auth('sessionExpired')
-            : status === 400
-              ? t('states.invalidLink')
-              : status === 403
-                ? t('states.accessDenied')
-                : unavailable
-                  ? t('states.unavailableDescription')
-                  : t('states.loadErrorDescription')
-        }
+        description={description}
         actionLabel={
           unavailable ? t('actions.openAvailable') : t('actions.retry')
         }

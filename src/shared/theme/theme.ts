@@ -7,9 +7,6 @@ import {
 
 // ==================== PALETTES ====================
 
-// Mantine needs ten shades per color. They point at the raw palette in
-// `_colors.scss`; components still read semantic tokens, not these.
-
 const neutral: MantineColorsTuple = [
   'var(--neutral-1)',
   'var(--neutral-2)',
@@ -64,7 +61,6 @@ export const theme = createTheme({
   variantColorResolver(input) {
     const resolved = defaultVariantColorsResolver(input);
 
-    // Mantine cannot infer contrast from CSS variable palette entries.
     if (
       (input.color ?? input.theme.primaryColor) === 'neutral' &&
       input.variant === 'filled'
@@ -122,8 +118,6 @@ const semanticColors = {
 
   // ---------- Status ----------
 
-  // Mantine notifications and alerts use these named colors; they resolve to
-  // the same semantic status tokens as the rest of the interface.
   '--mantine-color-red-filled': 'var(--color-danger)',
   '--mantine-color-red-light': 'var(--color-danger-subtle)',
   '--mantine-color-red-light-color': 'var(--color-danger-text)',

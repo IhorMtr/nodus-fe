@@ -16,7 +16,6 @@ export function useUpdatePresenceStatusMutation() {
       const version = authSessionEvents.getVersion();
       const update = await presenceApi.updateStatus(status);
 
-      // A response for a previous session must not reach the current cache.
       if (version !== authSessionEvents.getVersion()) {
         throw new AuthError('SessionChanged');
       }

@@ -8,3 +8,4 @@ export {
   useMarkAllNotificationsReadMutation,
 } from './notification-mutations';
 export type { Notification } from './notification-types';
+export { applyNotificationsRead } from './notification-cache';

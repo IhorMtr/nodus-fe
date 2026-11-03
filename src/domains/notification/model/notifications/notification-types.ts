@@ -2,7 +2,11 @@ export interface Notification {
   id: string;
   userId: string;
   workspaceId: string;
-  type: 'AnnouncementPublished' | 'WorkspaceRoleChanged' | 'WorkspaceRemoved';
+  type:
+    | 'AnnouncementPublished'
+    | 'DirectMessageCreated'
+    | 'WorkspaceRoleChanged'
+    | 'WorkspaceRemoved';
   entityId: string | null;
   title: string;
   message: string;

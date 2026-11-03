@@ -2,6 +2,7 @@
   "title": "Notifications",
   "subtitle": "Updates from all your workspaces",
   "markAllRead": "Mark all read",
+  "markAllReadShort": "Read all",
   "markRead": "Mark as read",
   "unread": "Unread",
   "loading": "Loading notifications…",
@@ -15,6 +16,7 @@
   "emptyDescription": "Your notifications will appear here.",
   "types": {
     "AnnouncementPublished": "Announcement",
+    "DirectMessageCreated": "Direct message",
     "WorkspaceRoleChanged": "Workspace role",
     "WorkspaceRemoved": "Workspace removed"
   }

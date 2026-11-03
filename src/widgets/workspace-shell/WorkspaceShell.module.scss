@@ -3,10 +3,6 @@
 
 // ==================== SHELL GEOMETRY ====================
 
-// One source for the column widths and header height, shared with the header
-// so panel borders line up from top to bottom.
-//
-// Flat neighbouring tones distinguish navigation from the page canvas.
 .shell {
   --shell-header-height: 60px;
   --shell-sidebar-width: 260px;
@@ -20,7 +16,6 @@
   overflow: hidden;
   background: var(--color-background);
 
-  // Side columns narrow slightly so the conversation keeps most of the width.
   @include mixins.down(breakpoints.$breakpoint-xl) {
     --shell-sidebar-width: 240px;
     --shell-members-width: 224px;
@@ -60,8 +55,6 @@
 
 // ==================== RIGHT MEMBERS PANEL ====================
 
-// The wrapper animates its width; the inner column keeps a fixed width so the
-// list does not reflow while the panel opens or closes.
 .desktopMembers {
   width: 0;
   min-height: 0;
@@ -82,7 +75,6 @@
     border-left-color: var(--color-divider);
   }
 
-  // Below this width the panel opens in a drawer instead.
   @include mixins.down(breakpoints.$breakpoint-lg) {
     display: none;
   }

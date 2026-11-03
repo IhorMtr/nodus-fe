@@ -25,8 +25,13 @@ export function getMessageErrorKey(error: unknown): MessageErrorKey {
   if (error instanceof AuthError && error.messageType === 'SessionChanged') {
     return 'sessionChanged';
   }
-  if (!isAxiosError<ApiErrorResponse>(error)) return 'requestFailed';
-  if (!error.response) return 'networkError';
+  if (!isAxiosError<ApiErrorResponse>(error)) {
+    return 'requestFailed';
+  }
+
+  if (!error.response) {
+    return 'networkError';
+  }
 
   switch (error.response.status) {
     case 400:

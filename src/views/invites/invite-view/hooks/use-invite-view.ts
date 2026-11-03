@@ -77,9 +77,7 @@ export function useInviteView() {
       setReady(true);
     });
 
-    void authLifecycle.initialize().catch(() => {
-      // Session status provides recovery feedback; invite resolution remains public.
-    });
+    void authLifecycle.initialize().catch(() => {});
   }, []);
 
   useEffect(() => {

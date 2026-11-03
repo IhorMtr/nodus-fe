@@ -7,13 +7,10 @@ import { useMembersPanelPreference } from './members-panel-preference';
 
 // ==================== CONSTANTS ====================
 
-// Matches the SCSS breakpoint below which the panel becomes a drawer.
 const COMPACT_QUERY = '(width < 1024px)';
 
 // ==================== PANEL LAYOUT ====================
 
-// Desktop shows the panel inline and remembers the user's choice. Narrower
-// screens use a drawer that always starts closed and is never persisted.
 export function useMembersPanelLayout(userId: string, suppressed = false) {
   // ==================== STATE ====================
 
@@ -23,8 +20,6 @@ export function useMembersPanelLayout(userId: string, suppressed = false) {
 
   // ==================== DERIVED STATE ====================
 
-  // Leaving the compact layout closes the drawer, so it does not reappear
-  // when the window is narrowed again.
   if ((!compact || suppressed) && drawerOpened) {
     setDrawerOpened(false);
   }

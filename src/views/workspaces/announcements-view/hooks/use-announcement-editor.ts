@@ -124,7 +124,6 @@ export function useAnnouncementEditor(
 
         onSaved();
       } catch {
-        // The mutation retains the backend error for the form to display.
       } finally {
         submitting.current = false;
       }

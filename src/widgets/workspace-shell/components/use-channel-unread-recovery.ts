@@ -9,9 +9,6 @@ import { useAppSocket } from '@/shared/realtime/socket-context';
 
 // ==================== UNREAD RECOVERY ====================
 
-// There are no read-state events, and message events reach only the open
-// channel. After a reconnect the counters are reloaded from REST, because
-// messages from the offline period are never replayed.
 export function useChannelUnreadRecovery(workspaceId: string) {
   // ==================== CONTEXT ====================
 
@@ -34,7 +31,6 @@ export function useChannelUnreadRecovery(workspaceId: string) {
       disconnected = true;
     };
 
-    // The first connection needs nothing: the list is loaded on mount.
     const onConnect = () => {
       if (!disconnected || version !== authSessionEvents.getVersion()) {
         return;

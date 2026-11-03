@@ -6,7 +6,6 @@ export const authHttpClient = axios.create({
 });
 
 authHttpClient.interceptors.response.use(response => {
-  // Reject unexpected bodies without discarding the original error envelope.
   if (response.data?.success !== true || response.data.data === undefined) {
     throw new AxiosError(
       'Unexpected API response',

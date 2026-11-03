@@ -12,7 +12,6 @@
   background: var(--color-chrome);
 }
 
-// A single raised panel on the darker chrome, matching the auth screens.
 .content {
   width: 100%;
   max-width: 460px;
@@ -22,7 +21,6 @@
   border-radius: var(--radius-lg);
   background: var(--color-background);
 
-  // Onboarding is the whole page, so its fields match the auth forms.
   --control-height-md: 40px;
 
   @include mixins.down(breakpoints.$breakpoint-xs) {

@@ -28,7 +28,6 @@ import styles from './WorkspaceSidebar.module.scss';
 
 // ==================== NAVIGATION SECTIONS ====================
 
-// Search is opened from the shell toolbar, so it is not repeated here.
 const sections = [
   { route: 'overview', icon: LayoutDashboard },
   { route: 'conversations', icon: MessagesSquare },

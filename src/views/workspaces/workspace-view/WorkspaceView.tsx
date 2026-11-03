@@ -12,21 +12,24 @@ export function WorkspaceView({ workspaceId }: { workspaceId: string }) {
   const auth = useTranslations('auth.messages');
   const state = useWorkspaceView(workspaceId);
 
-  if (state.isFetching)
+  if (state.isFetching) {
     return <PageSpinner contained label={t('states.loading')} />;
+  }
 
   if (state.isUnavailable || state.isInvalidLink || state.status === 403) {
+    let description = t('states.unavailableDescription');
+
+    if (state.isInvalidLink) {
+      description = t('states.invalidLink');
+    } else if (state.status === 403) {
+      description = t('states.accessDenied');
+    }
+
     return (
       <PageFeedback
         contained
         title={t('states.unavailable')}
-        description={
-          state.isInvalidLink
-            ? t('states.invalidLink')
-            : state.status === 403
-              ? t('states.accessDenied')
-              : t('states.unavailableDescription')
-        }
+        description={description}
         actionLabel={t('actions.openAvailable')}
         onAction={state.openApp}
       />

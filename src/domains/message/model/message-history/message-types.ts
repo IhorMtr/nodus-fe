@@ -4,6 +4,12 @@ export interface MessageAuthor {
   lastName: string;
 }
 
+export interface ChannelReceipt {
+  read: boolean;
+  readerCount: number;
+  readers: MessageAuthor[];
+}
+
 export interface Message {
   id: string;
   channelId: string;
@@ -11,6 +17,7 @@ export interface Message {
   content: string;
   createdAt: string;
   updatedAt: string;
+  receipt?: ChannelReceipt;
 }
 
 export interface MessageHistory {
