@@ -29,6 +29,7 @@ export function MessageReceipt({ receipt }: { receipt: ReceiptDisplay }) {
         className={styles.receipt}
         role="img"
         aria-label={t(receipt.read ? 'read' : 'sent')}
+        data-read={receipt.read || undefined}
       >
         {receipt.read ? <CheckCheck size={15} /> : <Check size={15} />}
       </span>
@@ -47,6 +48,7 @@ export function MessageReceipt({ receipt }: { receipt: ReceiptDisplay }) {
         <button
           type="button"
           className={styles.receiptButton}
+          data-read
           aria-label={t('readBy', { count: readers.length })}
           onMouseEnter={() => setOpened(true)}
           onMouseLeave={() => setOpened(false)}

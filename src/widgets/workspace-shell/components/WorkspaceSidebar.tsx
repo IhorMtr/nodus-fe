@@ -12,12 +12,15 @@ import {
   Pencil,
   Trash2,
   Settings,
+  X,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import type { User } from '@/domains/user/model/current-user';
+import type { Workspace } from '@/domains/workspace/model/workspace';
 import { Link } from '@/shared/i18n/navigation';
 import { Button } from '@/shared/ui/button';
+import { IconButton } from '@/shared/ui/icon-button';
 import { InlineStatus } from '@/shared/ui/inline-status';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
@@ -25,6 +28,7 @@ import { Spinner } from '@/shared/ui/spinner';
 import { UserProfile } from './UserProfile';
 import { useWorkspaceSidebar } from './use-workspace-sidebar';
 import styles from './WorkspaceSidebar.module.scss';
+import { WorkspaceSwitcher } from './WorkspaceSwitcher';
 
 // ==================== NAVIGATION SECTIONS ====================
 
@@ -39,20 +43,33 @@ const sections = [
 // ==================== CONSTANTS ====================
 
 const MAX_VISIBLE_UNREAD = 99;
+const ICON_SIZE = 16;
+const ICON_STROKE = 1.8;
+
+// ==================== TYPES ====================
+
+interface WorkspaceSidebarProps {
+  workspaceId: string;
+  workspace: Workspace;
+  user: User;
+  onNavigate?: () => void;
+  onClose?: () => void;
+}
+
+// ==================== RENDER ====================
 
 export function WorkspaceSidebar({
   workspaceId,
+  workspace,
   user,
   onNavigate,
-}: {
-  workspaceId: string;
-  user: User;
-  onNavigate?: () => void;
-}) {
+  onClose,
+}: WorkspaceSidebarProps) {
   // ==================== VIEW STATE ====================
 
   const t = useTranslations('workspace');
   const channel = useTranslations('channel');
+  const product = useTranslations('product');
   const {
     section,
     channelId,
@@ -75,10 +92,32 @@ export function WorkspaceSidebar({
     closeDelete,
   } = useWorkspaceSidebar(workspaceId, user, onNavigate);
 
-  // ==================== RENDER ====================
   return (
     <aside className={styles.sidebar} aria-label={t('navigation.sidebar')}>
+      {/* ==================== BRAND AND WORKSPACE ==================== */}
+
+      <div className={styles.brandRow}>
+        <Link href="/app" className={styles.brand} onClick={onNavigate}>
+          {product('name')}
+        </Link>
+        {onClose && (
+          <IconButton
+            icon={<X />}
+            variant="ghost"
+            size="sm"
+            aria-label={t('navigation.closeSidebar')}
+            onClick={onClose}
+          />
+        )}
+      </div>
+
+      <div className={styles.switcher}>
+        <WorkspaceSwitcher workspace={workspace} onNavigate={onNavigate} />
+      </div>
+
       <nav className={styles.scrollArea} aria-label={t('navigation.sidebar')}>
+        {/* ==================== PRIMARY NAVIGATION ==================== */}
+
         <ul className={styles.primaryNav}>
           {sections.map(({ route, icon: Icon }) => {
             if (route === 'settings' && !canManage) {
@@ -97,13 +136,20 @@ export function WorkspaceSidebar({
                   aria-current={active ? 'page' : undefined}
                   onClick={onNavigate}
                 >
-                  <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
+                  <Icon
+                    size={ICON_SIZE}
+                    strokeWidth={ICON_STROKE}
+                    aria-hidden="true"
+                  />
                   <span>{t(`navigation.${route}`)}</span>
                 </Link>
               </li>
             );
           })}
         </ul>
+
+        {/* ==================== CHANNELS ==================== */}
+
         <div className={styles.channelSection}>
           <div className={styles.sectionHeading}>
             <span>{t('navigation.channels')}</span>
@@ -115,7 +161,7 @@ export function WorkspaceSidebar({
                 title={channel('actions.create')}
                 onClick={() => openEditor('create')}
               >
-                <Plus size={16} aria-hidden="true" />
+                <Plus size={ICON_SIZE} aria-hidden="true" />
               </button>
             )}
           </div>
@@ -165,7 +211,11 @@ export function WorkspaceSidebar({
                     onClick={onNavigate}
                     title={item.name}
                   >
-                    <Hash size={17} strokeWidth={1.8} aria-hidden="true" />
+                    <Hash
+                      size={ICON_SIZE}
+                      strokeWidth={ICON_STROKE}
+                      aria-hidden="true"
+                    />
                     <span>{item.name}</span>
 
                     {/* ==================== UNREAD INDICATOR ==================== */}
@@ -188,7 +238,7 @@ export function WorkspaceSidebar({
                             name: item.name,
                           })}
                         >
-                          <MoreHorizontal size={17} aria-hidden="true" />
+                          <MoreHorizontal size={ICON_SIZE} aria-hidden="true" />
                         </button>
                       </Menu.Target>
                       <Menu.Dropdown>
@@ -214,11 +264,17 @@ export function WorkspaceSidebar({
           )}
         </div>
       </nav>
+
+      {/* ==================== PROFILE ==================== */}
+
       <UserProfile
         user={user}
         workspaceId={workspaceId}
         onNavigate={onNavigate}
       />
+
+      {/* ==================== CHANNEL DIALOGS ==================== */}
+
       {canManage && (
         <>
           <Modal

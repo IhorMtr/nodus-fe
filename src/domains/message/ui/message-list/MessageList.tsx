@@ -1,9 +1,10 @@
 'use client';
 
-import { isToday } from 'date-fns';
+import { isThisYear, isToday, isYesterday } from 'date-fns';
 import { Hash } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import {
+  Fragment,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -19,6 +20,7 @@ import { Spinner } from '@/shared/ui/spinner';
 import type { Message } from '../../model/message-history';
 import { MessageItem, type ReceiptDisplay } from '../message-item';
 
+import { buildTimeline } from './message-timeline';
 import styles from './MessageList.module.scss';
 
 // ==================== TYPES ====================
@@ -131,22 +133,55 @@ export function MessageList<T extends DisplayMessage>({
 
   // ==================== DERIVED STATE ====================
 
-  const formatTime = useMemo(() => {
+  const formatters = useMemo(() => {
     const time = new Intl.DateTimeFormat(locale, {
       hour: '2-digit',
       minute: '2-digit',
     });
     const dateTime = new Intl.DateTimeFormat(locale, {
-      dateStyle: 'medium',
+      dateStyle: 'full',
       timeStyle: 'short',
     });
+    const day = new Intl.DateTimeFormat(locale, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    });
+    const dayWithYear = new Intl.DateTimeFormat(locale, { dateStyle: 'long' });
+    const relativeDay = new Intl.RelativeTimeFormat(locale, {
+      numeric: 'auto',
+    });
 
-    return (isoDate: string) => {
+    const capitalize = (label: string) =>
+      label.charAt(0).toLocaleUpperCase(locale) + label.slice(1);
+
+    const formatDay = (isoDate: string) => {
       const date = new Date(isoDate);
-      return (isToday(date) ? time : dateTime).format(date);
+
+      if (isToday(date)) {
+        return capitalize(relativeDay.format(0, 'day'));
+      }
+
+      if (isYesterday(date)) {
+        return capitalize(relativeDay.format(-1, 'day'));
+      }
+
+      if (isThisYear(date)) {
+        return capitalize(day.format(date));
+      }
+
+      return dayWithYear.format(date);
+    };
+
+    return {
+      time: (isoDate: string) => time.format(new Date(isoDate)),
+      dateTime: (isoDate: string) => dateTime.format(new Date(isoDate)),
+      day: formatDay,
     };
   }, [locale]);
 
+  const timeline = useMemo(() => buildTimeline(messages), [messages]);
+  const isEmpty = messages.length === 0 && !hasOlder;
   const canLoadOlder = hasOlder && !isLoadingOlder && !hasOlderError;
   const canLoadNewer = hasNewer && !isLoadingNewer && !hasNewerError;
 
@@ -298,49 +333,71 @@ export function MessageList<T extends DisplayMessage>({
         role="region"
       >
         <div className={styles.inner}>
-          {messages.length === 0 && !hasOlder ? (
+          {/* ==================== EMPTY HISTORY ==================== */}
+
+          {isEmpty && (
             <div className={styles.empty}>
               <span className={styles.emptyIcon} aria-hidden="true">
-                {emptyIcon ?? <Hash size={24} />}
+                {emptyIcon ?? <Hash size={22} />}
               </span>
               <strong>
                 {emptyTitle ?? t('states.empty', { channel: channelName })}
               </strong>
               <p>{emptyDescription ?? t('states.emptyDescription')}</p>
             </div>
-          ) : (
+          )}
+
+          {/* ==================== MESSAGE TIMELINE ==================== */}
+
+          {!isEmpty && (
             <ul className={styles.list}>
-              {messages.map(message => {
+              {timeline.map(({ message, startsGroup, startsDay }) => {
                 const isEditing = message.id === editingId;
 
                 return (
-                  <li
-                    key={message.id}
-                    data-message-id={message.id}
-                    data-highlighted={highlightedId === message.id || undefined}
-                    className={styles.messageRow}
-                  >
-                    <MessageItem
-                      message={message}
-                      formatTime={formatTime}
-                      receipt={getReceipt(message)}
-                      canEdit={canEdit(message)}
-                      canDelete={canDelete(message)}
-                      isEditing={isEditing}
-                      isSaving={isEditing && isSavingEdit}
-                      editError={isEditing ? editError : undefined}
-                      onEdit={onEdit}
-                      onSave={onSaveEdit}
-                      onCancelEdit={onCancelEdit}
-                      onDelete={() => onDelete(message)}
-                    />
-                  </li>
+                  <Fragment key={message.id}>
+                    {startsDay && (
+                      <li className={styles.dayDivider}>
+                        <time dateTime={message.createdAt}>
+                          {formatters.day(message.createdAt)}
+                        </time>
+                      </li>
+                    )}
+                    <li
+                      data-message-id={message.id}
+                      data-highlighted={
+                        highlightedId === message.id || undefined
+                      }
+                      data-group-start={startsGroup || undefined}
+                      className={styles.messageRow}
+                    >
+                      <MessageItem
+                        message={message}
+                        grouped={!startsGroup}
+                        formatTime={formatters.time}
+                        formatDateTime={formatters.dateTime}
+                        receipt={getReceipt(message)}
+                        canEdit={canEdit(message)}
+                        canDelete={canDelete(message)}
+                        isEditing={isEditing}
+                        isSaving={isEditing && isSavingEdit}
+                        editError={isEditing ? editError : undefined}
+                        onEdit={onEdit}
+                        onSave={onSaveEdit}
+                        onCancelEdit={onCancelEdit}
+                        onDelete={() => onDelete(message)}
+                      />
+                    </li>
+                  </Fragment>
                 );
               })}
             </ul>
           )}
         </div>
       </div>
+
+      {/* ==================== HISTORY FEEDBACK ==================== */}
+
       {isLoadingOlder && (
         <div className={styles.status}>
           <Spinner size="sm" label={t('states.loadingOlder')} />

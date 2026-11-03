@@ -126,70 +126,77 @@ function WorkspaceShellLayout({
 
   return (
     <div className={styles.shell}>
-      {/* ==================== WORKSPACE HEADER ==================== */}
+      {/* ==================== DESKTOP SIDEBAR ==================== */}
 
-      <WorkspaceHeader
-        workspaceId={workspaceId}
-        workspaceName={workspace.name}
-        userId={user.id}
-        membersPanel={
-          isMembersPage || searchOpen
-            ? undefined
-            : {
-                expanded: panelLayout.expanded,
-                controls: panelLayout.compact ? undefined : MEMBERS_PANEL_ID,
-                onToggle: panelLayout.toggle,
-              }
-        }
-        onOpenSidebar={() => setSidebarOpened(true)}
-        isSearchActive={searchOpen}
-        searchButtonRef={searchButtonRef}
-        onOpenSearch={
-          channelId
-            ? () => {
-                panelLayout.closeDrawer();
-                setSearchChannelId(searchOpen ? undefined : channelId);
-              }
-            : undefined
-        }
-      />
+      <div className={styles.desktopSidebar}>
+        <WorkspaceSidebar
+          workspaceId={workspaceId}
+          workspace={workspace}
+          user={user}
+        />
+      </div>
 
-      <div className={styles.body}>
-        {/* ==================== DESKTOP SIDEBAR ==================== */}
+      {/* ==================== MAIN FRAME ==================== */}
 
-        <div className={styles.desktopSidebar}>
-          <WorkspaceSidebar workspaceId={workspaceId} user={user} />
-        </div>
+      <div className={styles.frame}>
+        <WorkspaceHeader
+          workspaceId={workspaceId}
+          userId={user.id}
+          membersPanel={
+            isMembersPage || searchOpen
+              ? undefined
+              : {
+                  expanded: panelLayout.expanded,
+                  controls: panelLayout.compact ? undefined : MEMBERS_PANEL_ID,
+                  onToggle: panelLayout.toggle,
+                }
+          }
+          onOpenSidebar={() => setSidebarOpened(true)}
+          isSearchActive={searchOpen}
+          searchButtonRef={searchButtonRef}
+          onOpenSearch={
+            channelId
+              ? () => {
+                  panelLayout.closeDrawer();
+                  setSearchChannelId(searchOpen ? undefined : channelId);
+                }
+              : undefined
+          }
+        />
 
-        {/* ==================== MAIN CONTENT ==================== */}
+        <div className={styles.body}>
+          {/* ==================== MAIN CONTENT ==================== */}
 
-        <main className={styles.content}>
-          <ChannelSearchNavigationProvider value={{ selection, selectMessage }}>
-            {children}
-          </ChannelSearchNavigationProvider>
-        </main>
+          <main className={styles.content}>
+            <ChannelSearchNavigationProvider
+              value={{ selection, selectMessage }}
+            >
+              {children}
+            </ChannelSearchNavigationProvider>
+          </main>
 
-        {/* ==================== DESKTOP MEMBERS PANEL ==================== */}
+          {/* ==================== DESKTOP SIDE PANEL ==================== */}
 
-        <div
-          id={MEMBERS_PANEL_ID}
-          className={styles.desktopMembers}
-          data-open={searchOpen || panelLayout.desktopOpen || undefined}
-          data-search={searchOpen || undefined}
-          inert={!(searchOpen || panelLayout.desktopOpen)}
-        >
-          <div className={styles.desktopMembersInner}>
-            {searchOpen && channelId && !panelLayout.compact ? (
-              <ChannelSearchPanel
-                key={channelId}
-                workspaceId={workspaceId}
-                channelId={channelId}
-                onClose={closeSearch}
-                onSelectMessage={selectMessage}
-              />
-            ) : (
-              <MembersPanel {...panelProps} />
-            )}
+          <div
+            id={MEMBERS_PANEL_ID}
+            className={styles.desktopMembers}
+            data-open={searchOpen || panelLayout.desktopOpen || undefined}
+            data-search={searchOpen || undefined}
+            inert={!(searchOpen || panelLayout.desktopOpen)}
+          >
+            <div className={styles.desktopMembersInner}>
+              {searchOpen && channelId && !panelLayout.compact ? (
+                <ChannelSearchPanel
+                  key={channelId}
+                  workspaceId={workspaceId}
+                  channelId={channelId}
+                  onClose={closeSearch}
+                  onSelectMessage={selectMessage}
+                />
+              ) : (
+                <MembersPanel {...panelProps} />
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -199,16 +206,21 @@ function WorkspaceShellLayout({
       <Drawer
         opened={sidebarOpened}
         onClose={() => setSidebarOpened(false)}
-        title={workspace.name}
-        size="min(320px, 88vw)"
+        withCloseButton={false}
+        size="min(300px, 88vw)"
         position="left"
-        classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
+        classNames={{
+          body: styles.sidebarDrawerBody,
+          content: styles.sidebarDrawerContent,
+        }}
         aria-label={t('navigation.sidebar')}
       >
         <WorkspaceSidebar
           workspaceId={workspaceId}
+          workspace={workspace}
           user={user}
           onNavigate={() => setSidebarOpened(false)}
+          onClose={() => setSidebarOpened(false)}
         />
       </Drawer>
 
@@ -218,7 +230,7 @@ function WorkspaceShellLayout({
         opened={panelLayout.drawerOpen}
         onClose={panelLayout.closeDrawer}
         title={t('membersPanel.title')}
-        size="min(300px, 88vw)"
+        size="min(264px, 88vw)"
         position="right"
         classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
       >
@@ -231,7 +243,7 @@ function WorkspaceShellLayout({
         opened={Boolean(searchOpen && panelLayout.compact)}
         onClose={closeSearch}
         title={t('searchPanel.title')}
-        size="min(360px, 90vw)"
+        size="min(340px, 90vw)"
         position="right"
         classNames={{ body: styles.drawerBody, content: styles.drawerContent }}
       >

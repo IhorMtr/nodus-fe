@@ -1,5 +1,3 @@
-@use '@/shared/styles/mixins' as mixins;
-
 // ==================== PANEL ====================
 
 .panel {
@@ -15,28 +13,29 @@
 
 .heading {
   display: flex;
-  min-height: 56px;
+  min-height: 52px;
+  flex-shrink: 0;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4) var(--space-1);
+  padding: var(--space-3) var(--space-4) var(--space-2) var(--space-5);
 
   h2 {
     margin: 0;
     color: var(--color-text-primary);
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
   }
 }
 
 .count {
   min-width: 22px;
-  padding: 0 6px;
+  padding: 0 7px;
   border-radius: var(--radius-full);
-  background: var(--color-surface-active);
+  background: var(--color-surface-selected);
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-medium);
   line-height: 20px;
   text-align: center;
 }
@@ -49,20 +48,22 @@
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--space-2) var(--space-3) var(--space-6);
+  padding: 0 var(--space-3) var(--space-6);
 }
 
 // ==================== GROUPS ====================
 
 .group + .group {
-  margin-top: var(--space-4);
+  margin-top: var(--space-5);
 }
 
 .group h3 {
-  @include mixins.eyebrow;
-
   margin: 0 0 var(--space-1);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
 }
 
 .list {
@@ -78,9 +79,9 @@
 .row {
   display: flex;
   min-width: 0;
-  min-height: 46px;
+  min-height: 48px;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   padding: var(--space-1) var(--space-1) var(--space-1) var(--space-2);
   border-radius: var(--radius-control);
   transition: background-color var(--transition-fast);
@@ -89,41 +90,10 @@
   &:focus-within {
     background: var(--color-surface-hover);
   }
-
-  &[data-offline] .identity {
-    opacity: 0.62;
-  }
 }
 
 .avatar {
-  position: relative;
-  display: grid;
-  width: 32px;
-  height: 32px;
-  flex: none;
-  place-items: center;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-active);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-semibold);
-
-  [data-offline] & {
-    color: var(--color-text-muted);
-  }
-}
-
-.presence.presence {
-  position: absolute;
-  right: -2px;
-  bottom: -2px;
-  width: 10px;
-  height: 10px;
-  box-shadow: 0 0 0 2px var(--color-chrome);
-
-  &[data-status='offline'] {
-    background: var(--color-chrome);
-  }
+  --avatar-ring: var(--color-background);
 }
 
 .identity {
@@ -131,7 +101,12 @@
   min-width: 0;
   flex: 1;
   flex-direction: column;
-  line-height: 1.35;
+  gap: 1px;
+  line-height: var(--line-height-snug);
+
+  [data-offline] & {
+    opacity: 0.6;
+  }
 }
 
 .name {

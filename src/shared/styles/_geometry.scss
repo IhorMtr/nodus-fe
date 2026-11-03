@@ -33,6 +33,13 @@
   --icon-size-md: 18px;
   --icon-size-lg: 20px;
 
+  // ==================== AVATARS ====================
+
+  --avatar-size-xs: 20px;
+  --avatar-size-sm: 28px;
+  --avatar-size-md: 36px;
+  --avatar-size-lg: 40px;
+
   // ==================== FOCUS ====================
 
   --focus-ring-width: 2px;
@@ -46,4 +53,13 @@
 
   --content-width-narrow: 680px;
   --content-width: 840px;
+  --content-width-message: 760px;
+
+  // ==================== APPLICATION SHELL ====================
+
+  --shell-gap: 8px;
+  --shell-header-height: 56px;
+  --shell-sidebar-width: 248px;
+  --shell-panel-width: 264px;
+  --shell-search-width: 340px;
 }

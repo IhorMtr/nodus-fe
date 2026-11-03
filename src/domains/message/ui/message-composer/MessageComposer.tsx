@@ -2,7 +2,13 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslations } from 'next-intl';
-import { useMemo, useRef, type FormEvent, type KeyboardEvent } from 'react';
+import {
+  useId,
+  useMemo,
+  useRef,
+  type FormEvent,
+  type KeyboardEvent,
+} from 'react';
 import { useForm } from 'react-hook-form';
 
 import { InlineStatus } from '@/shared/ui/inline-status';
@@ -35,6 +41,7 @@ export function MessageComposer({
   const t = useTranslations('message');
   const validation = useTranslations('message.validation');
   const submissionLock = useRef(false);
+  const hintId = useId();
   const schema = useMemo(() => messageContentSchema(validation), [validation]);
   const {
     register,
@@ -100,30 +107,36 @@ export function MessageComposer({
       noValidate
       aria-busy={isSubmitting}
     >
-      <div className={styles.inner}>
-        <div className={styles.row}>
-          <Textarea
-            {...register('content')}
-            aria-label={t('composer.label')}
-            placeholder={t('composer.placeholder')}
-            onKeyDown={handleKeyDown}
-            autosize
-            minRows={1}
-            maxRows={8}
-            readOnly={isSubmitting}
-            error={Boolean(message)}
-          />
-        </div>
+      {/* ==================== FIELD ==================== */}
+
+      <div className={styles.box} data-error={Boolean(message) || undefined}>
+        <Textarea
+          {...register('content')}
+          variant="plain"
+          size="lg"
+          aria-label={t('composer.label')}
+          aria-describedby={hintId}
+          placeholder={t('composer.placeholder')}
+          onKeyDown={handleKeyDown}
+          autosize
+          minRows={1}
+          maxRows={8}
+          readOnly={isSubmitting}
+          error={Boolean(message)}
+        />
+      </div>
+
+      {/* ==================== FEEDBACK AND HINT ==================== */}
+
+      <div className={styles.footer}>
         {message && (
-          <InlineStatus
-            tone="danger"
-            variant="plain"
-            role="alert"
-            className={styles.error}
-          >
+          <InlineStatus tone="danger" variant="plain" role="alert">
             {message}
           </InlineStatus>
         )}
+        <span id={hintId} className={styles.hint}>
+          {t('composer.hint')}
+        </span>
       </div>
     </form>
   );

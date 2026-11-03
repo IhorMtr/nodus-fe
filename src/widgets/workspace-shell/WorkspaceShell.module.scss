@@ -1,32 +1,21 @@
 @use '@/shared/styles/breakpoints' as breakpoints;
 @use '@/shared/styles/mixins' as mixins;
 
-// ==================== SHELL GEOMETRY ====================
+// ==================== SHELL CANVAS ====================
 
+// The sidebar sits directly on the canvas, while the working area is a
+// bordered frame. The contrast between them gives depth without colour.
 .shell {
-  --shell-header-height: 60px;
-  --shell-sidebar-width: 260px;
-  --shell-members-width: 248px;
-
   display: flex;
   width: 100%;
   height: 100dvh;
   min-width: 0;
-  flex-direction: column;
   overflow: hidden;
-  background: var(--color-background);
+  background: var(--color-canvas);
 
-  @include mixins.down(breakpoints.$breakpoint-xl) {
-    --shell-sidebar-width: 240px;
-    --shell-members-width: 224px;
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    --shell-gap: 0px;
   }
-}
-
-.body {
-  display: flex;
-  min-width: 0;
-  min-height: 0;
-  flex: 1;
 }
 
 // ==================== LEFT SIDEBAR ====================
@@ -35,12 +24,37 @@
   width: var(--shell-sidebar-width);
   min-width: var(--shell-sidebar-width);
   min-height: 0;
-  border-right: 1px solid var(--color-divider);
-  background: var(--color-chrome);
 
   @include mixins.down(breakpoints.$breakpoint-md) {
     display: none;
   }
+}
+
+// ==================== MAIN FRAME ====================
+
+.frame {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  margin: var(--shell-gap) var(--shell-gap) var(--shell-gap) 0;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  background: var(--color-background);
+
+  @include mixins.down(breakpoints.$breakpoint-md) {
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.body {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
 }
 
 // ==================== MAIN CONTENT ====================
@@ -53,25 +67,27 @@
   background: var(--color-background);
 }
 
-// ==================== RIGHT MEMBERS PANEL ====================
+// ==================== RIGHT SIDE PANEL ====================
 
 .desktopMembers {
+  --side-panel-width: var(--shell-panel-width);
+
   width: 0;
   min-height: 0;
   flex: none;
   overflow: hidden;
   border-left: 1px solid transparent;
-  background: var(--color-chrome);
+  background: var(--color-background);
   transition:
     width var(--transition-normal),
     border-color var(--transition-normal);
 
   &[data-search] {
-    --shell-members-width: 320px;
+    --side-panel-width: var(--shell-search-width);
   }
 
   &[data-open] {
-    width: var(--shell-members-width);
+    width: var(--side-panel-width);
     border-left-color: var(--color-divider);
   }
 
@@ -85,17 +101,26 @@
 }
 
 .desktopMembersInner {
-  width: calc(var(--shell-members-width) - 1px);
+  width: calc(var(--side-panel-width) - 1px);
   height: 100%;
 }
 
 // ==================== DRAWERS ====================
 
 .drawerContent.drawerContent {
-  background: var(--color-chrome);
+  background: var(--color-background);
 }
 
 .drawerBody {
   height: calc(100% - 60px);
+  padding: 0;
+}
+
+.sidebarDrawerContent.sidebarDrawerContent {
+  background: var(--color-canvas);
+}
+
+.sidebarDrawerBody {
+  height: 100%;
   padding: 0;
 }

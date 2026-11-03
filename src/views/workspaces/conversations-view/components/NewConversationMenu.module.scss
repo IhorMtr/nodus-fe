@@ -1,0 +1,17 @@
+// ==================== MEMBER PICKER ====================
+
+.dropdown {
+  max-height: min(380px, calc(100dvh - 160px));
+  overflow-y: auto;
+}
+
+.avatar {
+  --avatar-ring: var(--color-surface-overlay);
+}
+
+.name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

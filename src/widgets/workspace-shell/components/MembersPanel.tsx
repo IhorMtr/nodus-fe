@@ -12,6 +12,7 @@ import {
   type WorkspaceMember,
 } from '@/domains/workspace/model/members';
 import { MemberActionItems } from '@/domains/workspace/ui/member-management';
+import { Avatar } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { IconButton } from '@/shared/ui/icon-button';
 import { Spinner } from '@/shared/ui/spinner';
@@ -91,14 +92,12 @@ function MemberRow({
     >
       {/* ==================== IDENTITY ==================== */}
 
-      <span className={styles.avatar}>
-        <span aria-hidden="true">{getWorkspaceMemberInitials(member)}</span>
-        <PresenceIndicator
-          status={member.status}
-          withLabel={false}
-          className={styles.presence}
-        />
-      </span>
+      <Avatar
+        initials={getWorkspaceMemberInitials(member)}
+        size="sm"
+        className={styles.avatar}
+        status={<PresenceIndicator status={member.status} withLabel={false} />}
+      />
       <span className={styles.identity}>
         <span className={styles.name} title={name}>
           {name}

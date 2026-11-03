@@ -13,6 +13,20 @@
 
   height: auto;
   padding-block: var(--space-2);
+
+  // A plain field lets its container own the border, background and focus.
+  &[data-variant='plain'] {
+    padding-block: var(--space-3);
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+
+    &:focus,
+    &:focus-within {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
 }
 
 .label.label {
