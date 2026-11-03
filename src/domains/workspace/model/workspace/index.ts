@@ -1,9 +1,11 @@
 export {
   useWorkspacesQuery,
   useWorkspaceQuery,
+  useWorkspaceMetricsQuery,
   workspaceQueryKeys,
 } from './workspace-queries';
-export type { Workspace } from './workspace-types';
+export { canViewWorkspaceMetrics } from './workspace-types';
+export type { Workspace, WorkspaceMetrics } from './workspace-types';
 export {
   useRenameWorkspaceMutation,
   useDeleteWorkspaceMutation,

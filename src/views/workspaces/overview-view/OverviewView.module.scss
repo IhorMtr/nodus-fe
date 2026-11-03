@@ -1,0 +1,442 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// ==================== PAGE ====================
+
+.page {
+  container-type: inline-size;
+  width: min(100%, 1220px);
+  margin-inline: auto;
+  padding: var(--space-8) clamp(var(--space-4), 3vw, var(--space-10))
+    var(--space-12);
+}
+
+.intro {
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-divider);
+
+  h1 {
+    margin: var(--space-2) 0 var(--space-2);
+    color: var(--color-text-primary);
+    font-size: clamp(var(--font-size-2xl), 2.3vw, var(--font-size-3xl));
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+  }
+}
+
+.eyebrow {
+  @include mixins.eyebrow;
+}
+
+// ==================== CONTENT GRID ====================
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--space-8) var(--space-10);
+  padding-block: var(--space-8);
+
+  @container (max-width: 760px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.channels,
+.announcements,
+.team,
+.quick,
+.metrics {
+  min-width: 0;
+}
+
+.sectionHeading {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+
+  h2 {
+    @include mixins.section-title;
+    margin-top: var(--space-1);
+  }
+}
+
+.sectionAction {
+  @include mixins.focus-ring;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+.count {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+// ==================== CHANNELS AND ANNOUNCEMENTS ====================
+
+.channelList,
+.announcementList,
+.memberList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.channelList li,
+.announcementList li,
+.memberList li {
+  border-top: 1px solid var(--color-divider);
+}
+
+.channelLink {
+  @include mixins.focus-ring;
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--space-2);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+}
+
+.channelName {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unread {
+  display: grid;
+  min-width: 24px;
+  height: 22px;
+  place-items: center;
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-control);
+  background: var(--color-text-primary);
+  color: var(--color-background);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.rowArrow {
+  color: var(--color-text-muted);
+}
+
+.announcementLink {
+  @include mixins.focus-ring;
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+}
+
+.announcementTitle {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  overflow-wrap: anywhere;
+}
+
+.preview {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+// ==================== TEAM AND ACTIONS ====================
+
+.teamSummary {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.memberList li {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-inline: var(--space-2);
+}
+
+.memberName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quickLinks {
+  display: grid;
+
+  a {
+    @include mixins.focus-ring;
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    gap: var(--space-3);
+    padding-inline: var(--space-2);
+    border-top: 1px solid var(--color-divider);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+
+    svg:first-child {
+      color: var(--color-text-muted);
+    }
+    svg:last-child {
+      margin-left: auto;
+      color: var(--color-text-muted);
+    }
+    &:hover {
+      background: var(--color-surface-hover);
+    }
+  }
+}
+
+// ==================== METRICS ====================
+
+.metrics {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-divider);
+}
+
+.metricTotals {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin-top: var(--space-4);
+  border-block: 1px solid var(--color-divider);
+
+  > div {
+    display: grid;
+    align-content: center;
+    gap: var(--space-1);
+    min-height: 86px;
+    padding: var(--space-3);
+
+    + div {
+      border-left: 1px solid var(--color-divider);
+    }
+  }
+
+  strong {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  @container (max-width: 850px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    > div:nth-child(4) {
+      border-left: 0;
+    }
+    > div:nth-child(n + 4) {
+      border-top: 1px solid var(--color-divider);
+    }
+  }
+
+  @container (max-width: 430px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    > div:nth-child(odd) {
+      border-left: 0;
+    }
+    > div:nth-child(even) {
+      border-left: 1px solid var(--color-divider);
+    }
+    > div:nth-child(n + 3) {
+      border-top: 1px solid var(--color-divider);
+    }
+  }
+}
+
+.activityHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+
+  h3 {
+    @include mixins.section-title;
+  }
+  p {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+}
+
+.period {
+  display: flex;
+  padding: 2px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+
+  button {
+    @include mixins.focus-ring;
+    padding: var(--space-1) var(--space-3);
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--font-size-xs);
+
+    &[aria-pressed='true'] {
+      background: var(--color-surface-active);
+      color: var(--color-text-primary);
+    }
+  }
+}
+
+.activityGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+
+  > div {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-control);
+  }
+
+  span {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+  strong {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @container (max-width: 700px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @container (max-width: 350px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.metricNote {
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+// ==================== FEEDBACK AND RESPONSIVE ====================
+
+.empty,
+.feedback {
+  margin: 0;
+  padding: var(--space-5) var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+.feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.feedback button {
+  @include mixins.focus-ring;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+.skeleton {
+  height: 84px;
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  animation: pulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  to {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+@include mixins.down(breakpoints.$breakpoint-sm) {
+  .page {
+    padding: var(--space-6) var(--space-4) var(--space-10);
+  }
+  .intro {
+    padding-bottom: var(--space-5);
+  }
+  .contentGrid {
+    gap: var(--space-6);
+    padding-block: var(--space-5);
+  }
+}

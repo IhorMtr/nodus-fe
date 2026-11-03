@@ -48,7 +48,8 @@ export function WorkspaceAccessListener({ children }: { children: ReactNode }) {
           key[0] === 'channels' ||
           key[0] === 'conversations';
         const isWorkspaceDetail =
-          key[0] === 'workspaces' && key[1] === 'detail';
+          key[0] === 'workspaces' &&
+          (key[1] === 'detail' || key[1] === 'metrics');
         const isWorkspaceMembers =
           key[0] === 'workspaces' && key[1] === 'members';
         const isWorkspaceInvites = key[0] === 'invites';
