@@ -1,5 +1,6 @@
 'use client';
 
+import { CalendarClock, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { FormEventHandler } from 'react';
 import type { UseFormRegister, FieldErrors } from 'react-hook-form';
@@ -59,22 +60,26 @@ export function AnnouncementForm(props: AnnouncementFormProps) {
       {!props.published && (
         <fieldset className={styles.schedule}>
           <legend>{t('publicationLabel')}</legend>
-          <label>
-            <input
-              type="radio"
-              value="now"
-              {...props.register('publication')}
-            />
-            {t('publishNow')}
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="scheduled"
-              {...props.register('publication')}
-            />
-            {t('schedule')}
-          </label>
+          <div className={styles.options}>
+            <label className={styles.option}>
+              <input
+                type="radio"
+                value="now"
+                {...props.register('publication')}
+              />
+              <Send size={16} aria-hidden="true" />
+              <span>{t('publishNow')}</span>
+            </label>
+            <label className={styles.option}>
+              <input
+                type="radio"
+                value="scheduled"
+                {...props.register('publication')}
+              />
+              <CalendarClock size={16} aria-hidden="true" />
+              <span>{t('schedule')}</span>
+            </label>
+          </div>
           {props.publication === 'scheduled' && (
             <Input
               {...props.register('publishAtLocal')}

@@ -1,0 +1,188 @@
+@use '@/shared/styles/breakpoints' as breakpoints;
+@use '@/shared/styles/mixins' as mixins;
+
+// Composition shared by workspace pages rendered inside the shell frame.
+
+// ==================== CONTAINER ====================
+
+@mixin container($width: var(--content-width-page)) {
+  container-type: inline-size;
+  width: min(100%, $width);
+  margin-inline: auto;
+  padding: var(--space-10) var(--page-padding-lg) var(--space-16);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    padding: var(--space-6) var(--page-padding-sm) var(--space-12);
+  }
+}
+
+// ==================== PAGE HEADER ====================
+
+@mixin header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-8);
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    margin-bottom: var(--space-6);
+  }
+}
+
+@mixin title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.025em;
+  line-height: var(--line-height-tight);
+  overflow-wrap: anywhere;
+
+  @include mixins.down(breakpoints.$breakpoint-sm) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@mixin description {
+  max-width: 64ch;
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+}
+
+// ==================== SECTIONS ====================
+
+@mixin section-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+@mixin section-description {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+@mixin count {
+  min-width: 24px;
+  padding: 0 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-selected);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+  text-align: center;
+}
+
+// ==================== SURFACES ====================
+
+@mixin panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  background: var(--color-background);
+}
+
+@mixin tinted-panel {
+  @include panel;
+
+  background: var(--color-surface);
+}
+
+// ==================== SEGMENTED CONTROL ====================
+
+@mixin segmented {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+
+  button {
+    @include mixins.focus-ring(-2px);
+
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+
+    &:hover {
+      color: var(--color-text-primary);
+    }
+
+    &[aria-pressed='true'] {
+      background: var(--color-background);
+      color: var(--color-text-primary);
+      box-shadow:
+        var(--shadow-sm),
+        0 0 0 1px var(--color-divider);
+    }
+  }
+}
+
+// ==================== PAGE STATES ====================
+
+@mixin state {
+  display: flex;
+  min-height: min(420px, 60vh);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-10) var(--page-padding-md);
+  color: var(--color-text-secondary);
+  text-align: center;
+
+  h1,
+  h2 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    max-width: 44ch;
+    margin: 0;
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-relaxed);
+  }
+}
+
+@mixin empty-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-1);
+  place-items: center;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}

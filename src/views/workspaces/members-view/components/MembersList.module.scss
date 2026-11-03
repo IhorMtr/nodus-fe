@@ -1,0 +1,199 @@
+@use '@/shared/styles/page' as page;
+
+// ==================== SECTION ====================
+
+.section {
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+
+  h2 {
+    @include page.section-title;
+  }
+}
+
+.count {
+  @include page.count;
+}
+
+.refresh {
+  margin-left: auto;
+}
+
+// ==================== TABLE ====================
+
+// Columns are shared by the header row and every member row.
+.table {
+  --member-columns: minmax(0, 1fr) 132px 112px 40px;
+
+  @include page.panel;
+
+  container-type: inline-size;
+}
+
+.columns,
+.row {
+  display: grid;
+  grid-template-columns: var(--member-columns);
+  align-items: center;
+  column-gap: var(--space-4);
+  padding-inline: var(--space-5) var(--space-3);
+}
+
+.columns {
+  min-height: 40px;
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// ==================== MEMBER ROW ====================
+
+.row {
+  min-height: 68px;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+  transition: background-color var(--transition-fast);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover,
+  &:focus-within {
+    background: var(--color-surface-hover);
+  }
+}
+
+.person {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  [data-offline] & {
+    opacity: 0.6;
+  }
+}
+
+.identity {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+
+  strong,
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-snug);
+  }
+
+  span {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+  }
+}
+
+.presence {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.role {
+  justify-self: start;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+
+  &[data-role='Owner'],
+  &[data-role='Admin'] {
+    padding: 1px var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+// ==================== COMPACT TABLE ====================
+
+// Narrow tables move status and role under the person.
+@container (max-width: 600px) {
+  .columns {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) 40px;
+    row-gap: var(--space-2);
+    padding-inline: var(--space-4) var(--space-2);
+  }
+
+  .person {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .presence,
+  .role {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .presence {
+    margin-left: calc(var(--avatar-size-md) + var(--space-3));
+  }
+
+  .role {
+    justify-self: end;
+  }
+}
+
+// ==================== EMPTY STATE ====================
+
+.empty {
+  @include page.panel;
+
+  margin: 0;
+  padding: var(--space-8) var(--space-5);
+  border-style: dashed;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  text-align: center;
+}

@@ -1,12 +1,13 @@
 'use client';
 
 import { Modal } from '@mantine/core';
-import { Megaphone, Plus } from 'lucide-react';
+import { Clock, Megaphone, Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { getAnnouncementErrorKey } from '@/domains/announcement/model/announcements';
 import { AnnouncementCard } from '@/domains/announcement/ui/announcement-card';
 import { AnnouncementForm } from '@/domains/announcement/ui/announcement-form';
+import { Avatar, getNameInitials } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
@@ -43,7 +44,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
       <div className={styles.state} role="alert">
         <h1>{t('heading')}</h1>
         <p>{t(`errors.${getAnnouncementErrorKey(error)}`)}</p>
-        <Button variant="secondary" size="sm" onClick={state.retry}>
+        <Button variant="secondary" onClick={state.retry}>
           {t('retry')}
         </Button>
       </div>
@@ -62,6 +63,9 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
     emptyDescription = t('emptyManageDescription');
   }
 
+  const selectedAuthor = selected
+    ? (state.authorNames.get(selected.authorId) ?? t('unknownAuthor'))
+    : '';
   const selectedDate =
     selected?.publishedAt ?? selected?.publishAt ?? selected?.createdAt;
   const selectedDateLabel = selectedDate
@@ -75,15 +79,15 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
 
   return (
     <div className={styles.page}>
-      {/* ==================== PAGE INTRO ==================== */}
+      {/* ==================== PAGE HEADER ==================== */}
 
-      <header className={styles.intro}>
-        <div className={styles.introText}>
+      <header className={styles.header}>
+        <div className={styles.headerText}>
           <h1>{t('heading')}</h1>
           <p>{t('description')}</p>
         </div>
         {state.canManage && (
-          <Button leftIcon={<Plus size={16} />} onClick={state.openCreate}>
+          <Button leftIcon={<Plus />} onClick={state.openCreate}>
             {t('create')}
           </Button>
         )}
@@ -91,50 +95,71 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
 
       {/* ==================== PUBLICATION FILTERS ==================== */}
 
-      <div
-        className={styles.filters}
-        role="group"
-        aria-label={t('filterLabel')}
-      >
-        <button
-          type="button"
-          aria-pressed={state.filter === 'published' || !state.canManage}
-          onClick={() => state.setFilter('published')}
-        >
-          {t('published')} <span>{state.publishedItems.length}</span>
-        </button>
+      <div className={styles.toolbar}>
         {state.canManage && (
-          <button
-            type="button"
-            aria-pressed={state.filter === 'scheduled'}
-            onClick={() => state.setFilter('scheduled')}
+          <div
+            className={styles.filters}
+            role="group"
+            aria-label={t('filterLabel')}
           >
-            {t('scheduled')} <span>{state.scheduledItems.length}</span>
-          </button>
+            <button
+              type="button"
+              aria-pressed={state.filter === 'published'}
+              onClick={() => state.setFilter('published')}
+            >
+              {t('published')}
+              <span className={styles.filterCount}>
+                {state.publishedItems.length}
+              </span>
+            </button>
+            <button
+              type="button"
+              aria-pressed={state.filter === 'scheduled'}
+              onClick={() => state.setFilter('scheduled')}
+            >
+              <Clock size={14} aria-hidden="true" />
+              {t('scheduled')}
+              <span className={styles.filterCount}>
+                {state.scheduledItems.length}
+              </span>
+            </button>
+          </div>
+        )}
+
+        {!state.canManage && (
+          <p className={styles.toolbarLabel}>
+            {t('published')}
+            <span className={styles.filterCount}>
+              {state.publishedItems.length}
+            </span>
+          </p>
         )}
       </div>
 
-      {/* ==================== ANNOUNCEMENT LIST ==================== */}
+      {/* ==================== EMPTY LIST ==================== */}
 
-      {state.items.length === 0 ? (
+      {state.items.length === 0 && (
         <div className={styles.empty}>
-          <span className={styles.emptyIcon}>
-            <Megaphone size={24} aria-hidden="true" />
+          <span className={styles.emptyIcon} aria-hidden="true">
+            <Megaphone size={22} />
           </span>
           <h2>{emptyTitle}</h2>
           <p>{emptyDescription}</p>
           {state.canManage && (
             <Button
               variant="secondary"
-              size="sm"
-              leftIcon={<Plus size={16} />}
+              leftIcon={<Plus />}
               onClick={state.openCreate}
             >
               {t('create')}
             </Button>
           )}
         </div>
-      ) : (
+      )}
+
+      {/* ==================== ANNOUNCEMENT LIST ==================== */}
+
+      {state.items.length > 0 && (
         <div className={styles.list}>
           {state.items.map(item => (
             <AnnouncementCard
@@ -162,7 +187,12 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
         size="lg"
         centered
       >
-        {state.detail.isPending && <Spinner label={t('loadingDetail')} />}
+        {state.detail.isPending && (
+          <div className={styles.modalState}>
+            <Spinner label={t('loadingDetail')} />
+          </div>
+        )}
+
         {state.detail.isError && (
           <div className={styles.modalState} role="alert">
             <p>{t(`errors.${getAnnouncementErrorKey(state.detail.error)}`)}</p>
@@ -174,35 +204,49 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
             </Button>
           </div>
         )}
+
         {selected && !state.detail.isError && (
           <article className={styles.detail}>
             <span
               className={styles.status}
               data-published={Boolean(selected.publishedAt) || undefined}
             >
+              {!selected.publishedAt && <Clock size={12} aria-hidden="true" />}
               {selected.publishedAt ? t('published') : t('scheduled')}
             </span>
             <h2>{selected.title}</h2>
-            <p className={styles.meta}>
-              {t('by', {
-                name:
-                  state.authorNames.get(selected.authorId) ??
-                  t('unknownAuthor'),
-              })}
-              {' · '}
-              {selectedDateLabel}
-            </p>
+            <div className={styles.detailMeta}>
+              <Avatar initials={getNameInitials(selectedAuthor)} size="sm" />
+              <span>
+                <strong>{t('by', { name: selectedAuthor })}</strong>
+                <time dateTime={selectedDate}>{selectedDateLabel}</time>
+              </span>
+            </div>
             <p className={styles.content}>{selected.content}</p>
+
             {state.publish.isError && (
               <InlineStatus tone="danger" role="alert" className={styles.error}>
                 {t(`errors.${getAnnouncementErrorKey(state.publish.error)}`)}
               </InlineStatus>
             )}
+
             {state.canManage && (
               <div className={styles.actions}>
+                <Button
+                  variant="danger"
+                  onClick={() => state.openDelete(selected)}
+                >
+                  {t('delete')}
+                </Button>
+                <span className={styles.actionsSpacer} />
+                <Button
+                  variant="secondary"
+                  onClick={() => state.openEdit(selected)}
+                >
+                  {t('edit')}
+                </Button>
                 {!selected.publishedAt && (
                   <Button
-                    variant="secondary"
                     loading={state.publish.isPending}
                     disabled={state.publish.isPending}
                     onClick={() => state.publishNow(selected)}
@@ -210,18 +254,6 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
                     {t('publishImmediately')}
                   </Button>
                 )}
-                <Button
-                  variant="secondary"
-                  onClick={() => state.openEdit(selected)}
-                >
-                  {t('edit')}
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => state.openDelete(selected)}
-                >
-                  {t('delete')}
-                </Button>
               </div>
             )}
           </article>

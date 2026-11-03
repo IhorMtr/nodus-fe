@@ -1,21 +1,24 @@
 'use client';
 
-import {
-  ArrowRight,
-  Hash,
-  Megaphone,
-  MessageCircle,
-  Users,
-} from 'lucide-react';
+import { ArrowRight, Hash, MessageCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { PresenceIndicator } from '@/domains/presence/ui/presence-indicator';
-import { getWorkspaceMemberName } from '@/domains/workspace/model/members';
+import {
+  getWorkspaceMemberInitials,
+  getWorkspaceMemberName,
+} from '@/domains/workspace/model/members';
 import { Link } from '@/shared/i18n/navigation';
+import { Avatar, getNameInitials } from '@/shared/ui/avatar';
+import { Button } from '@/shared/ui/button';
 
-import { OverviewMetrics } from './OverviewMetrics';
-import styles from './OverviewView.module.scss';
 import { useOverviewView } from './hooks/use-overview-view';
+import { ActivitySummary, MetricTotals } from './OverviewMetrics';
+import styles from './OverviewView.module.scss';
+
+// ==================== CONSTANTS ====================
+
+const MAX_VISIBLE_UNREAD = 99;
 
 // ==================== SECTION FEEDBACK ====================
 
@@ -40,9 +43,9 @@ function SectionFeedback({
     return (
       <div className={styles.feedback} role="alert">
         <span>{t('loadError')}</span>
-        <button type="button" onClick={onRetry}>
+        <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}
-        </button>
+        </Button>
       </div>
     );
   }
@@ -53,11 +56,25 @@ function SectionFeedback({
 // ==================== PAGE VIEW ====================
 
 export function OverviewView({ workspaceId }: { workspaceId: string }) {
+  // ==================== CONTEXT ====================
+
   const t = useTranslations('workspace.overview');
+  const presence = useTranslations('presence');
+  const roles = useTranslations('invite.roles');
   const locale = useLocale();
   const state = useOverviewView(workspaceId);
 
   // ==================== DERIVED STATE ====================
+
+  const workspaceName = state.workspace.data?.name ?? t('workspaceFallback');
+  const monogram = workspaceName.trim().charAt(0).toUpperCase();
+  const members = state.members.data ?? [];
+  const onlineCount = members.filter(
+    member => member.status === 'online'
+  ).length;
+  const publishedDate = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+  });
 
   const showChannels =
     state.channels.isSuccess && state.visibleChannels.length > 0;
@@ -65,17 +82,44 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
     state.announcements.isSuccess && state.recentAnnouncements.length > 0;
   const showMembers =
     state.members.isSuccess && state.visibleMembers.length > 0;
+  const metrics = state.canViewMetrics ? state.metrics.data : undefined;
 
-  let metricsContent = null;
-  if (state.canViewMetrics) {
-    if (state.metrics.data) {
-      metricsContent = <OverviewMetrics metrics={state.metrics.data} />;
-    } else {
-      metricsContent = (
-        <section className={styles.metrics} aria-label={t('metricsTitle')}>
-          <div className={styles.sectionHeading}>
-            <h2>{t('metricsTitle')}</h2>
-          </div>
+  // ==================== RENDER ====================
+
+  return (
+    <div className={styles.page}>
+      {/* ==================== WORKSPACE HEADER ==================== */}
+
+      <header className={styles.header}>
+        <span className={styles.monogram} aria-hidden="true">
+          {monogram}
+        </span>
+        <div className={styles.headerText}>
+          <h1>{workspaceName}</h1>
+          <p>{t('description')}</p>
+        </div>
+        {state.members.isSuccess && (
+          <p className={styles.headerMeta}>
+            <span>{t('memberCount', { count: members.length })}</span>
+            <span className={styles.onlineMeta}>
+              <span aria-hidden="true">
+                <PresenceIndicator status="online" withLabel={false} />
+              </span>
+              {presence('online', { count: onlineCount })}
+            </span>
+          </p>
+        )}
+      </header>
+
+      {/* ==================== WORKSPACE TOTALS ==================== */}
+
+      {metrics && <MetricTotals metrics={metrics} />}
+
+      {state.canViewMetrics && !metrics && (
+        <section
+          className={styles.metricsFeedback}
+          aria-label={t('metricsTitle')}
+        >
           <SectionFeedback
             loading={state.metrics.isPending}
             error={state.metrics.isError}
@@ -83,227 +127,231 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
             onRetry={() => void state.metrics.refetch()}
           />
         </section>
-      );
-    }
-  }
+      )}
 
-  // ==================== RENDER ====================
+      <div className={styles.layout}>
+        <div className={styles.main}>
+          {/* ==================== CHANNELS ==================== */}
 
-  return (
-    <div className={styles.page}>
-      {/* ==================== INTRO ==================== */}
-      <header className={styles.intro}>
-        <span className={styles.eyebrow}>{t('eyebrow')}</span>
-        <h1>{state.workspace.data?.name ?? t('workspaceFallback')}</h1>
-        <p>{t('description')}</p>
-      </header>
-
-      {/* ==================== CONTENT ==================== */}
-      <div className={styles.contentGrid}>
-        <section
-          className={styles.channels}
-          aria-labelledby="overview-channels"
-        >
-          <div className={styles.sectionHeading}>
-            <div>
-              <span className={styles.eyebrow}>{t('places')}</span>
+          <section
+            className={styles.section}
+            aria-labelledby="overview-channels"
+          >
+            <div className={styles.sectionHeader}>
               <h2 id="overview-channels">{t('channelsTitle')}</h2>
+              {state.channels.data && (
+                <span className={styles.count}>
+                  {state.channels.data.length}
+                </span>
+              )}
             </div>
-            {state.channels.data && (
-              <span className={styles.count}>{state.channels.data.length}</span>
+
+            {!showChannels && (
+              <SectionFeedback
+                loading={state.channels.isPending}
+                error={state.channels.isError}
+                empty={t('channelsEmpty')}
+                onRetry={() => void state.channels.refetch()}
+              />
             )}
-          </div>
-          {!showChannels && (
-            <SectionFeedback
-              loading={state.channels.isPending}
-              error={state.channels.isError}
-              empty={t('channelsEmpty')}
-              onRetry={() => void state.channels.refetch()}
-            />
-          )}
-          {showChannels && (
-            <ul className={styles.channelList}>
-              {state.visibleChannels.map(channel => (
-                <li key={channel.id}>
-                  <Link
-                    href={{
-                      pathname:
-                        '/workspaces/[workspaceId]/channels/[channelId]',
-                      params: { workspaceId, channelId: channel.id },
-                    }}
-                    className={styles.channelLink}
-                  >
-                    <Hash size={16} aria-hidden="true" />
-                    <span className={styles.channelName}>{channel.name}</span>
-                    {channel.unreadCount > 0 && (
-                      <span
-                        className={styles.unread}
-                        aria-label={t('unread', { count: channel.unreadCount })}
-                      >
-                        {channel.unreadCount > 99 ? '99+' : channel.unreadCount}
+
+            {showChannels && (
+              <ul className={styles.channelList}>
+                {state.visibleChannels.map(channel => (
+                  <li key={channel.id}>
+                    <Link
+                      href={{
+                        pathname:
+                          '/workspaces/[workspaceId]/channels/[channelId]',
+                        params: { workspaceId, channelId: channel.id },
+                      }}
+                      className={styles.channelLink}
+                      data-unread={channel.unreadCount > 0 || undefined}
+                    >
+                      <span className={styles.channelIcon} aria-hidden="true">
+                        <Hash size={16} />
                       </span>
-                    )}
-                    <ArrowRight
-                      size={15}
-                      className={styles.rowArrow}
-                      aria-hidden="true"
-                    />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section
-          className={styles.announcements}
-          aria-labelledby="overview-announcements"
-        >
-          <div className={styles.sectionHeading}>
-            <div>
-              <span className={styles.eyebrow}>{t('updates')}</span>
-              <h2 id="overview-announcements">{t('announcementsTitle')}</h2>
-            </div>
-            <Link
-              href={{
-                pathname: '/workspaces/[workspaceId]/announcements',
-                params: { workspaceId },
-              }}
-              className={styles.sectionAction}
-            >
-              {t('viewAll')} <ArrowRight size={14} aria-hidden="true" />
-            </Link>
-          </div>
-          {!showAnnouncements && (
-            <SectionFeedback
-              loading={state.announcements.isPending}
-              error={state.announcements.isError}
-              empty={t('announcementsEmpty')}
-              onRetry={() => void state.announcements.refetch()}
-            />
-          )}
-          {showAnnouncements && (
-            <ul className={styles.announcementList}>
-              {state.recentAnnouncements.map(item => (
-                <li key={item.id}>
-                  <Link
-                    href={{
-                      pathname: '/workspaces/[workspaceId]/announcements',
-                      params: { workspaceId },
-                      query: { announcement: item.id },
-                    }}
-                    className={styles.announcementLink}
-                  >
-                    <span className={styles.announcementTitle}>
-                      {item.title}
-                    </span>
-                    <span className={styles.preview}>{item.content}</span>
-                    <span className={styles.meta}>
-                      {state.authorNames.get(item.authorId.toLowerCase()) ??
-                        t('unknownAuthor')}
-                      <span aria-hidden="true">·</span>
-                      {item.publishedAt && (
-                        <time dateTime={item.publishedAt}>
-                          {new Intl.DateTimeFormat(locale, {
-                            dateStyle: 'medium',
-                          }).format(new Date(item.publishedAt))}
-                        </time>
+                      <span className={styles.channelText}>
+                        <span className={styles.channelName}>
+                          {channel.name}
+                        </span>
+                        {channel.unreadCount > 0 && (
+                          <span className={styles.channelMeta}>
+                            {t('unread', { count: channel.unreadCount })}
+                          </span>
+                        )}
+                      </span>
+                      {channel.unreadCount > 0 && (
+                        <span className={styles.unread} aria-hidden="true">
+                          {channel.unreadCount > MAX_VISIBLE_UNREAD
+                            ? `${MAX_VISIBLE_UNREAD}+`
+                            : channel.unreadCount}
+                        </span>
                       )}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+                      <ArrowRight
+                        size={16}
+                        className={styles.rowArrow}
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
-        <section className={styles.team} aria-labelledby="overview-team">
-          <div className={styles.sectionHeading}>
-            <div>
-              <span className={styles.eyebrow}>{t('people')}</span>
+          {/* ==================== LATEST ANNOUNCEMENTS ==================== */}
+
+          <section
+            className={styles.section}
+            aria-labelledby="overview-announcements"
+          >
+            <div className={styles.sectionHeader}>
+              <h2 id="overview-announcements">{t('announcementsTitle')}</h2>
+              <Link
+                href={{
+                  pathname: '/workspaces/[workspaceId]/announcements',
+                  params: { workspaceId },
+                }}
+                className={styles.sectionAction}
+              >
+                {t('viewAll')}
+                <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+            </div>
+
+            {!showAnnouncements && (
+              <SectionFeedback
+                loading={state.announcements.isPending}
+                error={state.announcements.isError}
+                empty={t('announcementsEmpty')}
+                onRetry={() => void state.announcements.refetch()}
+              />
+            )}
+
+            {showAnnouncements && (
+              <ul className={styles.announcementList}>
+                {state.recentAnnouncements.map(item => {
+                  const author =
+                    state.authorNames.get(item.authorId.toLowerCase()) ??
+                    t('unknownAuthor');
+
+                  return (
+                    <li key={item.id}>
+                      <Link
+                        href={{
+                          pathname: '/workspaces/[workspaceId]/announcements',
+                          params: { workspaceId },
+                          query: { announcement: item.id },
+                        }}
+                        className={styles.announcementLink}
+                      >
+                        <span className={styles.announcementTitle}>
+                          {item.title}
+                        </span>
+                        <span className={styles.preview}>{item.content}</span>
+                        <span className={styles.meta}>
+                          <Avatar
+                            initials={getNameInitials(author)}
+                            size="xs"
+                          />
+                          <span>{author}</span>
+                          {item.publishedAt && (
+                            <>
+                              <span aria-hidden="true">·</span>
+                              <time dateTime={item.publishedAt}>
+                                {publishedDate.format(
+                                  new Date(item.publishedAt)
+                                )}
+                              </time>
+                            </>
+                          )}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        </div>
+
+        <aside className={styles.aside}>
+          {/* ==================== ACTIVITY ==================== */}
+
+          {metrics && <ActivitySummary metrics={metrics} />}
+
+          {/* ==================== TEAM ==================== */}
+
+          <section className={styles.team} aria-labelledby="overview-team">
+            <div className={styles.sectionHeader}>
               <h2 id="overview-team">{t('teamTitle')}</h2>
+              <Link
+                href={{
+                  pathname: '/workspaces/[workspaceId]/members',
+                  params: { workspaceId },
+                }}
+                className={styles.sectionAction}
+              >
+                {t('viewAll')}
+                <ArrowRight size={14} aria-hidden="true" />
+              </Link>
             </div>
-            <Link
-              href={{
-                pathname: '/workspaces/[workspaceId]/members',
-                params: { workspaceId },
-              }}
-              className={styles.sectionAction}
-            >
-              {t('viewAll')} <ArrowRight size={14} aria-hidden="true" />
-            </Link>
-          </div>
-          {state.members.data && (
-            <p className={styles.teamSummary}>
-              {t('memberCount', { count: state.members.data.length })}
-            </p>
-          )}
-          {!showMembers && (
-            <SectionFeedback
-              loading={state.members.isPending}
-              error={state.members.isError}
-              empty={t('teamEmpty')}
-              onRetry={() => void state.members.refetch()}
-            />
-          )}
-          {showMembers && (
-            <ul className={styles.memberList}>
-              {state.visibleMembers.map(member => (
-                <li key={member.userId}>
-                  <span className={styles.memberName}>
-                    {getWorkspaceMemberName(member)}
-                  </span>
-                  <PresenceIndicator status={member.status} withLabel={false} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
 
-        <section className={styles.quick} aria-labelledby="overview-quick">
-          <div className={styles.sectionHeading}>
-            <div>
-              <span className={styles.eyebrow}>{t('continue')}</span>
-              <h2 id="overview-quick">{t('quickTitle')}</h2>
-            </div>
-          </div>
-          <div className={styles.quickLinks}>
+            {!showMembers && (
+              <SectionFeedback
+                loading={state.members.isPending}
+                error={state.members.isError}
+                empty={t('teamEmpty')}
+                onRetry={() => void state.members.refetch()}
+              />
+            )}
+
+            {showMembers && (
+              <ul className={styles.memberList}>
+                {state.visibleMembers.map(member => (
+                  <li
+                    key={member.userId}
+                    data-offline={member.status === 'offline' || undefined}
+                  >
+                    <Avatar
+                      initials={getWorkspaceMemberInitials(member)}
+                      size="sm"
+                      className={styles.memberAvatar}
+                      status={
+                        <PresenceIndicator
+                          status={member.status}
+                          withLabel={false}
+                        />
+                      }
+                    />
+                    <span className={styles.memberText}>
+                      <span className={styles.memberName}>
+                        {getWorkspaceMemberName(member)}
+                      </span>
+                      <span className={styles.memberRole}>
+                        {roles(member.role)}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <Link
               href={{
                 pathname: '/workspaces/[workspaceId]/conversations',
                 params: { workspaceId },
               }}
+              className={styles.teamFooter}
             >
-              <MessageCircle size={17} aria-hidden="true" />
-              {t('openConversations')}
-              <ArrowRight size={15} aria-hidden="true" />
+              <MessageCircle size={16} aria-hidden="true" />
+              <span>{t('openConversations')}</span>
+              <ArrowRight size={14} aria-hidden="true" />
             </Link>
-            <Link
-              href={{
-                pathname: '/workspaces/[workspaceId]/announcements',
-                params: { workspaceId },
-              }}
-            >
-              <Megaphone size={17} aria-hidden="true" />
-              {t('openAnnouncements')}
-              <ArrowRight size={15} aria-hidden="true" />
-            </Link>
-            <Link
-              href={{
-                pathname: '/workspaces/[workspaceId]/members',
-                params: { workspaceId },
-              }}
-            >
-              <Users size={17} aria-hidden="true" />
-              {t('openMembers')}
-              <ArrowRight size={15} aria-hidden="true" />
-            </Link>
-          </div>
-        </section>
+          </section>
+        </aside>
       </div>
-
-      {/* ==================== ADMIN METRICS ==================== */}
-      {metricsContent}
     </div>
   );
 }
