@@ -10,6 +10,7 @@ import { createWorkspaceSchema } from '@/domains/workspace/model/create-workspac
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 import { workspaceNavigation } from '@/domains/workspace/model/navigation';
 import {
+  canManageWorkspace,
   useDeleteWorkspaceMutation,
   useRenameWorkspaceMutation,
   useWorkspaceQuery,
@@ -56,8 +57,7 @@ export function useSettingsView(workspaceId: string) {
 
   // ==================== PERMISSIONS ====================
 
-  const canManage =
-    workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
+  const canManage = canManageWorkspace(workspace.data?.role);
   const isOwner = workspace.data?.role === 'Owner';
   const workspaceName = workspace.data?.name;
 

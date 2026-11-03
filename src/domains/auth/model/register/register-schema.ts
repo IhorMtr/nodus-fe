@@ -2,6 +2,8 @@ import { object, ref, string } from 'yup';
 
 import type { LoginValidationKey } from '../login/login-schema';
 
+// ==================== TYPES ====================
+
 type RegisterValidationKey =
   | LoginValidationKey
   | 'firstNameRequired'
@@ -12,6 +14,8 @@ type RegisterValidationKey =
   | 'passwordDigit'
   | 'confirmPasswordRequired'
   | 'passwordMismatch';
+
+// ==================== SCHEMA ====================
 
 export function createRegisterSchema(
   translate: (key: RegisterValidationKey) => string

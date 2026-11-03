@@ -3,6 +3,8 @@ import { isAxiosError } from 'axios';
 import { AuthError } from '@/domains/auth/model/errors';
 import type { ApiErrorResponse } from '@/shared/api/api-types';
 
+// ==================== TYPES ====================
+
 type CreateWorkspaceErrorKey =
   | 'validationFailed'
   | 'invalidName'
@@ -16,6 +18,8 @@ interface CreateWorkspaceErrorFeedback {
   formError: string;
   fieldErrors: { name?: string };
 }
+
+// ==================== ERROR MAPPING ====================
 
 export function getCreateWorkspaceErrorFeedback(
   error: unknown,

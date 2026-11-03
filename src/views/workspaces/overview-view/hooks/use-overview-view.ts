@@ -4,9 +4,12 @@ import { useMemo } from 'react';
 
 import { useAnnouncementsQuery } from '@/domains/announcement/model/announcements';
 import { useChannelsQuery } from '@/domains/channel/model/channel';
-import { useWorkspaceMembersQuery } from '@/domains/workspace/model/members';
 import {
-  canViewWorkspaceMetrics,
+  getWorkspaceMemberName,
+  useWorkspaceMembersQuery,
+} from '@/domains/workspace/model/members';
+import {
+  canManageWorkspace,
   useWorkspaceMetricsQuery,
   useWorkspaceQuery,
 } from '@/domains/workspace/model/workspace';
@@ -21,7 +24,7 @@ export function useOverviewView(workspaceId: string) {
 
   // ==================== PERMISSIONS ====================
 
-  const canViewMetrics = canViewWorkspaceMetrics(workspace.data?.role);
+  const canViewMetrics = canManageWorkspace(workspace.data?.role);
   const metrics = useWorkspaceMetricsQuery(
     workspaceId,
     workspace.isSuccess &&
@@ -71,13 +74,19 @@ export function useOverviewView(workspaceId: string) {
   const authorNames = useMemo(() => {
     const names = new Map<string, string>();
     for (const member of members.data ?? []) {
-      names.set(
-        member.userId.toLowerCase(),
-        `${member.firstName} ${member.lastName}`.trim() || member.email
-      );
+      names.set(member.userId.toLowerCase(), getWorkspaceMemberName(member));
     }
     return names;
   }, [members.data]);
+
+  const onlineCount = (members.data ?? []).filter(
+    member => member.status === 'online'
+  ).length;
+  const showChannels = channels.isSuccess && visibleChannels.length > 0;
+  const showAnnouncements =
+    announcements.isSuccess && recentAnnouncements.length > 0;
+  const showMembers = members.isSuccess && visibleMembers.length > 0;
+  const visibleMetrics = canViewMetrics ? metrics.data : undefined;
 
   return {
     workspace,
@@ -90,5 +99,10 @@ export function useOverviewView(workspaceId: string) {
     recentAnnouncements,
     visibleMembers,
     authorNames,
+    onlineCount,
+    showChannels,
+    showAnnouncements,
+    showMembers,
+    visibleMetrics,
   };
 }

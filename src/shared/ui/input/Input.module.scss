@@ -1,6 +1,8 @@
 @use '@/shared/styles/field';
 @use '@/shared/styles/mixins';
 
+// ==================== FIELD PARTS ====================
+
 .root.root {
   @include field.root;
 }
@@ -45,6 +47,8 @@
 .required.required {
   @include field.asterisk;
 }
+
+// ==================== PASSWORD VISIBILITY ====================
 
 .visibilityToggle.visibilityToggle {
   @include mixins.focus-ring;

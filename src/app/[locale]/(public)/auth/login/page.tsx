@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
-import { LoginView } from '@/views/auth/login-view';
+import { LoginView } from '@/views/auth/login-view/LoginView';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('user.actions');

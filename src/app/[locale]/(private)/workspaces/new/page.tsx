@@ -1,4 +1,4 @@
-import { NewWorkspaceView } from '@/views/workspaces/new-workspace-view';
+import { NewWorkspaceView } from '@/views/workspaces/new-workspace-view/NewWorkspaceView';
 
 export default function NewWorkspacePage() {
   return <NewWorkspaceView />;

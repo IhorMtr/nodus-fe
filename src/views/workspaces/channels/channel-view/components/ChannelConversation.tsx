@@ -11,10 +11,10 @@ import { Button } from '@/shared/ui/button';
 import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
 
-import { useChannelMessages } from './hooks/use-channel-messages';
-import { useChannelMessageNavigation } from './hooks/use-channel-message-navigation';
-import { useChannelReadState } from './hooks/use-channel-read-state';
-import { useMessageActions } from './hooks/use-message-actions';
+import { useChannelMessages } from '../hooks/use-channel-messages';
+import { useChannelMessageNavigation } from '../hooks/use-channel-message-navigation';
+import { useChannelReadState } from '../hooks/use-channel-read-state';
+import { useMessageActions } from '../hooks/use-message-actions';
 import styles from './ChannelConversation.module.scss';
 
 export function ChannelConversation({

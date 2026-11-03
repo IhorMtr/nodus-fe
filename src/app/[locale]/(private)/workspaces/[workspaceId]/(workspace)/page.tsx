@@ -1,4 +1,4 @@
-import { WorkspaceView } from '@/views/workspaces/workspace-view';
+import { WorkspaceView } from '@/views/workspaces/workspace-view/WorkspaceView';
 
 export default async function WorkspacePage({
   params,

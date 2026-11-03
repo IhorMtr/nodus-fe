@@ -10,7 +10,6 @@ export {
 } from './announcement-mutations';
 export type {
   Announcement,
-  CreateAnnouncementInput,
   UpdateAnnouncementInput,
 } from './announcement-types';
 export { createAnnouncementSchema } from './announcement-form';

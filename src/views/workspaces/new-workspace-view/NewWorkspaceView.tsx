@@ -6,7 +6,7 @@ import { CreateWorkspaceForm } from '@/domains/workspace/ui/create-workspace-for
 import { Link } from '@/shared/i18n/navigation';
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
-import { useNewWorkspaceView } from './use-new-workspace-view';
+import { useNewWorkspaceView } from './hooks/use-new-workspace-view';
 import styles from './NewWorkspaceView.module.scss';
 
 // ==================== PAGE VIEW ====================

@@ -7,7 +7,11 @@ import { workspaceNavigation } from '@/domains/workspace/model/navigation';
 import { useWorkspacesQuery } from '@/domains/workspace/model/workspace';
 import { useRouter } from '@/shared/i18n/navigation';
 
+// ==================== PAGE STATE ====================
+
 export function useAppView() {
+  // ==================== QUERIES ====================
+
   const router = useRouter();
   const user = useCurrentUserQuery();
   const workspaces = useWorkspacesQuery({
@@ -15,6 +19,8 @@ export function useAppView() {
   });
   const error = user.error ?? workspaces.error;
   const isFetching = user.isFetching || workspaces.isFetching;
+
+  // ==================== ROUTE RESOLUTION ====================
 
   useEffect(() => {
     if (
@@ -51,6 +57,8 @@ export function useAppView() {
     isFetching,
     router,
   ]);
+
+  // ==================== RECOVERY ====================
 
   const retry = () => {
     if (user.isError) {

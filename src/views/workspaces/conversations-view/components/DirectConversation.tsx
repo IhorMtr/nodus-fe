@@ -1,6 +1,5 @@
 'use client';
 
-import { isAxiosError } from 'axios';
 import { MessagesSquare, WifiOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -8,6 +7,7 @@ import type { Conversation } from '@/domains/conversation/model/conversations';
 import { DeleteMessageModal } from '@/domains/message/ui/delete-message-modal';
 import { MessageComposer } from '@/domains/message/ui/message-composer';
 import { MessageList } from '@/domains/message/ui/message-list';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { Button } from '@/shared/ui/button';
 import { InlineStatus } from '@/shared/ui/inline-status';
 import { Spinner } from '@/shared/ui/spinner';
@@ -64,9 +64,8 @@ export function DirectConversation({
   // ==================== HISTORY ERROR ====================
 
   if (state.history.isError && !state.history.data) {
-    const unavailable =
-      isAxiosError(state.history.error) &&
-      [403, 404].includes(state.history.error.response?.status ?? 0);
+    const status = getHttpStatus(state.history.error);
+    const unavailable = status === 403 || status === 404;
 
     return (
       <div className={styles.state}>

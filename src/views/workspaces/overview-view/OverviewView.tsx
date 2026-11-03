@@ -14,7 +14,7 @@ import { Avatar, getNameInitials } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 
 import { useOverviewView } from './hooks/use-overview-view';
-import { ActivitySummary, MetricTotals } from './OverviewMetrics';
+import { ActivitySummary, MetricTotals } from './components/OverviewMetrics';
 import styles from './OverviewView.module.scss';
 
 // ==================== CONSTANTS ====================
@@ -69,21 +69,10 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
 
   const workspaceName = state.workspace.data?.name ?? t('workspaceFallback');
   const monogram = workspaceName.trim().charAt(0).toUpperCase();
-  const members = state.members.data ?? [];
-  const onlineCount = members.filter(
-    member => member.status === 'online'
-  ).length;
   const publishedDate = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
   });
-
-  const showChannels =
-    state.channels.isSuccess && state.visibleChannels.length > 0;
-  const showAnnouncements =
-    state.announcements.isSuccess && state.recentAnnouncements.length > 0;
-  const showMembers =
-    state.members.isSuccess && state.visibleMembers.length > 0;
-  const metrics = state.canViewMetrics ? state.metrics.data : undefined;
+  const metrics = state.visibleMetrics;
 
   // ==================== RENDER ====================
 
@@ -101,12 +90,14 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
         </div>
         {state.members.isSuccess && (
           <p className={styles.headerMeta}>
-            <span>{t('memberCount', { count: members.length })}</span>
+            <span>
+              {t('memberCount', { count: state.members.data.length })}
+            </span>
             <span className={styles.onlineMeta}>
               <span aria-hidden="true">
                 <PresenceIndicator status="online" withLabel={false} />
               </span>
-              {presence('online', { count: onlineCount })}
+              {presence('online', { count: state.onlineCount })}
             </span>
           </p>
         )}
@@ -147,7 +138,7 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
               )}
             </div>
 
-            {!showChannels && (
+            {!state.showChannels && (
               <SectionFeedback
                 loading={state.channels.isPending}
                 error={state.channels.isError}
@@ -156,7 +147,7 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
               />
             )}
 
-            {showChannels && (
+            {state.showChannels && (
               <ul className={styles.channelList}>
                 {state.visibleChannels.map(channel => (
                   <li key={channel.id}>
@@ -224,7 +215,7 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
               </Link>
             </div>
 
-            {!showAnnouncements && (
+            {!state.showAnnouncements && (
               <SectionFeedback
                 loading={state.announcements.isPending}
                 error={state.announcements.isError}
@@ -233,7 +224,7 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
               />
             )}
 
-            {showAnnouncements && (
+            {state.showAnnouncements && (
               <ul className={styles.announcementList}>
                 {state.recentAnnouncements.map(item => {
                   const author =
@@ -302,7 +293,7 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
               </Link>
             </div>
 
-            {!showMembers && (
+            {!state.showMembers && (
               <SectionFeedback
                 loading={state.members.isPending}
                 error={state.members.isError}
@@ -311,7 +302,7 @@ export function OverviewView({ workspaceId }: { workspaceId: string }) {
               />
             )}
 
-            {showMembers && (
+            {state.showMembers && (
               <ul className={styles.memberList}>
                 {state.visibleMembers.map(member => (
                   <li

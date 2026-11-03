@@ -10,8 +10,14 @@ import {
   useUpdateAnnouncementMutation,
   type Announcement,
 } from '@/domains/announcement/model/announcements';
-import { useWorkspaceMembersQuery } from '@/domains/workspace/model/members';
-import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
+import {
+  getWorkspaceMemberName,
+  useWorkspaceMembersQuery,
+} from '@/domains/workspace/model/members';
+import {
+  canManageWorkspace,
+  useWorkspaceQuery,
+} from '@/domains/workspace/model/workspace';
 import { useRouter } from '@/shared/i18n/navigation';
 
 import { useAnnouncementEditor } from './use-announcement-editor';
@@ -41,14 +47,13 @@ export function useAnnouncementsView(workspaceId: string) {
 
   // ==================== DERIVED STATE ====================
 
-  const canManage =
-    workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
+  const canManage = canManageWorkspace(workspace.data?.role);
   const authorNames = useMemo(
     () =>
       new Map(
         members.data?.map(member => [
           member.userId,
-          `${member.firstName} ${member.lastName}`,
+          getWorkspaceMemberName(member),
         ]) ?? []
       ),
     [members.data]
@@ -103,6 +108,12 @@ export function useAnnouncementsView(workspaceId: string) {
     setEditor('edit');
   };
 
+  const closeEditor = () => {
+    if (!announcementEditor.isSaving) {
+      setEditor(null);
+    }
+  };
+
   const publishNow = (announcement: Announcement) => {
     if (publish.isPending) {
       return;
@@ -129,6 +140,7 @@ export function useAnnouncementsView(workspaceId: string) {
 
     try {
       await remove.mutateAsync(deleteTarget.id);
+
       if (selectedId === deleteTarget.id) {
         closeDetail();
       }
@@ -150,7 +162,7 @@ export function useAnnouncementsView(workspaceId: string) {
     publish,
     editor,
     editingTarget,
-    setEditor,
+    closeEditor,
     filter,
     setFilter,
     deleteTarget,

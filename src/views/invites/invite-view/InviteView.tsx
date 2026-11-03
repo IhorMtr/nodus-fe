@@ -12,6 +12,8 @@ import { Spinner } from '@/shared/ui/spinner';
 import styles from './InviteView.module.scss';
 import { useInviteView } from './hooks/use-invite-view';
 
+// ==================== PAGE VIEW ====================
+
 export function InviteView() {
   // ==================== VIEW STATE ====================
 
@@ -32,6 +34,7 @@ export function InviteView() {
     retrySession,
     formatDate,
   } = useInviteView();
+
   // ==================== FEEDBACK ====================
 
   if (!ready || (token && resolved.isPending)) {

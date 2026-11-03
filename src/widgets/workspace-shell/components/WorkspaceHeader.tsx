@@ -21,11 +21,11 @@ import { Link } from '@/shared/i18n/navigation';
 import { Avatar } from '@/shared/ui/avatar';
 import { IconButton } from '@/shared/ui/icon-button';
 
-import { useNotificationCenter } from './use-notification-center';
+import { useNotificationCenter } from '../hooks/use-notification-center';
 import {
   useWorkspaceHeader,
   type WorkspaceContext,
-} from './use-workspace-header';
+} from '../hooks/use-workspace-header';
 import styles from './WorkspaceHeader.module.scss';
 import { WorkspaceToolbar } from './WorkspaceToolbar';
 

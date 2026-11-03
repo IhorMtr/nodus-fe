@@ -1,6 +1,5 @@
 'use client';
 
-import { isAxiosError } from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type RefObject } from 'react';
@@ -13,7 +12,8 @@ import {
   useMessageContextQuery,
   type MessageRealtimeEvent,
 } from '@/domains/message/model/message-history';
-import { useChannelSearchNavigation } from '@/widgets/workspace-shell/components/channel-search-navigation';
+import { getHttpStatus } from '@/shared/api/http-error';
+import { useChannelSearchNavigation } from '@/widgets/workspace-shell';
 
 import type { ChannelReadEvent } from './use-channel-realtime';
 
@@ -114,9 +114,7 @@ export function useChannelMessageNavigation(
 
   let error: string | undefined;
   if (requested && initialError) {
-    const status = isAxiosError(context.error)
-      ? context.error.response?.status
-      : undefined;
+    const status = getHttpStatus(context.error);
 
     if (status === 404) {
       error = t('errors.messageNotFound');

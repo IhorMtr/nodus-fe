@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 
-import { useModalLocaleSwitch } from './PersonalSettingsSlot';
+import { useModalLocaleSwitch } from '../PersonalSettingsSlot';
 
 // ==================== TYPES ====================
 
@@ -30,6 +30,14 @@ export function usePersonalSettings() {
   // ==================== LOCAL NAVIGATION ====================
 
   const [category, setCategory] = useState<SettingsCategory>('account');
+
+  // ==================== DERIVED STATE ====================
+
+  const firstName = user.data?.firstName ?? '';
+  const lastName = user.data?.lastName ?? '';
+  const userName = `${firstName} ${lastName}`.trim();
+  const userInitials =
+    `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
   // ==================== LANGUAGE ====================
 
@@ -54,6 +62,8 @@ export function usePersonalSettings() {
 
   return {
     user: user.data,
+    userName,
+    userInitials,
     locale,
     mounted,
     colorScheme,

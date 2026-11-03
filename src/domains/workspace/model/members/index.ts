@@ -4,10 +4,6 @@ export {
   type MemberManagement,
 } from './use-member-management';
 export {
-  useChangeWorkspaceMemberRoleMutation,
-  useRemoveWorkspaceMemberMutation,
-} from './workspace-member-mutations';
-export {
   getWorkspaceMemberInitials,
   getWorkspaceMemberName,
 } from './workspace-member-display';

@@ -2,7 +2,6 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
@@ -20,7 +19,11 @@ import {
 import { messageHistoryKey } from '@/domains/message/model/message-history';
 import type { User } from '@/domains/user/model/current-user';
 import { workspaceNavigation } from '@/domains/workspace/model/navigation';
-import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
+import {
+  canManageWorkspace,
+  useWorkspaceQuery,
+} from '@/domains/workspace/model/workspace';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { useRouter } from '@/shared/i18n/navigation';
 
 // ==================== CHANNEL MANAGEMENT ====================
@@ -68,11 +71,9 @@ export function useWorkspaceSidebar(
 
   // ==================== PERMISSIONS AND FEEDBACK ====================
 
-  const canManage =
-    workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
-  const status = isAxiosError(channels.error)
-    ? channels.error.response?.status
-    : undefined;
+  const canManage = canManageWorkspace(workspace.data?.role);
+  const savingChannel = createChannel.isPending || renameChannel.isPending;
+  const status = getHttpStatus(channels.error);
 
   // ==================== EDITOR HANDLERS ====================
 
@@ -84,7 +85,7 @@ export function useWorkspaceSidebar(
   }
 
   function closeEditor() {
-    if (createChannel.isPending || renameChannel.isPending) {
+    if (savingChannel) {
       return;
     }
 
@@ -93,7 +94,7 @@ export function useWorkspaceSidebar(
   }
 
   async function saveChannel({ name }: { name: string }) {
-    if (!canManage || createChannel.isPending || renameChannel.isPending) {
+    if (!canManage || savingChannel) {
       return;
     }
 
@@ -129,14 +130,12 @@ export function useWorkspaceSidebar(
       }
     } catch (error) {
       const key = getChannelErrorKey(error);
-      setError(
+      const field =
         key === 'duplicateName' || key === 'validationFailed'
           ? 'name'
-          : 'root.server',
-        {
-          message: channel(`errors.${key}`),
-        }
-      );
+          : 'root.server';
+
+      setError(field, { message: channel(`errors.${key}`) });
     }
   }
 
@@ -203,8 +202,7 @@ export function useWorkspaceSidebar(
     channelId,
     channels,
     canManage,
-    createChannel,
-    renameChannel,
+    savingChannel,
     deleteChannel,
     editor,
     selected,

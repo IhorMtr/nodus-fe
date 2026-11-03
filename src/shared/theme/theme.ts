@@ -80,7 +80,7 @@ export const theme = createTheme({
 // ==================== SEMANTIC VARIABLES ====================
 
 const semanticColors = {
-  // ---------- Base ----------
+  // ==================== BASE COLORS ====================
 
   '--mantine-color-bright': 'var(--color-text-primary)',
   '--mantine-color-text': 'var(--color-text-primary)',
@@ -98,7 +98,7 @@ const semanticColors = {
   '--mantine-color-disabled-color': 'var(--color-text-disabled)',
   '--mantine-color-disabled-border': 'var(--color-divider)',
 
-  // ---------- Primary ----------
+  // ==================== PRIMARY COLORS ====================
 
   '--mantine-primary-color-filled': 'var(--color-primary)',
   '--mantine-primary-color-filled-hover': 'var(--color-primary-hover)',
@@ -116,7 +116,7 @@ const semanticColors = {
   '--mantine-color-neutral-outline': 'var(--color-primary-text)',
   '--mantine-color-neutral-outline-hover': 'var(--color-primary-subtle)',
 
-  // ---------- Status ----------
+  // ==================== STATUS COLORS ====================
 
   '--mantine-color-red-filled': 'var(--color-danger)',
   '--mantine-color-red-light': 'var(--color-danger-subtle)',

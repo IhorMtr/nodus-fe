@@ -40,9 +40,7 @@ export function UpdatesSection() {
 
           {/* ==================== NOTIFICATIONS ==================== */}
 
-          {/* The portrait crop keeps the whole panel and only trims the
-              overview behind it, so the notification text stays legible.
-              The crop shows half the source width, hence the doubled sizes. */}
+          {/* The crop shows half the source width, hence the doubled sizes. */}
           <article className={styles.feature}>
             <ProductVisual
               className={styles.notifications}

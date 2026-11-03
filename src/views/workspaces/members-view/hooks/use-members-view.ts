@@ -5,7 +5,10 @@ import {
   useMemberManagement,
   useWorkspaceMembersQuery,
 } from '@/domains/workspace/model/members';
-import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
+import {
+  canManageWorkspace,
+  useWorkspaceQuery,
+} from '@/domains/workspace/model/workspace';
 import { useOpenConversationMutation } from '@/domains/conversation/model/conversations';
 import { useRouter } from '@/shared/i18n/navigation';
 import { useRef } from 'react';
@@ -26,8 +29,7 @@ export function useMembersView(workspaceId: string) {
 
   // ==================== PERMISSIONS AND SCENARIOS ====================
 
-  const canManage =
-    workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
+  const canManage = canManageWorkspace(workspace.data?.role);
   const memberManagement = useMemberManagement(
     workspaceId,
     user.data?.id,

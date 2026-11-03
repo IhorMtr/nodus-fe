@@ -10,8 +10,8 @@ import type { User } from '@/domains/user/model/current-user';
 import { Link } from '@/shared/i18n/navigation';
 import { Avatar } from '@/shared/ui/avatar';
 
-import { useUserPresence } from './use-user-presence';
-import { useUserProfile } from './use-user-profile';
+import { useUserPresence } from '../hooks/use-user-presence';
+import { useUserProfile } from '../hooks/use-user-profile';
 import styles from './UserProfile.module.scss';
 
 export function UserProfile({

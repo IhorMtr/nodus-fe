@@ -8,6 +8,8 @@ import { InlineStatus } from '@/shared/ui/inline-status';
 
 import styles from './DeleteMessageModal.module.scss';
 
+// ==================== TYPES ====================
+
 type DeleteMessageModalProps = {
   opened: boolean;
   isDeleting: boolean;
@@ -15,6 +17,8 @@ type DeleteMessageModalProps = {
   onConfirm: () => void;
   onClose: () => void;
 };
+
+// ==================== RENDER ====================
 
 export function DeleteMessageModal({
   opened,

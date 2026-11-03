@@ -3,7 +3,7 @@
 import { Check, Palette, UserRound } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { usePersonalSettings } from './use-personal-settings';
+import { usePersonalSettings } from './hooks/use-personal-settings';
 import styles from './PersonalSettingsView.module.scss';
 
 // ==================== CONSTANTS ====================
@@ -66,12 +66,10 @@ export function PersonalSettingsView({
                 <>
                   <div className={styles.identity}>
                     <span className={styles.avatar} aria-hidden="true">
-                      {`${settings.user.firstName.charAt(0)}${settings.user.lastName.charAt(0)}`.toUpperCase()}
+                      {settings.userInitials}
                     </span>
                     <div>
-                      <strong>
-                        {`${settings.user.firstName} ${settings.user.lastName}`.trim()}
-                      </strong>
+                      <strong>{settings.userName}</strong>
                       <span>{settings.user.email}</span>
                     </div>
                   </div>

@@ -27,7 +27,7 @@ import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
 import { UserProfile } from './UserProfile';
-import { useWorkspaceSidebar } from './use-workspace-sidebar';
+import { useWorkspaceSidebar } from '../hooks/use-workspace-sidebar';
 import styles from './WorkspaceSidebar.module.scss';
 import { WorkspaceSwitcher } from './WorkspaceSwitcher';
 
@@ -76,8 +76,7 @@ export function WorkspaceSidebar({
     channelId,
     channels,
     canManage,
-    createChannel,
-    renameChannel,
+    savingChannel,
     deleteChannel,
     editor,
     selected,
@@ -289,10 +288,8 @@ export function WorkspaceSidebar({
             )}
             centered
             size="sm"
-            closeOnClickOutside={
-              !createChannel.isPending && !renameChannel.isPending
-            }
-            closeOnEscape={!createChannel.isPending && !renameChannel.isPending}
+            closeOnClickOutside={!savingChannel}
+            closeOnEscape={!savingChannel}
           >
             <form onSubmit={submitEditor} noValidate>
               <Input
@@ -301,7 +298,7 @@ export function WorkspaceSidebar({
                 placeholder={channel('management.namePlaceholder')}
                 error={errors.name?.message}
                 autoFocus
-                readOnly={createChannel.isPending || renameChannel.isPending}
+                readOnly={savingChannel}
                 required
               />
               {errors.root?.server?.message && (
@@ -317,14 +314,11 @@ export function WorkspaceSidebar({
                 <Button
                   variant="secondary"
                   onClick={closeEditor}
-                  disabled={createChannel.isPending || renameChannel.isPending}
+                  disabled={savingChannel}
                 >
                   {channel('actions.cancel')}
                 </Button>
-                <Button
-                  type="submit"
-                  loading={createChannel.isPending || renameChannel.isPending}
-                >
+                <Button type="submit" loading={savingChannel}>
                   {channel(
                     editor === 'rename' ? 'actions.save' : 'actions.create'
                   )}

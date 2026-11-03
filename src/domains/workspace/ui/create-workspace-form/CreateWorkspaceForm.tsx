@@ -10,12 +10,16 @@ import { Input } from '@/shared/ui/input';
 
 import styles from './CreateWorkspaceForm.module.scss';
 
+// ==================== TYPES ====================
+
 export type CreateWorkspaceFormProps = {
   nameField: UseFormRegisterReturn<'name'> & { error?: string };
   onSubmit: FormEventHandler<HTMLFormElement>;
   isSubmitting: boolean;
   formError?: string;
 };
+
+// ==================== RENDER ====================
 
 export function CreateWorkspaceForm({
   nameField,

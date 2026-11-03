@@ -1,15 +1,16 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useEffect, useMemo, useRef } from 'react';
-import { useCurrentUserQuery } from '@/domains/user/model/current-user';
-import { useWorkspaceMembersQuery } from '@/domains/workspace/model/members';
+
 import {
   conversationKeys,
   useConversationsQuery,
   useOpenConversationMutation,
 } from '@/domains/conversation/model/conversations';
+import { useCurrentUserQuery } from '@/domains/user/model/current-user';
+import { useWorkspaceMembersQuery } from '@/domains/workspace/model/members';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { useRouter } from '@/shared/i18n/navigation';
 import { useAppSocket } from '@/shared/realtime/socket-context';
 
@@ -114,9 +115,10 @@ export function useConversationsView(
   // ==================== ACCESS LOSS ====================
 
   useEffect(() => {
-    if (!isAxiosError(list.error) || list.error.response?.status !== 403) {
+    if (getHttpStatus(list.error) !== 403) {
       return;
     }
+
     void client.cancelQueries({ queryKey: conversationKeys.all(workspaceId) });
     client.removeQueries({ queryKey: conversationKeys.all(workspaceId) });
     router.replace('/app');

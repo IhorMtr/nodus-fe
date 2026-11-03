@@ -58,12 +58,6 @@
     "offline": "Offline — {count}",
     "loadError": "Unable to load members."
   },
-  "sections": {
-    "overviewPending": "Your workspace overview will appear here soon.",
-    "conversationsPending": "Conversations will be available here soon.",
-    "announcementsPending": "Announcements will be available here soon.",
-    "searchPending": "Workspace search will be available here soon."
-  },
   "creation": {
     "title": "Create a workspace",
     "description": "Give your team a place to bring conversations together.",
@@ -80,7 +74,6 @@
   "management": {
     "settingsTitle": "Workspace settings",
     "settingsDescription": "Manage the name and lifecycle of this workspace.",
-    "workspaceLabel": "Workspace",
     "generalTitle": "General",
     "dangerZone": "Danger zone",
     "nameTitle": "Workspace name",

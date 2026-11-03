@@ -2,8 +2,12 @@ import 'server-only';
 
 import { type NextRequest, type NextResponse } from 'next/server';
 
+// ==================== CONSTANTS ====================
+
 const COOKIE_NAME = 'nodus_refresh';
 const REFRESH_TOKEN_LIFETIME_SECONDS = 7 * 24 * 60 * 60;
+
+// ==================== OPTIONS ====================
 
 function cookieOptions(request: NextRequest) {
   const isLocalhost = ['localhost', '127.0.0.1', '[::1]'].includes(
@@ -20,6 +24,8 @@ function cookieOptions(request: NextRequest) {
     path: '/api/auth',
   };
 }
+
+// ==================== COOKIE STORAGE ====================
 
 export const authCookie = {
   read(request: NextRequest): string | undefined {

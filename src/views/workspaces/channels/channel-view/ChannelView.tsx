@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 
 import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
-import { ChannelConversation } from './ChannelConversation';
+import { ChannelConversation } from './components/ChannelConversation';
 import { useChannelView } from './hooks/use-channel-view';
 import styles from './ChannelView.module.scss';
 

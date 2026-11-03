@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios';
 
 import { configureHttpAuthentication } from '@/shared/api/http-authentication';
 import { httpClient } from '@/shared/api/http-client';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { logRealtime } from '@/shared/realtime/realtime-debug';
 
 import { authApi } from '../../api/auth-api';
@@ -26,9 +27,7 @@ let refreshFlight: Promise<void> | null = null;
 let initialization: Promise<void> | null = null;
 
 function isInvalidSession(error: AuthError): boolean {
-  const status = isAxiosError(error.cause)
-    ? error.cause.response?.status
-    : undefined;
+  const status = getHttpStatus(error.cause);
   return (
     invalidSessionErrors.has(error.messageType) &&
     status !== undefined &&

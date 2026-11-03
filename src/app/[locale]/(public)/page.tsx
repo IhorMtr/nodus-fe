@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
-import { LandingView } from '@/views/landing-view';
+import { LandingView } from '@/views/landing-view/LandingView';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('product.metadata');

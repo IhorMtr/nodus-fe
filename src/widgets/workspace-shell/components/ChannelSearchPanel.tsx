@@ -9,7 +9,7 @@ import { IconButton } from '@/shared/ui/icon-button';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 
-import { useChannelSearch } from './use-channel-search';
+import { useChannelSearch } from '../hooks/use-channel-search';
 import styles from './ChannelSearchPanel.module.scss';
 
 // ==================== COMPONENT ====================

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { WorkspaceShell } from '@/widgets/workspace-shell/WorkspaceShell';
+import { WorkspaceShell } from '@/widgets/workspace-shell';
 
 export default async function WorkspaceScreenLayout({
   children,

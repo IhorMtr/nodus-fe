@@ -1,6 +1,8 @@
 @use '@/shared/styles/controls';
 @use '@/shared/styles/mixins';
 
+// ==================== LAYOUT ====================
+
 @mixin root {
   @include controls.sizes;
 
@@ -43,6 +45,8 @@
   }
 }
 
+// ==================== CONTROL ====================
+
 @mixin input {
   height: var(--control-height);
   min-height: var(--control-height);
@@ -63,19 +67,19 @@
     opacity: 1;
   }
 
-  // ---------- Hover ----------
+  // ==================== HOVER ====================
 
   &:hover:where(:not(:disabled, [data-disabled], [data-error], :focus)) {
     border-color: var(--color-border-strong);
   }
 
-  // ---------- Error ----------
+  // ==================== ERROR ====================
 
   &[data-error] {
     border-color: var(--color-danger-border);
   }
 
-  // ---------- Focus ----------
+  // ==================== FOCUS ====================
 
   &:focus,
   &:focus-visible,
@@ -89,7 +93,7 @@
     box-shadow: 0 0 0 3px var(--color-danger-subtle);
   }
 
-  // ---------- Disabled ----------
+  // ==================== DISABLED ====================
 
   &:disabled,
   &[data-disabled],
@@ -117,6 +121,8 @@
     flex-shrink: 0;
   }
 }
+
+// ==================== LABELS AND MESSAGES ====================
 
 @mixin label {
   margin-bottom: 6px;

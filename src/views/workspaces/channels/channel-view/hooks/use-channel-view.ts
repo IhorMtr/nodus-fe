@@ -7,18 +7,24 @@ import { useChannelQuery } from '@/domains/channel/model/channel';
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 import { workspaceNavigation } from '@/domains/workspace/model/navigation';
 import type { ApiErrorResponse } from '@/shared/api/api-types';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { useRouter } from '@/shared/i18n/navigation';
 
+// ==================== PAGE STATE ====================
+
 export function useChannelView(workspaceId: string, channelId: string) {
+  // ==================== QUERIES ====================
+
   const router = useRouter();
   const user = useCurrentUserQuery();
   const channel = useChannelQuery(workspaceId, channelId, {
     enabled: user.isSuccess && user.isFetchedAfterMount && !user.isFetching,
   });
+
+  // ==================== DERIVED STATE ====================
+
   const rawError = user.error ?? channel.error;
-  const rawStatus = isAxiosError(rawError)
-    ? rawError.response?.status
-    : undefined;
+  const rawStatus = getHttpStatus(rawError);
   const response = isAxiosError<ApiErrorResponse>(channel.error)
     ? channel.error.response
     : undefined;
@@ -36,6 +42,8 @@ export function useChannelView(workspaceId: string, channelId: string) {
   const isFetching = !isReady && (user.isFetching || channel.isFetching);
   const isUnavailable = !user.isError && response?.status === 404;
   const isInvalidLink = !user.isError && response?.status === 400;
+
+  // ==================== EFFECTS ====================
 
   useEffect(() => {
     if (!isReady || !user.data || !channel.data) {

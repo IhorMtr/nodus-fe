@@ -1,4 +1,4 @@
-import { ChannelView } from '@/views/workspaces/channels/channel-view';
+import { ChannelView } from '@/views/workspaces/channels/channel-view/ChannelView';
 
 export default async function ChannelPage({
   params,

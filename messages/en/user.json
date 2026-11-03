@@ -19,7 +19,6 @@
     "title": "Personal settings",
     "description": "Preferences for your Nodus experience on this device.",
     "account": "Account",
-    "accountDescription": "Signed in as",
     "appearance": "Appearance",
     "appearanceDescription": "Choose how Nodus looks on this device.",
     "light": "Light",

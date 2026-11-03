@@ -1,15 +1,19 @@
 'use client';
 
-import { isAxiosError } from 'axios';
 import { useEffect } from 'react';
 
 import { useChannelsQuery } from '@/domains/channel/model/channel';
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
 import { workspaceNavigation } from '@/domains/workspace/model/navigation';
 import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { useRouter } from '@/shared/i18n/navigation';
 
+// ==================== PAGE STATE ====================
+
 export function useWorkspaceView(workspaceId: string) {
+  // ==================== QUERIES ====================
+
   const router = useRouter();
   const user = useCurrentUserQuery();
   const workspace = useWorkspaceQuery(workspaceId, {
@@ -29,10 +33,8 @@ export function useWorkspaceView(workspaceId: string) {
 
   const error = user.error ?? workspace.error ?? channels.error;
   const resourceError = workspace.error ?? channels.error;
-  const status = isAxiosError(error) ? error.response?.status : undefined;
-  const resourceStatus = isAxiosError(resourceError)
-    ? resourceError.response?.status
-    : undefined;
+  const status = getHttpStatus(error);
+  const resourceStatus = getHttpStatus(resourceError);
   const isFetching =
     user.isFetching || workspace.isFetching || channels.isFetching;
   const isReady =

@@ -27,6 +27,33 @@ type NotificationsReadEvent = {
   unreadCount: number;
 };
 
+// ==================== NAVIGATION ====================
+
+function getNotificationRoute(
+  notification: Notification,
+  availableWorkspaceIds: string[]
+) {
+  if (!availableWorkspaceIds.includes(notification.workspaceId)) {
+    return null;
+  }
+
+  const params = { workspaceId: notification.workspaceId };
+
+  if (notification.type === 'WorkspaceRoleChanged') {
+    return { pathname: '/workspaces/[workspaceId]/members' as const, params };
+  }
+
+  if (notification.type === 'AnnouncementPublished' && notification.entityId) {
+    return {
+      pathname: '/workspaces/[workspaceId]/announcements' as const,
+      params,
+      query: { announcement: notification.entityId },
+    };
+  }
+
+  return null;
+}
+
 // ==================== NOTIFICATION CENTER STATE ====================
 
 export function useNotificationCenter(
@@ -66,20 +93,9 @@ export function useNotificationCenter(
   }, [list.data]);
   const canMarkAll = (count.data ?? 0) > 0 || items.some(item => !item.readAt);
   const navigableIds = items
-    .filter(notification => {
-      if (!availableWorkspaceIds.includes(notification.workspaceId)) {
-        return false;
-      }
-
-      if (notification.type === 'WorkspaceRoleChanged') {
-        return true;
-      }
-
-      return (
-        notification.type === 'AnnouncementPublished' &&
-        Boolean(notification.entityId)
-      );
-    })
+    .filter(notification =>
+      Boolean(getNotificationRoute(notification, availableWorkspaceIds))
+    )
     .map(notification => notification.id);
 
   // ==================== REALTIME SYNCHRONIZATION ====================
@@ -215,33 +231,22 @@ export function useNotificationCenter(
       markRead.mutate(notification.id);
     }
 
-    if (
-      notification.type === 'WorkspaceRoleChanged' &&
-      availableWorkspaceIds.includes(notification.workspaceId)
-    ) {
+    const route = getNotificationRoute(notification, availableWorkspaceIds);
+
+    if (route) {
       setPanelState({ workspaceId, opened: false });
-      router.push({
-        pathname: '/workspaces/[workspaceId]/members',
-        params: { workspaceId: notification.workspaceId },
-      });
-    } else if (
-      notification.type === 'AnnouncementPublished' &&
-      notification.entityId &&
-      availableWorkspaceIds.includes(notification.workspaceId)
-    ) {
-      setPanelState({ workspaceId, opened: false });
-      router.push({
-        pathname: '/workspaces/[workspaceId]/announcements',
-        params: { workspaceId: notification.workspaceId },
-        query: { announcement: notification.entityId },
-      });
+      router.push(route);
     }
+  };
+
+  const close = () => {
+    setPanelState({ workspaceId, opened: false });
   };
 
   return {
     opened,
     open,
-    close: () => setPanelState({ workspaceId, opened: false }),
+    close,
     items,
     canMarkAll,
     navigableIds,

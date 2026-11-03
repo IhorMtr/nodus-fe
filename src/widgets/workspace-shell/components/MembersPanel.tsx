@@ -18,7 +18,7 @@ import { IconButton } from '@/shared/ui/icon-button';
 import { Spinner } from '@/shared/ui/spinner';
 
 import styles from './MembersPanel.module.scss';
-import type { MembersPanelGroup } from './use-members-panel';
+import type { MembersPanelGroup } from '../hooks/use-members-panel';
 
 // ==================== TYPES ====================
 

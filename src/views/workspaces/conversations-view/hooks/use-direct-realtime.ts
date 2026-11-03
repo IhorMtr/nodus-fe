@@ -2,6 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
+
 import { authSessionEvents } from '@/domains/auth/model/session';
 import {
   applyDirectMessage,
@@ -12,7 +13,7 @@ import {
 } from '@/domains/conversation/model/conversations';
 import { useAppSocket } from '@/shared/realtime/socket-context';
 
-// ==================== TYPES AND SUBSCRIPTIONS ====================
+// ==================== TYPES ====================
 
 type JoinAck =
   | { success: true; data: { workspaceId: string; conversationId: string } }
@@ -20,6 +21,9 @@ type JoinAck =
 type DirectEvent =
   | { kind: 'created' | 'updated'; message: DirectMessage }
   | { kind: 'deleted'; messageId: string };
+
+type DirectMessageEvent = { workspaceId: string; message: DirectMessage };
+
 type DirectReadEvent = {
   workspaceId: string;
   conversationId: string;
@@ -28,6 +32,9 @@ type DirectReadEvent = {
   lastReadCreatedAt: string;
   lastReadAt: string;
 };
+
+// ==================== SUBSCRIPTIONS ====================
+
 const subscriptions = new WeakMap<object, Map<string, number>>();
 
 // ==================== READ ORDERING ====================
@@ -45,6 +52,8 @@ function isStaleReadEvent(
       previous.lastReadMessageId.localeCompare(incoming.lastReadMessageId) >= 0)
   );
 }
+
+// ==================== DIRECT REALTIME ====================
 
 export function useDirectRealtime(workspaceId: string, conversationId: string) {
   // ==================== STATE AND REFS ====================
@@ -115,30 +124,18 @@ export function useDirectRealtime(workspaceId: string, conversationId: string) {
 
       invalidateConversationList(client, workspaceId);
     }
-    const created = (payload: {
-      workspaceId: string;
-      message: DirectMessage;
-    }) => {
-      if (
-        payload.workspaceId.toLowerCase() === workspaceId.toLowerCase() &&
-        payload.message.conversationId.toLowerCase() ===
-          conversationId.toLowerCase()
-      ) {
-        receive({ kind: 'created', message: payload.message });
-      }
-    };
-    const updated = (payload: {
-      workspaceId: string;
-      message: DirectMessage;
-    }) => {
-      if (
-        payload.workspaceId.toLowerCase() === workspaceId.toLowerCase() &&
-        payload.message.conversationId.toLowerCase() ===
-          conversationId.toLowerCase()
-      ) {
-        receive({ kind: 'updated', message: payload.message });
-      }
-    };
+    const onMessage =
+      (kind: 'created' | 'updated') => (payload: DirectMessageEvent) => {
+        if (
+          payload.workspaceId.toLowerCase() === workspaceId.toLowerCase() &&
+          payload.message.conversationId.toLowerCase() ===
+            conversationId.toLowerCase()
+        ) {
+          receive({ kind, message: payload.message });
+        }
+      };
+    const created = onMessage('created');
+    const updated = onMessage('updated');
     const deleted = (payload: {
       workspaceId: string;
       conversationId: string;

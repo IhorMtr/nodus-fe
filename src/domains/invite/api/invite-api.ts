@@ -8,9 +8,13 @@ import type {
   WorkspaceInvite,
 } from '../model/invitations/invite-types';
 
+// ==================== PATHS ====================
+
 function invitesPath(workspaceId: string) {
   return `/workspaces/${encodeURIComponent(workspaceId)}/invites`;
 }
+
+// ==================== TRANSPORT ====================
 
 export const inviteApi = {
   async create(workspaceId: string): Promise<CreatedInvite> {

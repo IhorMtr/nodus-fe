@@ -3,6 +3,8 @@ import { isAxiosError } from 'axios';
 import { AuthError } from '@/domains/auth/model/errors';
 import type { ApiErrorResponse } from '@/shared/api/api-types';
 
+// ==================== TYPES ====================
+
 type MessageErrorKey =
   | 'validationFailed'
   | 'networkError'
@@ -12,6 +14,8 @@ type MessageErrorKey =
   | 'notFound'
   | 'messageNotFound'
   | 'requestFailed';
+
+// ==================== ERROR MAPPING ====================
 
 export function isMessageNotFound(error: unknown) {
   return (
@@ -25,6 +29,7 @@ export function getMessageErrorKey(error: unknown): MessageErrorKey {
   if (error instanceof AuthError && error.messageType === 'SessionChanged') {
     return 'sessionChanged';
   }
+
   if (!isAxiosError<ApiErrorResponse>(error)) {
     return 'requestFailed';
   }

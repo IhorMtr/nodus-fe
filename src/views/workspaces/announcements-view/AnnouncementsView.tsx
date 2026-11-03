@@ -264,11 +264,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
 
       <Modal
         opened={state.editor !== null}
-        onClose={() => {
-          if (!state.announcementEditor.isSaving) {
-            state.setEditor(null);
-          }
-        }}
+        onClose={state.closeEditor}
         title={state.editor === 'create' ? t('create') : t('edit')}
         size="lg"
         centered
@@ -289,11 +285,7 @@ export function AnnouncementsView({ workspaceId }: { workspaceId: string }) {
           onSubmit={state.announcementEditor.submit(
             state.editor === 'edit' ? state.editingTarget : null
           )}
-          onCancel={() => {
-            if (!state.announcementEditor.isSaving) {
-              state.setEditor(null);
-            }
-          }}
+          onCancel={state.closeEditor}
         />
       </Modal>
 

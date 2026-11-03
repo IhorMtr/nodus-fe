@@ -8,7 +8,7 @@ import type { RefObject } from 'react';
 import { NotificationPanel } from '@/domains/notification/ui/notification-panel';
 import { IconButton } from '@/shared/ui/icon-button';
 
-import type { NotificationCenter } from './use-notification-center';
+import type { NotificationCenter } from '../hooks/use-notification-center';
 import styles from './WorkspaceToolbar.module.scss';
 
 // ==================== TYPES ====================

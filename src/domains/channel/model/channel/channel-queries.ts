@@ -6,11 +6,15 @@ import { retryQuery } from '@/shared/query/retry-query';
 
 import { channelApi } from '../../api/channel-api';
 
+// ==================== QUERY KEYS ====================
+
 export const channelQueryKeys = {
   list: (workspaceId: string) => ['channels', workspaceId, 'list'] as const,
   detail: (workspaceId: string, channelId: string) =>
     ['channels', workspaceId, 'detail', channelId] as const,
 };
+
+// ==================== QUERIES ====================
 
 export function useChannelsQuery(
   workspaceId: string,

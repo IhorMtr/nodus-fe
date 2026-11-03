@@ -7,7 +7,7 @@ type TimelineMessage = {
   createdAt: string;
 };
 
-export type TimelineEntry<T extends TimelineMessage> = {
+type TimelineEntry<T extends TimelineMessage> = {
   message: T;
   startsGroup: boolean;
   startsDay: boolean;

@@ -36,6 +36,6 @@ export interface WorkspaceMetrics {
 
 // ==================== PERMISSIONS ====================
 
-export function canViewWorkspaceMetrics(role: Workspace['role'] | undefined) {
+export function canManageWorkspace(role: Workspace['role'] | undefined) {
   return role === 'Owner' || role === 'Admin';
 }

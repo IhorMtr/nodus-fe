@@ -4,7 +4,7 @@ export {
   useWorkspaceMetricsQuery,
   workspaceQueryKeys,
 } from './workspace-queries';
-export { canViewWorkspaceMetrics } from './workspace-types';
+export { canManageWorkspace } from './workspace-types';
 export type { Workspace, WorkspaceMetrics } from './workspace-types';
 export {
   useRenameWorkspaceMutation,

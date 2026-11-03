@@ -1,7 +1,6 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 
@@ -17,7 +16,11 @@ import {
   canEditMessage,
 } from '@/domains/message/model/message-permissions';
 import { useCurrentUserQuery } from '@/domains/user/model/current-user';
-import { useWorkspaceQuery } from '@/domains/workspace/model/workspace';
+import {
+  canManageWorkspace,
+  useWorkspaceQuery,
+} from '@/domains/workspace/model/workspace';
+import { getHttpStatus } from '@/shared/api/http-error';
 
 import { useChannelRealtime } from './use-channel-realtime';
 
@@ -39,12 +42,9 @@ export function useChannelMessages(workspaceId: string, channelId: string) {
 
   // ==================== DERIVED STATE ====================
 
-  const canModerate =
-    workspace.data?.role === 'Owner' || workspace.data?.role === 'Admin';
+  const canModerate = canManageWorkspace(workspace.data?.role);
   const hasHistory = history.data !== undefined;
-  const status = isAxiosError(history.error)
-    ? history.error.response?.status
-    : undefined;
+  const status = getHttpStatus(history.error);
 
   // ==================== HISTORY SYNCHRONIZATION ====================
 

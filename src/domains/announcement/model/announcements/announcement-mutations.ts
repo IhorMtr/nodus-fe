@@ -1,7 +1,8 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+
+import { getHttpStatus } from '@/shared/api/http-error';
 
 import { announcementApi } from '../../api/announcement-api';
 import { announcementKeys } from './announcement-queries';
@@ -78,10 +79,7 @@ export function useUpdateAnnouncementMutation(workspaceId: string) {
       });
     },
     onError: (error, variables) => {
-      if (
-        !isAxiosError(error) ||
-        ![404, 409].includes(error.response?.status ?? 0)
-      ) {
+      if (![404, 409].includes(getHttpStatus(error) ?? 0)) {
         return;
       }
 
@@ -115,7 +113,7 @@ export function useDeleteAnnouncementMutation(workspaceId: string) {
       });
     },
     onError: error => {
-      if (!isAxiosError(error) || error.response?.status !== 404) {
+      if (getHttpStatus(error) !== 404) {
         return;
       }
 

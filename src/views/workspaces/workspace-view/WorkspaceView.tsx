@@ -6,11 +6,17 @@ import { PageFeedback, PageSpinner } from '@/shared/ui/page-feedback';
 
 import { useWorkspaceView } from './hooks/use-workspace-view';
 
+// ==================== PAGE VIEW ====================
+
 export function WorkspaceView({ workspaceId }: { workspaceId: string }) {
+  // ==================== CONTEXT ====================
+
   const t = useTranslations('workspace');
   const channel = useTranslations('channel');
   const auth = useTranslations('auth.messages');
   const state = useWorkspaceView(workspaceId);
+
+  // ==================== ROUTE STATES ====================
 
   if (state.isFetching) {
     return <PageSpinner contained label={t('states.loading')} />;

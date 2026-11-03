@@ -3,10 +3,11 @@ import { vi, describe, expect, it, beforeEach } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { LoginView } from '@/views/auth/login-view/LoginView';
 import { authSession } from '@/domains/auth/model/session/auth-session';
-import { server } from '@/test/utils/server';
 import { renderWithProviders } from '@/test/utils/render';
+import { server } from '@/test/utils/server';
+
+import { LoginView } from './LoginView';
 
 const navigation = vi.hoisted(() => ({ replace: vi.fn() }));
 

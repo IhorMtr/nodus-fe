@@ -10,7 +10,7 @@ import styles from './Textarea.module.scss';
 
 // ==================== TYPES ====================
 
-export type TextareaProps = Omit<ComponentPropsWithRef<'textarea'>, 'color'> &
+type TextareaProps = Omit<ComponentPropsWithRef<'textarea'>, 'color'> &
   Pick<
     MantineTextareaProps,
     | 'label'

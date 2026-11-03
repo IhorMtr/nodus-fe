@@ -8,7 +8,11 @@ import { retryQuery } from '@/shared/query/retry-query';
 
 import { inviteApi } from '../../api/invite-api';
 
+// ==================== QUERY KEYS ====================
+
 const invitesKey = (workspaceId: string) => ['invites', workspaceId] as const;
+
+// ==================== QUERIES ====================
 
 export function useWorkspaceInvitesQuery(workspaceId: string, enabled = true) {
   return useQuery({
@@ -20,6 +24,8 @@ export function useWorkspaceInvitesQuery(workspaceId: string, enabled = true) {
     retry: retryQuery,
   });
 }
+
+// ==================== WORKSPACE INVITE MUTATIONS ====================
 
 export function useCreateInviteMutation(workspaceId: string) {
   const queryClient = useQueryClient();
@@ -62,6 +68,8 @@ export function useRevokeInviteMutation(workspaceId: string) {
     retry: false,
   });
 }
+
+// ==================== INVITE ACCEPTANCE ====================
 
 export function useResolveInviteMutation() {
   return useMutation({

@@ -8,7 +8,6 @@
     "hint": "Enter to send · Shift + Enter for a new line"
   },
   "actions": {
-    "send": "Send message",
     "more": "Message actions",
     "edit": "Edit",
     "delete": "Delete",

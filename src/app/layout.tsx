@@ -12,6 +12,8 @@ import { appFont } from '@/shared/config/font';
 
 import { AppProviders } from './_providers/AppProviders';
 
+// ==================== METADATA ====================
+
 export const metadata: Metadata = {
   applicationName: 'Nodus',
   openGraph: {
@@ -22,6 +24,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
   },
 };
+
+// ==================== ROOT LAYOUT ====================
 
 export default async function RootLayout({
   children,

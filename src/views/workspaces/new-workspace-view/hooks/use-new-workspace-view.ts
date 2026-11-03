@@ -1,7 +1,6 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { isAxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
@@ -15,6 +14,7 @@ import {
 } from '@/domains/workspace/model/create-workspace';
 import { workspaceNavigation } from '@/domains/workspace/model/navigation';
 import type { CreateWorkspaceFormProps } from '@/domains/workspace/ui/create-workspace-form';
+import { getHttpStatus } from '@/shared/api/http-error';
 import { useRouter } from '@/shared/i18n/navigation';
 
 export function useNewWorkspaceView() {
@@ -90,9 +90,7 @@ export function useNewWorkspaceView() {
 
   // ==================== VIEW STATE ====================
 
-  const status = isAxiosError(currentUser.error)
-    ? currentUser.error.response?.status
-    : undefined;
+  const status = getHttpStatus(currentUser.error);
   let loadError: string | undefined;
 
   if (currentUser.isError) {
